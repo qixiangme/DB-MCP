@@ -1,0 +1,36 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: riwonace-mcp-server
+  datasource:
+    url: jdbc:postgresql://localhost:5433/riwonace
+    username: riwonace
+    password: riwonace
+  ai:
+    mcp:
+      server:
+        name: riwonace-data-platform
+        version: 1.0.0
+        type: SYNC
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        enabled: false
+      embedding:
+        options:
+          model: nomic-embed-text
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        dimensions: 768
+        # 문서 수백 건 규모에서는 근사 인덱스가 속도 이득 없이 recall만 깎는다.
+        # 인덱스 없는 exact search = recall 100% (pgvector 공식 README 권고)
+        index-type: NONE
+        distance-type: COSINE_DISTANCE
+
+logging:
+  level:
+    com.riwonace: INFO
+    io.modelcontextprotocol: INFO

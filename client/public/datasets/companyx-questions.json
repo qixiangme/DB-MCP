@@ -1,0 +1,152 @@
+[
+  {
+    "q": "서울 지역 매출 상위 5개 고객사를 알려줘",
+    "tool": "nl2sql",
+    "hint": "sales + clients 조인, region='서울', GROUP BY, ORDER BY DESC LIMIT 5"
+  },
+  {
+    "q": "2025년 3분기 총 매출액은 얼마야?",
+    "tool": "nl2sql",
+    "hint": "sales WHERE quarter='2025-Q3', SUM(amount)"
+  },
+  {
+    "q": "보안 솔루션 카테고리 제품들의 월 평균 매출은?",
+    "tool": "nl2sql",
+    "hint": "sales WHERE category='security', AVG(amount)"
+  },
+  {
+    "q": "현재 활성 상태인 계약 수는 몇 개야?",
+    "tool": "nl2sql",
+    "hint": "contracts WHERE status='active', COUNT(*)"
+  },
+  {
+    "q": "기술지원팀 직원 목록과 연봉을 알려줘",
+    "tool": "nl2sql",
+    "hint": "employees JOIN departments WHERE name='기술지원팀'"
+  },
+  {
+    "q": "가장 많은 프로젝트를 진행 중인 고객사는?",
+    "tool": "nl2sql",
+    "hint": "projects JOIN clients, GROUP BY client_id, ORDER BY COUNT DESC LIMIT 1"
+  },
+  {
+    "q": "Critical 우선순위 티켓 중 아직 해결되지 않은 건은?",
+    "tool": "nl2sql",
+    "hint": "support_tickets WHERE priority='critical' AND status IN ('open','in_progress')"
+  },
+  {
+    "q": "제품별 총 계약 금액을 큰 순서로 보여줘",
+    "tool": "nl2sql",
+    "hint": "contracts JOIN products, GROUP BY product_id, SUM(amount) ORDER BY DESC"
+  },
+  {
+    "q": "2024년에 등록된 고객사는 몇 개야?",
+    "tool": "nl2sql",
+    "hint": "clients WHERE registered_at BETWEEN '2024-01-01' AND '2024-12-31'"
+  },
+  {
+    "q": "평균 연봉이 가장 높은 부서는 어디야?",
+    "tool": "nl2sql",
+    "hint": "employees JOIN departments, GROUP BY dept_id, AVG(salary) ORDER BY DESC LIMIT 1"
+  },
+  {
+    "q": "최근 서버 장애 사례와 원인을 알려줘",
+    "tool": "vector_search",
+    "hint": "장애 보고서 문서 검색, incident_report 타입"
+  },
+  {
+    "q": "Product-C1 설치 방법이 궁금해",
+    "tool": "vector_search",
+    "hint": "기술 문서에서 설치 가이드 검색"
+  },
+  {
+    "q": "Kubernetes 관련 장애 대응 방법은?",
+    "tool": "vector_search",
+    "hint": "K8s, Pod, 컨테이너 관련 장애 보고서 검색"
+  },
+  {
+    "q": "성능 최적화를 위한 DB 튜닝 방법 알려줘",
+    "tool": "vector_search",
+    "hint": "성능 튜닝 가이드 문서 검색"
+  },
+  {
+    "q": "보안 취약점 점검 관련 내용이 있어?",
+    "tool": "vector_search",
+    "hint": "회의록 또는 장애보고서에서 보안 관련 검색"
+  },
+  {
+    "q": "백업 정책은 어떻게 되어 있어?",
+    "tool": "vector_search",
+    "hint": "운영 매뉴얼에서 백업 관련 검색"
+  },
+  {
+    "q": "API 인증 방식은 뭐야?",
+    "tool": "vector_search",
+    "hint": "API 레퍼런스 문서 검색"
+  },
+  {
+    "q": "고객사 미팅에서 논의된 일정 지연 이슈는?",
+    "tool": "vector_search",
+    "hint": "회의록에서 일정 지연 관련 검색"
+  },
+  {
+    "q": "클라우드 마이그레이션 제안서 내용 보여줘",
+    "tool": "vector_search",
+    "hint": "제안서 문서에서 마이그레이션 관련 검색"
+  },
+  {
+    "q": "SSL 인증서 관련 장애가 있었어?",
+    "tool": "vector_search",
+    "hint": "장애 보고서에서 SSL 관련 검색"
+  },
+  {
+    "q": "Client-A가 사용 중인 제품 목록은?",
+    "tool": "knowledge_graph",
+    "hint": "client_1 -[USES]→ product_* 탐색"
+  },
+  {
+    "q": "Product-C1을 사용하는 고객사는 어디야?",
+    "tool": "knowledge_graph",
+    "hint": "product_1 ←[USES]- client_* 역방향 탐색"
+  },
+  {
+    "q": "클라우드사업부 소속 직원들은 누구야?",
+    "tool": "knowledge_graph",
+    "hint": "dept_2 ←[BELONGS_TO]- employee_* 탐색"
+  },
+  {
+    "q": "서울물산 담당 엔지니어는 누구야?",
+    "tool": "knowledge_graph",
+    "hint": "client_2 ←[MANAGES_ACCOUNT]- employee_* 탐색"
+  },
+  {
+    "q": "Product-D1 제품과 관련된 프로젝트는?",
+    "tool": "knowledge_graph",
+    "hint": "product_5 ←[USES]- client_* -[HAS_PROJECT]→ project_* 2홉 탐색"
+  },
+  {
+    "q": "기술 지원 이슈가 가장 많은 제품은?",
+    "tool": "knowledge_graph",
+    "hint": "REPORTED_ISSUE 관계 카운트로 집계"
+  },
+  {
+    "q": "경영지원팀 팀장은 누구야?",
+    "tool": "knowledge_graph",
+    "hint": "dept_1 -[HEAD_IS]→ employee_* 탐색"
+  },
+  {
+    "q": "진행 중인 프로젝트를 이끄는 직원 목록",
+    "tool": "knowledge_graph",
+    "hint": "project(status=in_progress) ←[LEADS]- employee_* 탐색"
+  },
+  {
+    "q": "Product-S1 관련 고객 이슈 현황은?",
+    "tool": "knowledge_graph",
+    "hint": "product_3 ←[REPORTED_ISSUE]- client_* 탐색 + 속성 확인"
+  },
+  {
+    "q": "가장 많은 고객을 담당하는 직원은?",
+    "tool": "knowledge_graph",
+    "hint": "MANAGES_ACCOUNT 관계 카운트로 집계"
+  }
+]

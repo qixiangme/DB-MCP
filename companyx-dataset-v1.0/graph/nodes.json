@@ -1,0 +1,1211 @@
+[
+  {
+    "id": "client_1",
+    "type": "client",
+    "name": "Client-A",
+    "properties": {
+      "industry": "제조업",
+      "region": "서울",
+      "size": "startup"
+    }
+  },
+  {
+    "id": "client_2",
+    "type": "client",
+    "name": "Client-B",
+    "properties": {
+      "industry": "금융",
+      "region": "경기",
+      "size": "mid"
+    }
+  },
+  {
+    "id": "client_3",
+    "type": "client",
+    "name": "Client-C",
+    "properties": {
+      "industry": "IT/SW",
+      "region": "부산",
+      "size": "enterprise"
+    }
+  },
+  {
+    "id": "client_4",
+    "type": "client",
+    "name": "Client-D",
+    "properties": {
+      "industry": "유통/물류",
+      "region": "대전",
+      "size": "startup"
+    }
+  },
+  {
+    "id": "client_5",
+    "type": "client",
+    "name": "Client-E",
+    "properties": {
+      "industry": "의료/바이오",
+      "region": "대구",
+      "size": "mid"
+    }
+  },
+  {
+    "id": "client_6",
+    "type": "client",
+    "name": "Client-F",
+    "properties": {
+      "industry": "교육",
+      "region": "인천",
+      "size": "enterprise"
+    }
+  },
+  {
+    "id": "client_7",
+    "type": "client",
+    "name": "Client-G",
+    "properties": {
+      "industry": "미디어",
+      "region": "광주",
+      "size": "startup"
+    }
+  },
+  {
+    "id": "client_8",
+    "type": "client",
+    "name": "Client-H",
+    "properties": {
+      "industry": "에너지",
+      "region": "제주",
+      "size": "mid"
+    }
+  },
+  {
+    "id": "client_9",
+    "type": "client",
+    "name": "Client-I",
+    "properties": {
+      "industry": "건설",
+      "region": "서울",
+      "size": "enterprise"
+    }
+  },
+  {
+    "id": "client_10",
+    "type": "client",
+    "name": "Client-J",
+    "properties": {
+      "industry": "공공기관",
+      "region": "경기",
+      "size": "startup"
+    }
+  },
+  {
+    "id": "client_11",
+    "type": "client",
+    "name": "Client-K",
+    "properties": {
+      "industry": "제조업",
+      "region": "부산",
+      "size": "mid"
+    }
+  },
+  {
+    "id": "client_12",
+    "type": "client",
+    "name": "Client-L",
+    "properties": {
+      "industry": "금융",
+      "region": "대전",
+      "size": "enterprise"
+    }
+  },
+  {
+    "id": "client_13",
+    "type": "client",
+    "name": "Client-M",
+    "properties": {
+      "industry": "IT/SW",
+      "region": "대구",
+      "size": "startup"
+    }
+  },
+  {
+    "id": "client_14",
+    "type": "client",
+    "name": "Client-N",
+    "properties": {
+      "industry": "유통/물류",
+      "region": "인천",
+      "size": "mid"
+    }
+  },
+  {
+    "id": "client_15",
+    "type": "client",
+    "name": "Client-O",
+    "properties": {
+      "industry": "의료/바이오",
+      "region": "광주",
+      "size": "enterprise"
+    }
+  },
+  {
+    "id": "client_16",
+    "type": "client",
+    "name": "Client-P",
+    "properties": {
+      "industry": "교육",
+      "region": "제주",
+      "size": "startup"
+    }
+  },
+  {
+    "id": "client_17",
+    "type": "client",
+    "name": "Client-Q",
+    "properties": {
+      "industry": "미디어",
+      "region": "서울",
+      "size": "mid"
+    }
+  },
+  {
+    "id": "client_18",
+    "type": "client",
+    "name": "Client-R",
+    "properties": {
+      "industry": "에너지",
+      "region": "경기",
+      "size": "enterprise"
+    }
+  },
+  {
+    "id": "client_19",
+    "type": "client",
+    "name": "Client-S",
+    "properties": {
+      "industry": "건설",
+      "region": "부산",
+      "size": "startup"
+    }
+  },
+  {
+    "id": "client_20",
+    "type": "client",
+    "name": "Client-T",
+    "properties": {
+      "industry": "공공기관",
+      "region": "대전",
+      "size": "mid"
+    }
+  },
+  {
+    "id": "client_21",
+    "type": "client",
+    "name": "Client-U",
+    "properties": {
+      "industry": "제조업",
+      "region": "대구",
+      "size": "enterprise"
+    }
+  },
+  {
+    "id": "client_22",
+    "type": "client",
+    "name": "Client-V",
+    "properties": {
+      "industry": "금융",
+      "region": "인천",
+      "size": "startup"
+    }
+  },
+  {
+    "id": "client_23",
+    "type": "client",
+    "name": "Client-W",
+    "properties": {
+      "industry": "IT/SW",
+      "region": "광주",
+      "size": "mid"
+    }
+  },
+  {
+    "id": "client_24",
+    "type": "client",
+    "name": "Client-X",
+    "properties": {
+      "industry": "유통/물류",
+      "region": "제주",
+      "size": "enterprise"
+    }
+  },
+  {
+    "id": "client_25",
+    "type": "client",
+    "name": "Client-Y",
+    "properties": {
+      "industry": "의료/바이오",
+      "region": "서울",
+      "size": "startup"
+    }
+  },
+  {
+    "id": "client_26",
+    "type": "client",
+    "name": "Client-Z",
+    "properties": {
+      "industry": "교육",
+      "region": "경기",
+      "size": "mid"
+    }
+  },
+  {
+    "id": "client_27",
+    "type": "client",
+    "name": "Client-AA",
+    "properties": {
+      "industry": "미디어",
+      "region": "부산",
+      "size": "enterprise"
+    }
+  },
+  {
+    "id": "client_28",
+    "type": "client",
+    "name": "Client-AB",
+    "properties": {
+      "industry": "에너지",
+      "region": "대전",
+      "size": "startup"
+    }
+  },
+  {
+    "id": "client_29",
+    "type": "client",
+    "name": "Client-AC",
+    "properties": {
+      "industry": "건설",
+      "region": "대구",
+      "size": "mid"
+    }
+  },
+  {
+    "id": "client_30",
+    "type": "client",
+    "name": "Client-AD",
+    "properties": {
+      "industry": "공공기관",
+      "region": "인천",
+      "size": "enterprise"
+    }
+  },
+  {
+    "id": "product_1",
+    "type": "product",
+    "name": "Product-C1",
+    "properties": {
+      "category": "cloud",
+      "price": 350
+    }
+  },
+  {
+    "id": "product_2",
+    "type": "product",
+    "name": "Product-C2",
+    "properties": {
+      "category": "cloud",
+      "price": 150
+    }
+  },
+  {
+    "id": "product_3",
+    "type": "product",
+    "name": "Product-S1",
+    "properties": {
+      "category": "security",
+      "price": 280
+    }
+  },
+  {
+    "id": "product_4",
+    "type": "product",
+    "name": "Product-S2",
+    "properties": {
+      "category": "security",
+      "price": 200
+    }
+  },
+  {
+    "id": "product_5",
+    "type": "product",
+    "name": "Product-D1",
+    "properties": {
+      "category": "data",
+      "price": 400
+    }
+  },
+  {
+    "id": "product_6",
+    "type": "product",
+    "name": "Product-D2",
+    "properties": {
+      "category": "data",
+      "price": 180
+    }
+  },
+  {
+    "id": "product_7",
+    "type": "product",
+    "name": "Product-C3",
+    "properties": {
+      "category": "cloud",
+      "price": 120
+    }
+  },
+  {
+    "id": "product_8",
+    "type": "product",
+    "name": "Product-C4",
+    "properties": {
+      "category": "cloud",
+      "price": 250
+    }
+  },
+  {
+    "id": "product_9",
+    "type": "product",
+    "name": "Product-D3",
+    "properties": {
+      "category": "data",
+      "price": 500
+    }
+  },
+  {
+    "id": "product_10",
+    "type": "product",
+    "name": "Product-S3",
+    "properties": {
+      "category": "security",
+      "price": 160
+    }
+  },
+  {
+    "id": "product_11",
+    "type": "product",
+    "name": "Product-T1",
+    "properties": {
+      "category": "consulting",
+      "price": 80
+    }
+  },
+  {
+    "id": "product_12",
+    "type": "product",
+    "name": "Product-T2",
+    "properties": {
+      "category": "consulting",
+      "price": 100
+    }
+  },
+  {
+    "id": "employee_1",
+    "type": "employee",
+    "name": "윤소연",
+    "properties": {
+      "position": "부장",
+      "dept": "경영지원팀"
+    }
+  },
+  {
+    "id": "employee_2",
+    "type": "employee",
+    "name": "안진우",
+    "properties": {
+      "position": "이사",
+      "dept": "클라우드사업부"
+    }
+  },
+  {
+    "id": "employee_3",
+    "type": "employee",
+    "name": "조재원",
+    "properties": {
+      "position": "이사",
+      "dept": "보안솔루션팀"
+    }
+  },
+  {
+    "id": "employee_4",
+    "type": "employee",
+    "name": "박성민",
+    "properties": {
+      "position": "이사",
+      "dept": "데이터플랫폼팀"
+    }
+  },
+  {
+    "id": "employee_5",
+    "type": "employee",
+    "name": "박소연",
+    "properties": {
+      "position": "부장",
+      "dept": "기술지원팀"
+    }
+  },
+  {
+    "id": "employee_6",
+    "type": "employee",
+    "name": "김지훈",
+    "properties": {
+      "position": "부장",
+      "dept": "영업팀"
+    }
+  },
+  {
+    "id": "employee_7",
+    "type": "employee",
+    "name": "강현우",
+    "properties": {
+      "position": "사원",
+      "dept": "클라우드사업부"
+    }
+  },
+  {
+    "id": "employee_8",
+    "type": "employee",
+    "name": "서재원",
+    "properties": {
+      "position": "과장",
+      "dept": "클라우드사업부"
+    }
+  },
+  {
+    "id": "employee_9",
+    "type": "employee",
+    "name": "홍서연",
+    "properties": {
+      "position": "차장",
+      "dept": "경영지원팀"
+    }
+  },
+  {
+    "id": "employee_10",
+    "type": "employee",
+    "name": "김도윤",
+    "properties": {
+      "position": "사원",
+      "dept": "클라우드사업부"
+    }
+  },
+  {
+    "id": "employee_11",
+    "type": "employee",
+    "name": "황민수",
+    "properties": {
+      "position": "차장",
+      "dept": "영업팀"
+    }
+  },
+  {
+    "id": "employee_12",
+    "type": "employee",
+    "name": "박민수",
+    "properties": {
+      "position": "과장",
+      "dept": "데이터플랫폼팀"
+    }
+  },
+  {
+    "id": "employee_13",
+    "type": "employee",
+    "name": "권소연",
+    "properties": {
+      "position": "과장",
+      "dept": "보안솔루션팀"
+    }
+  },
+  {
+    "id": "employee_14",
+    "type": "employee",
+    "name": "권승호",
+    "properties": {
+      "position": "사원",
+      "dept": "기술지원팀"
+    }
+  },
+  {
+    "id": "employee_15",
+    "type": "employee",
+    "name": "한태호",
+    "properties": {
+      "position": "차장",
+      "dept": "보안솔루션팀"
+    }
+  },
+  {
+    "id": "employee_16",
+    "type": "employee",
+    "name": "강동현",
+    "properties": {
+      "position": "과장",
+      "dept": "영업팀"
+    }
+  },
+  {
+    "id": "employee_17",
+    "type": "employee",
+    "name": "류서연",
+    "properties": {
+      "position": "차장",
+      "dept": "데이터플랫폼팀"
+    }
+  },
+  {
+    "id": "employee_18",
+    "type": "employee",
+    "name": "안소연",
+    "properties": {
+      "position": "차장",
+      "dept": "데이터플랫폼팀"
+    }
+  },
+  {
+    "id": "employee_19",
+    "type": "employee",
+    "name": "류혜원",
+    "properties": {
+      "position": "대리",
+      "dept": "영업팀"
+    }
+  },
+  {
+    "id": "employee_20",
+    "type": "employee",
+    "name": "조동현",
+    "properties": {
+      "position": "차장",
+      "dept": "클라우드사업부"
+    }
+  },
+  {
+    "id": "employee_21",
+    "type": "employee",
+    "name": "안재원",
+    "properties": {
+      "position": "사원",
+      "dept": "영업팀"
+    }
+  },
+  {
+    "id": "employee_22",
+    "type": "employee",
+    "name": "이지훈",
+    "properties": {
+      "position": "차장",
+      "dept": "클라우드사업부"
+    }
+  },
+  {
+    "id": "employee_23",
+    "type": "employee",
+    "name": "서지현",
+    "properties": {
+      "position": "대리",
+      "dept": "경영지원팀"
+    }
+  },
+  {
+    "id": "employee_24",
+    "type": "employee",
+    "name": "신미라",
+    "properties": {
+      "position": "과장",
+      "dept": "보안솔루션팀"
+    }
+  },
+  {
+    "id": "employee_25",
+    "type": "employee",
+    "name": "신다은",
+    "properties": {
+      "position": "차장",
+      "dept": "영업팀"
+    }
+  },
+  {
+    "id": "employee_26",
+    "type": "employee",
+    "name": "정혜원",
+    "properties": {
+      "position": "차장",
+      "dept": "경영지원팀"
+    }
+  },
+  {
+    "id": "employee_27",
+    "type": "employee",
+    "name": "황다은",
+    "properties": {
+      "position": "사원",
+      "dept": "클라우드사업부"
+    }
+  },
+  {
+    "id": "employee_28",
+    "type": "employee",
+    "name": "강유진",
+    "properties": {
+      "position": "대리",
+      "dept": "영업팀"
+    }
+  },
+  {
+    "id": "employee_29",
+    "type": "employee",
+    "name": "오수진",
+    "properties": {
+      "position": "차장",
+      "dept": "경영지원팀"
+    }
+  },
+  {
+    "id": "employee_30",
+    "type": "employee",
+    "name": "신하은",
+    "properties": {
+      "position": "과장",
+      "dept": "경영지원팀"
+    }
+  },
+  {
+    "id": "employee_31",
+    "type": "employee",
+    "name": "박성민",
+    "properties": {
+      "position": "차장",
+      "dept": "보안솔루션팀"
+    }
+  },
+  {
+    "id": "employee_32",
+    "type": "employee",
+    "name": "조예진",
+    "properties": {
+      "position": "차장",
+      "dept": "기술지원팀"
+    }
+  },
+  {
+    "id": "employee_33",
+    "type": "employee",
+    "name": "한은지",
+    "properties": {
+      "position": "사원",
+      "dept": "클라우드사업부"
+    }
+  },
+  {
+    "id": "employee_34",
+    "type": "employee",
+    "name": "신동현",
+    "properties": {
+      "position": "대리",
+      "dept": "영업팀"
+    }
+  },
+  {
+    "id": "employee_35",
+    "type": "employee",
+    "name": "황준혁",
+    "properties": {
+      "position": "사원",
+      "dept": "영업팀"
+    }
+  },
+  {
+    "id": "employee_36",
+    "type": "employee",
+    "name": "박은지",
+    "properties": {
+      "position": "과장",
+      "dept": "경영지원팀"
+    }
+  },
+  {
+    "id": "employee_37",
+    "type": "employee",
+    "name": "권은지",
+    "properties": {
+      "position": "대리",
+      "dept": "보안솔루션팀"
+    }
+  },
+  {
+    "id": "employee_38",
+    "type": "employee",
+    "name": "최상우",
+    "properties": {
+      "position": "차장",
+      "dept": "경영지원팀"
+    }
+  },
+  {
+    "id": "employee_39",
+    "type": "employee",
+    "name": "황재원",
+    "properties": {
+      "position": "사원",
+      "dept": "클라우드사업부"
+    }
+  },
+  {
+    "id": "employee_40",
+    "type": "employee",
+    "name": "한도윤",
+    "properties": {
+      "position": "과장",
+      "dept": "영업팀"
+    }
+  },
+  {
+    "id": "employee_41",
+    "type": "employee",
+    "name": "임우진",
+    "properties": {
+      "position": "차장",
+      "dept": "기술지원팀"
+    }
+  },
+  {
+    "id": "employee_42",
+    "type": "employee",
+    "name": "권진우",
+    "properties": {
+      "position": "차장",
+      "dept": "보안솔루션팀"
+    }
+  },
+  {
+    "id": "employee_43",
+    "type": "employee",
+    "name": "조현우",
+    "properties": {
+      "position": "차장",
+      "dept": "데이터플랫폼팀"
+    }
+  },
+  {
+    "id": "employee_44",
+    "type": "employee",
+    "name": "장미라",
+    "properties": {
+      "position": "과장",
+      "dept": "보안솔루션팀"
+    }
+  },
+  {
+    "id": "employee_45",
+    "type": "employee",
+    "name": "김준혁",
+    "properties": {
+      "position": "차장",
+      "dept": "클라우드사업부"
+    }
+  },
+  {
+    "id": "project_1",
+    "type": "project",
+    "name": "Client-J 모니터링 시스템 도입",
+    "properties": {
+      "status": "in_progress",
+      "budget": 14738
+    }
+  },
+  {
+    "id": "project_2",
+    "type": "project",
+    "name": "Client-B CI/CD 파이프라인 구축",
+    "properties": {
+      "status": "planning",
+      "budget": 9267
+    }
+  },
+  {
+    "id": "project_3",
+    "type": "project",
+    "name": "Client-Q AI 예측 모델 구축",
+    "properties": {
+      "status": "on_hold",
+      "budget": 4922
+    }
+  },
+  {
+    "id": "project_4",
+    "type": "project",
+    "name": "Client-O 클라우드 마이그레이션",
+    "properties": {
+      "status": "in_progress",
+      "budget": 5503
+    }
+  },
+  {
+    "id": "project_5",
+    "type": "project",
+    "name": "Client-AB DevOps 전환",
+    "properties": {
+      "status": "completed",
+      "budget": 6512
+    }
+  },
+  {
+    "id": "project_6",
+    "type": "project",
+    "name": "Client-N K8s 클러스터 구축",
+    "properties": {
+      "status": "in_progress",
+      "budget": 11809
+    }
+  },
+  {
+    "id": "project_7",
+    "type": "project",
+    "name": "Client-X 로그 분석 시스템",
+    "properties": {
+      "status": "completed",
+      "budget": 9183
+    }
+  },
+  {
+    "id": "project_8",
+    "type": "project",
+    "name": "Client-I 보안 인프라 강화",
+    "properties": {
+      "status": "planning",
+      "budget": 8700
+    }
+  },
+  {
+    "id": "project_9",
+    "type": "project",
+    "name": "Client-I API 게이트웨이 구축",
+    "properties": {
+      "status": "completed",
+      "budget": 1277
+    }
+  },
+  {
+    "id": "project_10",
+    "type": "project",
+    "name": "Client-AC 성능 최적화",
+    "properties": {
+      "status": "on_hold",
+      "budget": 6442
+    }
+  },
+  {
+    "id": "project_11",
+    "type": "project",
+    "name": "Client-V 하이브리드 클라우드",
+    "properties": {
+      "status": "in_progress",
+      "budget": 1162
+    }
+  },
+  {
+    "id": "project_12",
+    "type": "project",
+    "name": "Client-S 클라우드 마이그레이션",
+    "properties": {
+      "status": "on_hold",
+      "budget": 4121
+    }
+  },
+  {
+    "id": "project_13",
+    "type": "project",
+    "name": "Client-B CI/CD 파이프라인 구축",
+    "properties": {
+      "status": "planning",
+      "budget": 11832
+    }
+  },
+  {
+    "id": "project_14",
+    "type": "project",
+    "name": "Client-U AI 예측 모델 구축",
+    "properties": {
+      "status": "in_progress",
+      "budget": 8410
+    }
+  },
+  {
+    "id": "project_15",
+    "type": "project",
+    "name": "Client-AC 로그 분석 시스템",
+    "properties": {
+      "status": "in_progress",
+      "budget": 8635
+    }
+  },
+  {
+    "id": "project_16",
+    "type": "project",
+    "name": "Client-E 로그 분석 시스템",
+    "properties": {
+      "status": "in_progress",
+      "budget": 10413
+    }
+  },
+  {
+    "id": "project_17",
+    "type": "project",
+    "name": "Client-AA 재해 복구 시스템",
+    "properties": {
+      "status": "in_progress",
+      "budget": 2923
+    }
+  },
+  {
+    "id": "project_18",
+    "type": "project",
+    "name": "Client-E DevOps 전환",
+    "properties": {
+      "status": "on_hold",
+      "budget": 7413
+    }
+  },
+  {
+    "id": "project_19",
+    "type": "project",
+    "name": "Client-M 하이브리드 클라우드",
+    "properties": {
+      "status": "in_progress",
+      "budget": 12232
+    }
+  },
+  {
+    "id": "project_20",
+    "type": "project",
+    "name": "Client-C DB 마이그레이션",
+    "properties": {
+      "status": "in_progress",
+      "budget": 898
+    }
+  },
+  {
+    "id": "project_21",
+    "type": "project",
+    "name": "Client-Y 데이터 거버넌스",
+    "properties": {
+      "status": "on_hold",
+      "budget": 3128
+    }
+  },
+  {
+    "id": "project_22",
+    "type": "project",
+    "name": "Client-B 하이브리드 클라우드",
+    "properties": {
+      "status": "planning",
+      "budget": 8616
+    }
+  },
+  {
+    "id": "project_23",
+    "type": "project",
+    "name": "Client-E 모니터링 시스템 도입",
+    "properties": {
+      "status": "planning",
+      "budget": 6823
+    }
+  },
+  {
+    "id": "project_24",
+    "type": "project",
+    "name": "Client-AC MLOps 파이프라인",
+    "properties": {
+      "status": "in_progress",
+      "budget": 8007
+    }
+  },
+  {
+    "id": "project_25",
+    "type": "project",
+    "name": "Client-U API 게이트웨이 구축",
+    "properties": {
+      "status": "on_hold",
+      "budget": 2382
+    }
+  },
+  {
+    "id": "project_26",
+    "type": "project",
+    "name": "Client-N 보안 감사 자동화",
+    "properties": {
+      "status": "planning",
+      "budget": 4506
+    }
+  },
+  {
+    "id": "project_27",
+    "type": "project",
+    "name": "Client-G DB 마이그레이션",
+    "properties": {
+      "status": "completed",
+      "budget": 6695
+    }
+  },
+  {
+    "id": "project_28",
+    "type": "project",
+    "name": "Client-V DevOps 전환",
+    "properties": {
+      "status": "in_progress",
+      "budget": 9651
+    }
+  },
+  {
+    "id": "project_29",
+    "type": "project",
+    "name": "Client-R 보안 감사 자동화",
+    "properties": {
+      "status": "in_progress",
+      "budget": 13330
+    }
+  },
+  {
+    "id": "project_30",
+    "type": "project",
+    "name": "Client-G 로그 분석 시스템",
+    "properties": {
+      "status": "on_hold",
+      "budget": 3370
+    }
+  },
+  {
+    "id": "project_31",
+    "type": "project",
+    "name": "Client-Z CI/CD 파이프라인 구축",
+    "properties": {
+      "status": "in_progress",
+      "budget": 4855
+    }
+  },
+  {
+    "id": "project_32",
+    "type": "project",
+    "name": "Client-K API 게이트웨이 구축",
+    "properties": {
+      "status": "completed",
+      "budget": 7764
+    }
+  },
+  {
+    "id": "project_33",
+    "type": "project",
+    "name": "Client-S DevOps 전환",
+    "properties": {
+      "status": "completed",
+      "budget": 14528
+    }
+  },
+  {
+    "id": "project_34",
+    "type": "project",
+    "name": "Client-W MLOps 파이프라인",
+    "properties": {
+      "status": "on_hold",
+      "budget": 6058
+    }
+  },
+  {
+    "id": "project_35",
+    "type": "project",
+    "name": "Client-R MLOps 파이프라인",
+    "properties": {
+      "status": "on_hold",
+      "budget": 10186
+    }
+  },
+  {
+    "id": "project_36",
+    "type": "project",
+    "name": "Client-E 클라우드 마이그레이션",
+    "properties": {
+      "status": "in_progress",
+      "budget": 2650
+    }
+  },
+  {
+    "id": "project_37",
+    "type": "project",
+    "name": "Client-AC K8s 클러스터 구축",
+    "properties": {
+      "status": "in_progress",
+      "budget": 4195
+    }
+  },
+  {
+    "id": "project_38",
+    "type": "project",
+    "name": "Client-J API 게이트웨이 구축",
+    "properties": {
+      "status": "in_progress",
+      "budget": 6398
+    }
+  },
+  {
+    "id": "project_39",
+    "type": "project",
+    "name": "Client-J 제로트러스트 구축",
+    "properties": {
+      "status": "in_progress",
+      "budget": 6002
+    }
+  },
+  {
+    "id": "project_40",
+    "type": "project",
+    "name": "Client-S 성능 최적화",
+    "properties": {
+      "status": "on_hold",
+      "budget": 8626
+    }
+  },
+  {
+    "id": "dept_1",
+    "type": "department",
+    "name": "경영지원팀",
+    "properties": {}
+  },
+  {
+    "id": "dept_2",
+    "type": "department",
+    "name": "클라우드사업부",
+    "properties": {}
+  },
+  {
+    "id": "dept_3",
+    "type": "department",
+    "name": "보안솔루션팀",
+    "properties": {}
+  },
+  {
+    "id": "dept_4",
+    "type": "department",
+    "name": "데이터플랫폼팀",
+    "properties": {}
+  },
+  {
+    "id": "dept_5",
+    "type": "department",
+    "name": "기술지원팀",
+    "properties": {}
+  },
+  {
+    "id": "dept_6",
+    "type": "department",
+    "name": "영업팀",
+    "properties": {}
+  }
+]

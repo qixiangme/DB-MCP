@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: riwonace-postgres
+    environment:
+      POSTGRES_DB: riwonace
+      POSTGRES_USER: riwonace
+      POSTGRES_PASSWORD: riwonace
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U riwonace -d riwonace"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: riwonace-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    environment:
+      # 모델 상주 — 5분 유휴 언로드로 인한 콜드 스타트(~45초) 제거
+      OLLAMA_KEEP_ALIVE: "-1"
+      # KV 캐시 절반 절감(체감 손실 거의 없음) + Flash Attention
+      OLLAMA_KV_CACHE_TYPE: "q8_0"
+      OLLAMA_FLASH_ATTENTION: "1"
+
+volumes:
+  pgdata:
+  ollama:

@@ -1,0 +1,17 @@
+{
+  "description": "라우트별 평가셋 — expectedRoute가 응답 routes에 포함되면 라우팅 적중, keywords 중 하나라도 답변에 포함되면 정답",
+  "questions": [
+    { "id": "V1", "question": "MCP가 뭐야?", "expectedRoute": "VECTOR", "keywords": ["표준", "프로토콜", "Anthropic"] },
+    { "id": "V2", "question": "TACC가 뭔지 설명해줘", "expectedRoute": "VECTOR", "keywords": ["컨텍스트", "선별"] },
+    { "id": "V3", "question": "pgvector의 장점을 설명해줘", "expectedRoute": "VECTOR", "keywords": ["PostgreSQL", "벡터"] },
+    { "id": "V4", "question": "Lost in the Middle 문제가 뭐야?", "expectedRoute": "VECTOR", "keywords": ["중간", "컨텍스트", "처음"] },
+    { "id": "S1", "question": "플랫폼팀 직원의 평균 급여는 얼마야?", "expectedRoute": "SQL", "keywords": ["6500", "6,500"] },
+    { "id": "S2", "question": "직원은 총 몇 명이야?", "expectedRoute": "SQL", "keywords": ["8명", "여덟", "8 명"] },
+    { "id": "S3", "question": "가장 비싼 제품은 뭐야?", "expectedRoute": "SQL", "keywords": ["OpenShift", "오픈시프트"] },
+    { "id": "S4", "question": "AI연구소 직원은 몇 명이야?", "expectedRoute": "SQL", "keywords": ["2명", "두 명", "2 명"] },
+    { "id": "S5", "question": "재고가 가장 많은 제품은 뭐야?", "expectedRoute": "SQL", "keywords": ["Kubernetes", "쿠버네티스"] },
+    { "id": "G1", "question": "air는 누가 개발했어?", "expectedRoute": "GRAPH", "keywords": ["리원에이스"] },
+    { "id": "G2", "question": "MCP 개발사는 어디야?", "expectedRoute": "GRAPH", "keywords": ["Anthropic", "앤트로픽"] },
+    { "id": "G3", "question": "air의 라이선스는 뭐야?", "expectedRoute": "GRAPH", "keywords": ["Apache", "아파치"] }
+  ]
+}

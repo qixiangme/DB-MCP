@@ -1,0 +1,2473 @@
+[
+  {
+    "source": "employee_1",
+    "target": "dept_1",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_2",
+    "target": "dept_2",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_3",
+    "target": "dept_3",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_4",
+    "target": "dept_4",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_5",
+    "target": "dept_5",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_6",
+    "target": "dept_6",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_7",
+    "target": "dept_2",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_8",
+    "target": "dept_2",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_9",
+    "target": "dept_1",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_10",
+    "target": "dept_2",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_11",
+    "target": "dept_6",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_12",
+    "target": "dept_4",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_13",
+    "target": "dept_3",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_14",
+    "target": "dept_5",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_15",
+    "target": "dept_3",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_16",
+    "target": "dept_6",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_17",
+    "target": "dept_4",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_18",
+    "target": "dept_4",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_19",
+    "target": "dept_6",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_20",
+    "target": "dept_2",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_21",
+    "target": "dept_6",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_22",
+    "target": "dept_2",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_23",
+    "target": "dept_1",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_24",
+    "target": "dept_3",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_25",
+    "target": "dept_6",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_26",
+    "target": "dept_1",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_27",
+    "target": "dept_2",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_28",
+    "target": "dept_6",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_29",
+    "target": "dept_1",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_30",
+    "target": "dept_1",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_31",
+    "target": "dept_3",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_32",
+    "target": "dept_5",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_33",
+    "target": "dept_2",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_34",
+    "target": "dept_6",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_35",
+    "target": "dept_6",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_36",
+    "target": "dept_1",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_37",
+    "target": "dept_3",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_38",
+    "target": "dept_1",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_39",
+    "target": "dept_2",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_40",
+    "target": "dept_6",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_41",
+    "target": "dept_5",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_42",
+    "target": "dept_3",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_43",
+    "target": "dept_4",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_44",
+    "target": "dept_3",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "employee_45",
+    "target": "dept_2",
+    "relation": "BELONGS_TO"
+  },
+  {
+    "source": "dept_1",
+    "target": "employee_1",
+    "relation": "HEAD_IS"
+  },
+  {
+    "source": "dept_2",
+    "target": "employee_2",
+    "relation": "HEAD_IS"
+  },
+  {
+    "source": "dept_3",
+    "target": "employee_3",
+    "relation": "HEAD_IS"
+  },
+  {
+    "source": "dept_4",
+    "target": "employee_4",
+    "relation": "HEAD_IS"
+  },
+  {
+    "source": "dept_5",
+    "target": "employee_5",
+    "relation": "HEAD_IS"
+  },
+  {
+    "source": "dept_6",
+    "target": "employee_6",
+    "relation": "HEAD_IS"
+  },
+  {
+    "source": "client_17",
+    "target": "product_8",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 1,
+      "amount": 1750,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_43",
+    "target": "client_17",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_4",
+    "target": "product_2",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 2,
+      "amount": 1950,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_3",
+    "target": "client_4",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_8",
+    "target": "product_1",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 3,
+      "amount": 4900,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_44",
+    "target": "client_8",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_9",
+    "target": "product_8",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 4,
+      "amount": 4250,
+      "status": "cancelled"
+    }
+  },
+  {
+    "source": "employee_2",
+    "target": "client_9",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_4",
+    "target": "product_1",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 5,
+      "amount": 5950,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_18",
+    "target": "client_4",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_2",
+    "target": "product_10",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 6,
+      "amount": 2400,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_34",
+    "target": "client_2",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_28",
+    "target": "product_8",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 7,
+      "amount": 2000,
+      "status": "cancelled"
+    }
+  },
+  {
+    "source": "employee_4",
+    "target": "client_28",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_20",
+    "target": "product_4",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 8,
+      "amount": 4600,
+      "status": "completed"
+    }
+  },
+  {
+    "source": "employee_45",
+    "target": "client_20",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_23",
+    "target": "product_6",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 9,
+      "amount": 3780,
+      "status": "cancelled"
+    }
+  },
+  {
+    "source": "employee_35",
+    "target": "client_23",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_20",
+    "target": "product_1",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 10,
+      "amount": 7700,
+      "status": "completed"
+    }
+  },
+  {
+    "source": "employee_6",
+    "target": "client_20",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_14",
+    "target": "product_8",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 11,
+      "amount": 4000,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_34",
+    "target": "client_14",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_2",
+    "target": "product_2",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 12,
+      "amount": 1200,
+      "status": "completed"
+    }
+  },
+  {
+    "source": "employee_28",
+    "target": "client_2",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_20",
+    "target": "product_12",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 13,
+      "amount": 1000,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_22",
+    "target": "client_20",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "employee_27",
+    "target": "client_2",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_20",
+    "target": "product_10",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 15,
+      "amount": 1760,
+      "status": "cancelled"
+    }
+  },
+  {
+    "source": "employee_21",
+    "target": "client_20",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_21",
+    "target": "product_9",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 16,
+      "amount": 6000,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_18",
+    "target": "client_21",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_25",
+    "target": "product_5",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 17,
+      "amount": 2800,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_7",
+    "target": "client_25",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_25",
+    "target": "product_1",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 18,
+      "amount": 3500,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_18",
+    "target": "client_25",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_16",
+    "target": "product_7",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 19,
+      "amount": 1560,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_39",
+    "target": "client_16",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_4",
+    "target": "product_10",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 20,
+      "amount": 1600,
+      "status": "completed"
+    }
+  },
+  {
+    "source": "employee_7",
+    "target": "client_4",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_26",
+    "target": "product_4",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 21,
+      "amount": 3800,
+      "status": "completed"
+    }
+  },
+  {
+    "source": "employee_37",
+    "target": "client_26",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_28",
+    "target": "product_5",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 22,
+      "amount": 4800,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_12",
+    "target": "client_28",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_5",
+    "target": "product_3",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 23,
+      "amount": 5040,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_33",
+    "target": "client_5",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_2",
+    "target": "product_5",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 24,
+      "amount": 6400,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_17",
+    "target": "client_2",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_17",
+    "target": "product_1",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 25,
+      "amount": 6300,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_15",
+    "target": "client_17",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_25",
+    "target": "product_9",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 26,
+      "amount": 3500,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_37",
+    "target": "client_25",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_24",
+    "target": "product_6",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 27,
+      "amount": 3240,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_19",
+    "target": "client_24",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_24",
+    "target": "product_9",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 28,
+      "amount": 8000,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_20",
+    "target": "client_24",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_25",
+    "target": "product_11",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 29,
+      "amount": 480,
+      "status": "cancelled"
+    }
+  },
+  {
+    "source": "employee_10",
+    "target": "client_25",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_9",
+    "target": "product_11",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 30,
+      "amount": 720,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_17",
+    "target": "client_9",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_27",
+    "target": "product_10",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 31,
+      "amount": 1440,
+      "status": "cancelled"
+    }
+  },
+  {
+    "source": "employee_15",
+    "target": "client_27",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_18",
+    "target": "product_8",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 32,
+      "amount": 3000,
+      "status": "completed"
+    }
+  },
+  {
+    "source": "employee_6",
+    "target": "client_18",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_6",
+    "target": "product_2",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 33,
+      "amount": 1350,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_11",
+    "target": "client_6",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_10",
+    "target": "product_3",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 34,
+      "amount": 5040,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_3",
+    "target": "client_10",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_29",
+    "target": "product_7",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 35,
+      "amount": 840,
+      "status": "cancelled"
+    }
+  },
+  {
+    "source": "employee_44",
+    "target": "client_29",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_30",
+    "target": "product_3",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 36,
+      "amount": 6440,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_2",
+    "target": "client_30",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_8",
+    "target": "product_7",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 37,
+      "amount": 720,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_40",
+    "target": "client_8",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_20",
+    "target": "product_9",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 38,
+      "amount": 11000,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_13",
+    "target": "client_20",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_19",
+    "target": "product_10",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 39,
+      "amount": 2560,
+      "status": "cancelled"
+    }
+  },
+  {
+    "source": "employee_42",
+    "target": "client_19",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_20",
+    "target": "product_5",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 40,
+      "amount": 8000,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_12",
+    "target": "client_20",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_6",
+    "target": "product_10",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 41,
+      "amount": 1760,
+      "status": "cancelled"
+    }
+  },
+  {
+    "source": "employee_15",
+    "target": "client_6",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_5",
+    "target": "product_4",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 42,
+      "amount": 2400,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_43",
+    "target": "client_5",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_24",
+    "target": "product_2",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 43,
+      "amount": 2100,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_18",
+    "target": "client_24",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_1",
+    "target": "product_7",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 44,
+      "amount": 960,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_11",
+    "target": "client_1",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_14",
+    "target": "product_3",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 45,
+      "amount": 3360,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_33",
+    "target": "client_14",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_27",
+    "target": "product_9",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 46,
+      "amount": 8000,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_13",
+    "target": "client_27",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_17",
+    "target": "product_5",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 47,
+      "amount": 3200,
+      "status": "completed"
+    }
+  },
+  {
+    "source": "client_22",
+    "target": "product_7",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 48,
+      "amount": 840,
+      "status": "completed"
+    }
+  },
+  {
+    "source": "employee_44",
+    "target": "client_22",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "employee_24",
+    "target": "client_5",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_9",
+    "target": "product_12",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 50,
+      "amount": 1300,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_42",
+    "target": "client_9",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_7",
+    "target": "product_2",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 51,
+      "amount": 3450,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_22",
+    "target": "client_7",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "employee_43",
+    "target": "client_25",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_10",
+    "target": "product_7",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 53,
+      "amount": 1200,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_37",
+    "target": "client_10",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_12",
+    "target": "product_12",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 54,
+      "amount": 800,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_45",
+    "target": "client_12",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_28",
+    "target": "product_7",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 55,
+      "amount": 1320,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_27",
+    "target": "client_28",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_8",
+    "target": "product_2",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 56,
+      "amount": 1650,
+      "status": "active"
+    }
+  },
+  {
+    "source": "client_1",
+    "target": "product_3",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 57,
+      "amount": 6440,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_17",
+    "target": "client_1",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_11",
+    "target": "product_3",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 58,
+      "amount": 4480,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_45",
+    "target": "client_11",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_30",
+    "target": "product_4",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 59,
+      "amount": 3000,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_13",
+    "target": "client_30",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_24",
+    "target": "product_4",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 60,
+      "amount": 4000,
+      "status": "cancelled"
+    }
+  },
+  {
+    "source": "employee_40",
+    "target": "client_24",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_22",
+    "target": "product_1",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 61,
+      "amount": 5950,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_39",
+    "target": "client_22",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_2",
+    "target": "product_4",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 62,
+      "amount": 2600,
+      "status": "completed"
+    }
+  },
+  {
+    "source": "employee_45",
+    "target": "client_2",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "employee_8",
+    "target": "client_22",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_30",
+    "target": "product_12",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 64,
+      "amount": 700,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_43",
+    "target": "client_30",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_29",
+    "target": "product_6",
+    "relation": "USES",
+    "properties": {
+      "contract_id": 65,
+      "amount": 3780,
+      "status": "active"
+    }
+  },
+  {
+    "source": "employee_42",
+    "target": "client_29",
+    "relation": "MANAGES_ACCOUNT"
+  },
+  {
+    "source": "client_10",
+    "target": "project_1",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_7",
+    "target": "project_1",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_2",
+    "target": "project_2",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_2",
+    "target": "project_2",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_17",
+    "target": "project_3",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_3",
+    "target": "project_3",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_15",
+    "target": "project_4",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_20",
+    "target": "project_4",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_28",
+    "target": "project_5",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_22",
+    "target": "project_5",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_14",
+    "target": "project_6",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_15",
+    "target": "project_6",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_24",
+    "target": "project_7",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_15",
+    "target": "project_7",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_9",
+    "target": "project_8",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_18",
+    "target": "project_8",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_9",
+    "target": "project_9",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_7",
+    "target": "project_9",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_29",
+    "target": "project_10",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_43",
+    "target": "project_10",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_22",
+    "target": "project_11",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_44",
+    "target": "project_11",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_19",
+    "target": "project_12",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_12",
+    "target": "project_12",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_2",
+    "target": "project_13",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_31",
+    "target": "project_13",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_21",
+    "target": "project_14",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_45",
+    "target": "project_14",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_29",
+    "target": "project_15",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_45",
+    "target": "project_15",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_5",
+    "target": "project_16",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_44",
+    "target": "project_16",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_27",
+    "target": "project_17",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_15",
+    "target": "project_17",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_5",
+    "target": "project_18",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_24",
+    "target": "project_18",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_13",
+    "target": "project_19",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_8",
+    "target": "project_19",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_3",
+    "target": "project_20",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_2",
+    "target": "project_20",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_25",
+    "target": "project_21",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_12",
+    "target": "project_21",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_2",
+    "target": "project_22",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_8",
+    "target": "project_22",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_5",
+    "target": "project_23",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_10",
+    "target": "project_23",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_29",
+    "target": "project_24",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_17",
+    "target": "project_24",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_21",
+    "target": "project_25",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_42",
+    "target": "project_25",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_14",
+    "target": "project_26",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_20",
+    "target": "project_26",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_7",
+    "target": "project_27",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_10",
+    "target": "project_27",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_22",
+    "target": "project_28",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_13",
+    "target": "project_28",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_18",
+    "target": "project_29",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_7",
+    "target": "project_29",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_7",
+    "target": "project_30",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_17",
+    "target": "project_30",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_26",
+    "target": "project_31",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_8",
+    "target": "project_31",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_11",
+    "target": "project_32",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_31",
+    "target": "project_32",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_19",
+    "target": "project_33",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_44",
+    "target": "project_33",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_23",
+    "target": "project_34",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_44",
+    "target": "project_34",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_18",
+    "target": "project_35",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_20",
+    "target": "project_35",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_5",
+    "target": "project_36",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_31",
+    "target": "project_36",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_29",
+    "target": "project_37",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_45",
+    "target": "project_37",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_10",
+    "target": "project_38",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_8",
+    "target": "project_38",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_10",
+    "target": "project_39",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_3",
+    "target": "project_39",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_19",
+    "target": "project_40",
+    "relation": "HAS_PROJECT"
+  },
+  {
+    "source": "employee_33",
+    "target": "project_40",
+    "relation": "LEADS"
+  },
+  {
+    "source": "client_29",
+    "target": "product_7",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 1,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_4",
+    "target": "product_3",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 2,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_22",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 3,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_24",
+    "target": "product_2",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 4,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_26",
+    "target": "product_8",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 5,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_21",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 6,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_25",
+    "target": "product_1",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 7,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_26",
+    "target": "product_9",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 8,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_23",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 9,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_11",
+    "target": "product_1",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 10,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_13",
+    "target": "product_2",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 11,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_10",
+    "target": "product_3",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 12,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_23",
+    "target": "product_6",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 13,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_24",
+    "target": "product_3",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 14,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_17",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 15,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_15",
+    "target": "product_10",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 16,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_24",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 17,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_13",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 18,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_22",
+    "target": "product_3",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 19,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_3",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 20,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_28",
+    "target": "product_11",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 22,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_3",
+    "target": "product_11",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 23,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_2",
+    "target": "product_7",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 24,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_25",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 25,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_23",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 26,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_28",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 27,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_18",
+    "target": "product_10",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 28,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_24",
+    "target": "product_8",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 29,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_2",
+    "target": "product_6",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 30,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_19",
+    "target": "product_10",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 31,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_6",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 32,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_16",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 33,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_16",
+    "target": "product_9",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 34,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_26",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 35,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_4",
+    "target": "product_9",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 36,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_19",
+    "target": "product_1",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 38,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_26",
+    "target": "product_7",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 39,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_12",
+    "target": "product_11",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 40,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_4",
+    "target": "product_8",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 41,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_22",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 42,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_27",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 43,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_19",
+    "target": "product_8",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 44,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_20",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 45,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_4",
+    "target": "product_2",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 46,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_18",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 47,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_26",
+    "target": "product_1",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 48,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_21",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 49,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_18",
+    "target": "product_9",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 50,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_15",
+    "target": "product_3",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 51,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_13",
+    "target": "product_11",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 52,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_11",
+    "target": "product_2",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 53,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_29",
+    "target": "product_8",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 54,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_23",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 55,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_14",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 58,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_11",
+    "target": "product_7",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 59,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_20",
+    "target": "product_11",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 60,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_17",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 61,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_5",
+    "target": "product_10",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 62,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_2",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 63,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_6",
+    "target": "product_6",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 65,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_8",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 66,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_13",
+    "target": "product_9",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 68,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_7",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 69,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_9",
+    "target": "product_9",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 70,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_25",
+    "target": "product_11",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 71,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_10",
+    "target": "product_6",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 74,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_11",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 75,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_20",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 78,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_19",
+    "target": "product_3",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 79,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_1",
+    "target": "product_10",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 80,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_29",
+    "target": "product_2",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 81,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_4",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 83,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_24",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 85,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_15",
+    "target": "product_7",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 88,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_25",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 90,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_22",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 93,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_2",
+    "target": "product_10",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 94,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_15",
+    "target": "product_6",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 95,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_14",
+    "target": "product_10",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 96,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_4",
+    "target": "product_10",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 98,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_30",
+    "target": "product_8",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 100,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_5",
+    "target": "product_6",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 101,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_18",
+    "target": "product_4",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 102,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_27",
+    "target": "product_3",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 103,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_29",
+    "target": "product_1",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 104,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_8",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 105,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_13",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 106,
+      "priority": "low"
+    }
+  },
+  {
+    "source": "client_6",
+    "target": "product_5",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 107,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_9",
+    "target": "product_11",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 108,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_28",
+    "target": "product_1",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 109,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_30",
+    "target": "product_10",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 111,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_19",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 112,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_26",
+    "target": "product_2",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 113,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_5",
+    "target": "product_3",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 114,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_13",
+    "target": "product_8",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 115,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_24",
+    "target": "product_6",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 116,
+      "priority": "high"
+    }
+  },
+  {
+    "source": "client_13",
+    "target": "product_12",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 117,
+      "priority": "critical"
+    }
+  },
+  {
+    "source": "client_30",
+    "target": "product_11",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 119,
+      "priority": "medium"
+    }
+  },
+  {
+    "source": "client_10",
+    "target": "product_1",
+    "relation": "REPORTED_ISSUE",
+    "properties": {
+      "ticket_id": 120,
+      "priority": "critical"
+    }
+  }
+]
