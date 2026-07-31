@@ -36,4 +36,18 @@ class RuleBasedRouterTest {
     fun `어떤 규칙에도 안 걸리면 VECTOR가 기본값이다`() {
         assertEquals(listOf(Route.VECTOR), router.route("안녕하세요"))
     }
+
+    @Test
+    fun `fallback이 있으면 키워드 미매칭 시 위임한다`() {
+        val withFallback = RuleBasedRouter(fallback = RouteFallback { Route.GRAPH })
+        assertEquals(listOf(Route.GRAPH), withFallback.route("키워드가 하나도 안 걸리는 질문"))
+    }
+
+    @Test
+    fun `키워드가 하나라도 걸리면 fallback은 호출되지 않는다`() {
+        var called = false
+        val withFallback = RuleBasedRouter(fallback = RouteFallback { called = true; Route.GRAPH })
+        withFallback.route("가장 비싼 제품이 뭐야?")
+        assertEquals(false, called)
+    }
 }

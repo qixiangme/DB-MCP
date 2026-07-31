@@ -9,10 +9,10 @@ enum class Route { SQL, VECTOR, GRAPH }
  *
  * 소형 LLM의 불안정한 function-calling 대신 결정적 규칙으로 도구를 선택한다.
  * 복수 규칙에 걸리면 해당 도구들을 병렬 호출하고 결과를 통합한다.
- * 어떤 규칙에도 걸리지 않으면 vector_search가 기본값이다.
+ * 어떤 규칙에도 걸리지 않으면 `fallback`이 있으면 그쪽에 위임하고, 없으면 vector_search가 기본값이다.
  */
 @Component
-class RuleBasedRouter {
+class RuleBasedRouter(private val fallback: RouteFallback? = null) {
 
     private val sqlKeywords = listOf(
         "몇", "개수", "수는", "평균", "합계", "총", "최대", "최소", "가장 비싼", "가장 싼",
@@ -43,6 +43,7 @@ class RuleBasedRouter {
             if (graphKeywords.any { q.contains(it) }) add(Route.GRAPH)
             if (vectorKeywords.any { q.contains(it) }) add(Route.VECTOR)
         }
-        return routes.ifEmpty { listOf(Route.VECTOR) }
+        if (routes.isNotEmpty()) return routes
+        return listOf(fallback?.classify(question) ?: Route.VECTOR)
     }
 }
