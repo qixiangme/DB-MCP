@@ -71,7 +71,51 @@ MCP 서버만 교체: Spring AI MCP Server(Kotlin, :8081) ↔ **air 프레임워
 3. **측정이 개선을 만든다** — 인코딩 버그, 회귀 2건, 리콜 실패를 모두 벤치마크가 잡았다.
    이 보고서 자체가 "튜닝 파라미터 없이 구조로 안정성 확보"의 증거 문서.
 
-## 5. 재현 방법
+## 5. 키워드 미매칭 라우팅 갭 — 폴백 전략 비교
+
+`RuleBasedRouter`는 키워드가 하나도 안 걸리면 무조건 VECTOR로 떨어진다. 공식 30문항의
+라우팅 적중률이 100%인 건 구조가 완벽해서가 아니라 질문 표현이 키워드 목록과 우연히
+겹쳐서일 수 있다는 의심을 실측으로 검증했다 ([#1](https://github.com/qixiangme/DB-MCP/issues/1)).
+
+**방법**: 공식 30문항을 sqlKeywords/graphKeywords/vectorKeywords에 있는 단어를 하나도
+안 쓰고 같은 사실을 묻도록 다시 쓴 `eval/keyword-gap-eval.json`을 만들고, 키워드
+미매칭 시에만 개입하는 폴백 2종([#2](https://github.com/qixiangme/DB-MCP/pull/2))을
+이 데이터셋과 기존 공식 30문항 양쪽에 실측했다.
+
+| 폴백 전략 | MCP 서버 | 라우팅 적중률 | SQL | VECTOR | GRAPH | 답변 정확도 | 평균 지연 |
+|---|---|---|---|---|---|---|---|
+| (없음, 기존) | — | 33.3% (10/30) | 0/10 | 10/10\* | 0/10 | — | — |
+| 임베딩 유사도 | air | 43.3% (13/30) | 1/10 | 7/10 | 5/10 | 13.3% | 11,945ms |
+| 임베딩 유사도 | Spring AI | 43.3% (13/30) | 1/10 | 7/10 | 5/10 | 20.0% | 10,899ms |
+| AI 분류 노드 | air | **60.0% (18/30)** | 4/10 | 5/10 | 9/10 | 20.0% | 13,534ms |
+| AI 분류 노드 | Spring AI | **60.0% (18/30)** | 4/10 | 5/10 | 9/10 | 23.3% | 13,994ms |
+
+\* 전부 VECTOR로 기본 라우팅되므로 VECTOR가 정답인 문항만 우연히 맞은 것 — 구조적 강점이 아니다.
+
+### 판정
+
+- **두 폴백 다 기존(33.3%)보다 낫지만, AI 분류 노드가 임베딩 유사도보다 확실히 우세하다
+  (60.0% vs 43.3%).** "소형 LLM은 판단을 못 믿는다"는 전제로 임베딩을 먼저 의심했지만,
+  **function-calling(도구 인자 생성)과 3지선다 분류는 난이도가 다르다** — 1B가 후자는
+  꽤 잘 해낸다는 게 이번 실측의 핵심 발견이다.
+- **AI 분류 노드는 GRAPH로 쏠리는 편향이 있다** (SQL·VECTOR 오답의 대부분이 GRAPH로 감,
+  GRAPH 자체는 9/10). 소수 예시(few-shot 3개)의 균형 문제로 보이며, 예시를 늘리면
+  개선 여지가 있다 — 다음 라운드 과제로 남긴다.
+- **라우팅 결과는 air/Spring AI 서버와 무관하게 완전히 동일하다** (두 폴백 모두 두 서버에서
+  라우팅 적중률이 한 자리도 다르지 않음). 라우팅은 MCP 도구 호출 이전에 agent-app 내부에서
+  끝나므로 당연한 결과지만, 실측으로 한 번 더 확인했다. 답변 정확도만 서버별로 소폭
+  다른데(예: 임베딩×air 13.3% vs 임베딩×Spring AI 20.0%), 이는 두 서버의 벡터 검색
+  구현 차이(air는 하이브리드 RRF, Spring AI는 순수 유사도) 때문으로 보인다.
+- **회귀 없음**: 기존 공식 30문항에 AI 분류 노드를 활성화한 채로 재실행해도 라우팅
+  적중률은 그대로 100%다 (30문항 모두 키워드가 걸려 폴백 자체가 호출되지 않기 때문).
+  답변 정확도는 23.3%(7/30)로 원래 26.7%(8/30)와 1문항 차이 — CPU 추론의 정상적인
+  변동 범위 안이다.
+- **비용은 있다**: AI 분류 노드는 폴백이 걸릴 때마다 LLM 호출을 하나 더 하므로 임베딩
+  방식보다 지연이 약 2초 더 든다. "장애 지점·튜닝 파라미터 최소화"라는 원칙 위에
+  올린 게 아니라 **키워드 미매칭이라는 좁고 드문 경로에만 격리된 예외**라, 결정적
+  라우팅이라는 기본 원칙은 그대로 유지된다.
+
+## 6. 재현 방법
 
 ```powershell
 # 시드 12문항
@@ -80,4 +124,6 @@ powershell -File eval\run-eval.ps1 -Label my-run -Reps 2
 powershell -File eval\run-eval.ps1 -Label official -Reps 1 -SetFile official-eval.json
 # 공식 30문항 (air 서버) — 에이전트를 MCP_SERVER_URL=http://localhost:8082 로 기동 후
 powershell -File eval\run-eval.ps1 -Label official-air -Reps 1 -SetFile official-eval.json
+# 키워드 미매칭 갭 — 에이전트를 ROUTER_FALLBACK=embedding 또는 ai 로 기동 후
+powershell -File eval\run-eval.ps1 -Label gap-embedding-air -Reps 1 -SetFile keyword-gap-eval.json
 ```
