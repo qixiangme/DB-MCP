@@ -18,6 +18,10 @@ spring:
           num-ctx: 4096
           # CPU 추론에서 생성 토큰 수 = 지연시간. 답변 폭주 방지 겸 지연 안정화
           max-tokens: 512
+      embedding:
+        options:
+          # EmbeddingRouteFallback이 라우팅용으로만 사용 — mcp-server의 문서 임베딩과는 별개 호출
+          model: nomic-embed-text
     mcp:
       client:
         enabled: true
@@ -34,6 +38,9 @@ spring:
 agent:
   context:
     budget-chars: 2400
+  router:
+    # 키워드 미매칭 시 폴백 전략: 빈 값(기본)=VECTOR 기본값 유지, embedding=코사인 유사도, ai=소형 LLM 분류
+    fallback: ${ROUTER_FALLBACK:}
 
 logging:
   level:
