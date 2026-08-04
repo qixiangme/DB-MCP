@@ -74,7 +74,13 @@ class AgentService(
                 Route.SQL -> {
                     toolCalls += "get_schema"
                     toolCalls += "run_sql"
-                    var sql = generateSql(question)
+                    val schema = gateway.schema()
+                    var sql = generateSql(question, schema)
+                    val schemaError = validateSqlAgainstSchema(sql, schema)
+                    if (schemaError != null) {
+                        log.info("NL2SQL 스키마 제약 재시도 — 사유: {}", schemaError)
+                        sql = generateSql(question, schema, previousAttempt = sql, error = schemaError)
+                    }
                     var result = gateway.runSql(sql)
                     // 오류·0행 시 1회 자가수정: MCP 도구의 피드백을 근거로 SQL 재생성
                     val feedback = when {
@@ -86,7 +92,7 @@ class AgentService(
                     if (feedback != null) {
                         log.info("run_sql 자가수정 재시도 — 사유: {}", feedback.take(100))
                         toolCalls += "run_sql(retry)"
-                        sql = generateSql(question, previousAttempt = sql, error = feedback)
+                        sql = generateSql(question, schema, previousAttempt = sql, error = feedback)
                         result = gateway.runSql(sql)
                     }
                     listOf(ContextItem("sql", "실행한 SQL: $sql\n조회 결과:\n${humanizeSqlResult(result)}", 1.0))
@@ -101,8 +107,12 @@ class AgentService(
      * NL2SQL: MCP로 받은 스키마를 근거로 소형 LLM이 SELECT 한 문장을 생성한다.
      * 1B급 모델 안정화를 위해 원샷 예시를 포함한다 (출력 형식을 좁힐수록 소형 모델이 안정적이다).
      */
-    private fun generateSql(question: String, previousAttempt: String? = null, error: String? = null): String {
-        val schema = gateway.schema()
+    private fun generateSql(
+        question: String,
+        schema: String,
+        previousAttempt: String? = null,
+        error: String? = null,
+    ): String {
         val retryBlock =
             if (previousAttempt == null) ""
             else "직전 시도: $previousAttempt\n오류: ${error?.take(300)}\n오류를 고쳐서 다시 작성한다.\n\n"
@@ -113,6 +123,11 @@ class AgentService(
             )
             .user(
                 "스키마:\n$schema\n\n" +
+                    "제약:\n" +
+                    "1. 질문의 개체를 tables의 실제 테이블·컬럼에 먼저 연결한다.\n" +
+                    "2. 스키마에 없는 테이블·컬럼·상태값을 추측하지 않는다.\n" +
+                    "3. 날짜 조건은 질문의 사건과 의미가 같은 날짜 컬럼만 사용한다.\n" +
+                    "4. valueHints가 있으면 문자열 조건은 그 실제 값만 사용한다.\n\n" +
                     // 예시 2개: 1B 모델은 예시 하나면 그 WHERE절까지 그대로 베낀다.
                     // 필터 집계 + 조인 패턴을 모두 보여 패턴을 분리한다.
                     "예시1 — 질문: 완료된 프로젝트는 몇 개야?\n" +
@@ -131,6 +146,43 @@ class AgentService(
             .removeSuffix(";")
         log.info("NL2SQL 생성 결과: {}", sql)
         return sql
+    }
+
+    /**
+     * PICARD의 constrained decoding 아이디어를 API 모델 앞단의 가벼운 검증으로 적용한다.
+     * 생성 SQL의 FROM/JOIN 테이블과 alias.column 참조가 MCP 스키마에 없으면 실행 전에
+     * 구조화된 피드백으로 한 번 재생성한다. 값/문법 오류는 기존 DB 실행 피드백이 담당한다.
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun validateSqlAgainstSchema(sql: String, schemaJson: String): String? {
+        return try {
+            val root: Map<String, Any?> = mapper.readValue(
+                schemaJson,
+                mapper.typeFactory.constructMapType(Map::class.java, String::class.java, Any::class.java),
+            )
+            val rawTables = root["tables"] as? Map<String, List<String>> ?: return null
+            val tables = rawTables.mapValues { (_, columns) ->
+                columns.map { it.substringBefore(" (").lowercase() }.toSet()
+            }
+            val aliases = linkedMapOf<String, String>()
+            TABLE_REFERENCE.findAll(sql).forEach { match ->
+                val table = match.groupValues[1].trim('"').lowercase()
+                if (table !in tables) return "스키마에 없는 테이블: $table"
+                aliases[table] = table
+                val alias = match.groupValues[2].lowercase()
+                if (alias.isNotBlank() && alias !in SQL_RESERVED_WORDS) aliases[alias] = table
+            }
+            QUALIFIED_COLUMN.findAll(sql).forEach { match ->
+                val qualifier = match.groupValues[1].lowercase()
+                val column = match.groupValues[2].lowercase()
+                val table = aliases[qualifier] ?: return "정의되지 않은 테이블 별칭: $qualifier"
+                if (column !in tables.getValue(table)) return "스키마에 없는 컬럼: $table.$column"
+            }
+            null
+        } catch (e: Exception) {
+            log.debug("SQL 스키마 검증을 건너뜀: {}", e.message)
+            null
+        }
     }
 
     /**
@@ -188,5 +240,19 @@ class AgentService(
             .call()
             .content()
             .orEmpty()
+    }
+
+    companion object {
+        private val TABLE_REFERENCE = Regex(
+            """\b(?:FROM|JOIN)\s+\"?([A-Za-z_][A-Za-z0-9_]*)\"?(?:\s+(?:AS\s+)?([A-Za-z_][A-Za-z0-9_]*))?""",
+            RegexOption.IGNORE_CASE,
+        )
+        private val QUALIFIED_COLUMN = Regex(
+            """\b([A-Za-z_][A-Za-z0-9_]*)\.([A-Za-z_][A-Za-z0-9_]*)\b""",
+        )
+        private val SQL_RESERVED_WORDS = setOf(
+            "where", "join", "left", "right", "inner", "outer", "cross", "on", "group",
+            "order", "limit", "offset", "having", "union", "except", "intersect",
+        )
     }
 }
