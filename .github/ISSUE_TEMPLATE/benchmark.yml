@@ -1,0 +1,48 @@
+name: 벤치마크
+description: 재현 가능한 평가 추가, 성능 회귀, 실험 결과를 다룹니다.
+title: "[Benchmark] "
+labels: ["type: benchmark"]
+body:
+  - type: textarea
+    id: hypothesis
+    attributes: {label: 가설, description: 바꾸려는 한 가지 요인과 예상 효과를 적어 주세요.}
+    validations: {required: true}
+  - type: textarea
+    id: protocol
+    attributes: {label: 평가 프로토콜, description: 데이터셋, 공개/숨은 분할, 반복 수, 모델, seed, 채점기를 적어 주세요.}
+    validations: {required: true}
+  - type: textarea
+    id: baseline
+    attributes: {label: 기준선, description: 커밋과 정확도·라우팅·지연·오류 수를 적어 주세요.}
+    validations: {required: true}
+  - type: textarea
+    id: target
+    attributes: {label: 통과 기준, description: 목표값과 허용 가능한 회귀 한도를 수치로 적어 주세요.}
+    validations: {required: true}
+  - type: checkboxes
+    id: leakage
+    attributes:
+      label: 평가 무결성
+      options:
+        - label: 테스트 정답이나 문항을 런타임 프롬프트·규칙에 복사하지 않았습니다.
+          required: true
+        - label: 실패 결과도 결과 파일과 보고서에 남기겠습니다.
+          required: true
+  - type: dropdown
+    id: evaluation_category
+    attributes:
+      label: 주 평가항목
+      description: 이 실험이 가장 직접적으로 개선할 평가항목을 선택해 주세요.
+      options:
+        - 프로젝트 구조 및 코드 완성도
+        - 오픈소스 프로젝트의 발전 가능성
+        - 개발 문서의 구체성
+        - 프로젝트 혁신성
+        - 프로젝트 팀워크
+    validations: {required: true}
+  - type: textarea
+    id: evaluation_impact
+    attributes:
+      label: 0.1점 이상 개선 가설과 근거
+      description: 현재 문제, 평가 문구와의 연결, 예상 상승 폭, 전후 검증 방법을 적어 주세요. 점수는 확정값이 아닌 가설로 표현합니다.
+    validations: {required: true}
