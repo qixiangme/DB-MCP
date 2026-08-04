@@ -26,5 +26,19 @@ The loop is bounded to one retry to prevent runaway cost and latency.
 
 ## Benchmark
 
-Result pending. The branch is accepted only if the Docker full-stack keyword-gap
-answer accuracy improves; otherwise its issue and PR are closed without merge.
+Docker PostgreSQL/pgvector, Ollama `gemma3:4b` + `nomic-embed-text`, semantic router,
+Spring MCP, temperature `0.0`, one pass over 30 keyword-gap questions.
+
+| Metric | Baseline | Candidate | Delta |
+|---|---:|---:|---:|
+| Full answer accuracy | 50.0% (15/30) | 60.0% (18/30) | +10.0%p |
+| VECTOR answer accuracy | 50.0% (5/10) | 80.0% (8/10) | +30.0%p |
+| SQL answer accuracy | 50.0% (5/10) | 50.0% (5/10) | 0.0%p |
+| GRAPH answer accuracy | 50.0% (5/10) | 50.0% (5/10) | 0.0%p |
+| Mean latency | 5,503 ms | 8,393 ms | +2,890 ms |
+
+Decision: keep the PR open because full accuracy improves by 10 percentage points
+with zero request errors. The additional validator call adds substantial latency, so
+production adoption should gate the hook to uncertain drafts or use a smaller verifier.
+
+Raw evidence: `eval/results/full-keyword-gap-claude-stop-hook-gemma4b-spring.json`.
