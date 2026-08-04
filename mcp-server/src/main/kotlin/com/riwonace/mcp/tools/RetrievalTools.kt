@@ -30,16 +30,53 @@ class RetrievalTools(
         @ToolParam(description = "가져올 문서 수 (1~10, 기본 4)", required = false) topK: Int?,
     ): String = guard {
         val k = (topK ?: 4).coerceIn(1, 10)
-        val docs = vectorStore.similaritySearch(
-            SearchRequest.builder().query(query).topK(k).build(),
+        val vectorDocs = vectorStore.similaritySearch(
+            SearchRequest.builder().query(query).topK(maxOf(k, 10)).build(),
         ) ?: emptyList()
-        docs.map {
-            mapOf(
-                "source" to (it.metadata["source"] ?: "unknown"),
-                "score" to it.score,
-                "text" to it.text,
-            )
+
+        // Dense 검색만으로 놓치기 쉬운 도메인 용어를 lexical 검색으로 보완한 뒤
+        // Reciprocal Rank Fusion으로 결합한다. RRF는 점수 스케일을 맞출 필요 없이
+        // 서로 다른 랭킹을 안정적으로 합칠 수 있다 (Cormack et al., SIGIR 2009).
+        val lexicalRows = lexicalSearch(query)
+        val fused = linkedMapOf<String, FusedDocument>()
+        vectorDocs.forEachIndexed { index, document ->
+            val source = document.metadata["source"]?.toString() ?: "unknown"
+            val key = "$source\u0000${document.text}"
+            val candidate = fused.getOrPut(key) {
+                FusedDocument(source, document.text, document.score ?: 0.0)
+            }
+            candidate.rrf += 1.0 / (RRF_K + index + 1)
         }
+        lexicalRows.forEachIndexed { index, row ->
+            val source = row["source"]?.toString() ?: "unknown"
+            val text = row["text"]?.toString().orEmpty()
+            val key = "$source\u0000$text"
+            val candidate = fused.getOrPut(key) { FusedDocument(source, text, 0.5) }
+            candidate.rrf += 1.0 / (RRF_K + index + 1)
+        }
+        fused.values
+            .sortedByDescending { it.rrf }
+            .take(k)
+            .map { mapOf("source" to it.source, "score" to maxOf(it.score, 0.5), "text" to it.text) }
+    }
+
+    private fun lexicalSearch(query: String): List<Map<String, Any>> {
+        val tokens = query
+            .split(Regex("[\\s,.?!'\"()]+"))
+            .map { it.replace(KOREAN_PARTICLE, "").trim() }
+            .filter { it.length >= 2 && it !in LEXICAL_STOP_WORDS }
+            .distinct()
+            .take(6)
+        if (tokens.isEmpty()) return emptyList()
+
+        val hits = tokens.joinToString(" + ") { "(CASE WHEN content ILIKE ? THEN 1 ELSE 0 END)" }
+        val where = tokens.joinToString(" OR ") { "content ILIKE ?" }
+        val params = (tokens + tokens).map { "%$it%" }.toTypedArray()
+        return jdbc.queryForList(
+            "SELECT metadata->>'source' AS source, content AS text, $hits AS hits " +
+                "FROM vector_store WHERE $where ORDER BY hits DESC LIMIT 10",
+            *params,
+        )
     }
 
     @Tool(
@@ -163,5 +200,18 @@ class RetrievalTools(
     companion object {
         const val MAX_OUTPUT_CHARS = 4000
         const val MAX_HINT_VALUES = 12
+        const val RRF_K = 60.0
+        val KOREAN_PARTICLE = Regex("(은|는|이|가|을|를|의|에서|으로|로|와|과|도|만|야|이야)$")
+        val LEXICAL_STOP_WORDS = setOf(
+            "어떻게", "무엇", "되어", "있어", "있었", "있는", "해줘", "알려줘",
+            "궁금해", "보여줘", "관련", "내용", "방법", "어디", "누구",
+        )
     }
+
+    private data class FusedDocument(
+        val source: String,
+        val text: String,
+        val score: Double,
+        var rrf: Double = 0.0,
+    )
 }
