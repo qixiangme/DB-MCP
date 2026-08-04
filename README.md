@@ -29,6 +29,7 @@ OLLAMA_MODEL=gemma3:4b ROUTER_FALLBACK=semantic-ai ./gradlew :agent-app:bootRun
 
 공개셋 93.3%, 키워드 무교집합 보류셋 96.7%이며 100%는 아닙니다. 평가 범위와 원시 결과는
 [키워드 없는 라우팅 실험 결과](./docs/research/KEYWORDLESS_ROUTING_RESULTS.md)를 참고하세요.
+Company-X 전체 스택에서는 공식 원문 답변 66.7%, 키워드 제거 답변 50.0%를 측정했습니다.
 
 ## 빠른 시작
 

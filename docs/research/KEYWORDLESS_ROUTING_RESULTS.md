@@ -47,10 +47,36 @@
 명시하거나, 불확실할 때 비용 한도 안에서 두 도구를 호출하고 별도의 precision 지표를 함께
 측정하는 것입니다.
 
-이 평가는 라우팅만 격리합니다. 최종 답변 정확도에는 검색 recall, NL2SQL, 문맥 큐레이션,
-생성 모델이 추가로 영향을 줍니다. 당시 로컬 Docker 엔진이 실행 중이 아니어서 PostgreSQL과
-MCP가 필요한 전체 답변 벤치마크는 새 결과로 재실행하지 않았습니다. 기존 전체 앱 결과와
-혼동하지 않도록 보고 범위를 분리합니다.
+## 전체 답변 벤치마크
+
+Docker PostgreSQL에 Company-X SQL 데이터, 그래프 triple 354개, 문서 40개를 적재하고
+Spring AI MCP 서버와 agent-app을 실제로 연결해 같은 `gemma3:4b`로 재측정했습니다.
+답변 정확도는 기존 하네스와 동일하게 기대 키워드 중 하나가 포함됐는지로 채점했습니다.
+
+| 평가셋 | 라우팅 적중률 | 최종 답변 정확도 | SQL | VECTOR | GRAPH | 평균 지연 |
+|---|---:|---:|---:|---:|---:|---:|
+| 공식 원문 30문항 | **100%** | **66.7% (20/30)** | 70% | 50% | 80% | 8,442ms |
+| 키워드 제거 30문항 | **93.3%** | **50.0% (15/30)** | 50% | 50% | 50% | 5,503ms |
+
+기존 저장 결과인 `gemma3:1b` + Spring AI와 비교하면 공식 답변 정확도는
+26.7%에서 66.7%로, 키워드 제거셋은 23.3%에서 50.0%로 올랐습니다. 단, 모델 크기와
+문서 corpus 적재가 함께 달라졌기 때문에 이 차이를 라우터 하나의 효과로 해석할 수는 없습니다.
+
+남은 실패는 세 단계에 걸쳐 있습니다.
+
+- NL2SQL: 존재하지 않는 `categories`, `sales.status`를 생성하거나 `registered_at` 대신
+  `created_at`을 선택해 SQL 3~5문항이 실패했습니다.
+- 벡터 검색: 두 평가셋 모두 5/10으로, 순수 `nomic-embed-text`가 백업·마이그레이션·보안
+  문서 대신 회의록을 top-4에 올리는 recall 문제가 남았습니다.
+- 그래프: 단순 관계 조회는 강했지만 “가장 많은”, 전체 프로젝트 리더처럼 집계·전역 탐색이
+  필요한 문항에서 토큰 매칭과 40개 제한 때문에 실패했습니다.
+
+공식 V8은 규칙이 GRAPH+VECTOR를 병렬 호출하는 과정에서 VECTOR MCP 요청이 120초 timeout을
+내 평균 지연을 크게 높였습니다. 요청 자체는 오류 응답 없이 복구됐지만 답변은 오답이었습니다.
+원시 결과는 다음과 같습니다.
+
+- `eval/results/full-official-semantic-gemma4b-spring.json`
+- `eval/results/full-keyword-gap-semantic-gemma4b-spring.json`
 
 ## 재현
 
@@ -67,4 +93,10 @@ python3 eval/run-router-eval.py \
   --prompt agent-app/src/main/resources/router/semantic-ai-prompt.txt \
   --model gemma3:4b --fail-under 90 \
   --output eval/results/reproduced-holdout.json
+
+# PostgreSQL과 MCP/agent-app 기동 및 Company-X SQL·graph 적재 후
+python3 eval/ingest-company-docs.py
+python3 eval/run-full-eval.py \
+  --set eval/keyword-gap-eval.json \
+  --output eval/results/reproduced-full-gap.json
 ```
