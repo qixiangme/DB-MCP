@@ -17,3 +17,9 @@ python3 eval/run-router-eval.py \
 
 프롬프트를 수정할 때는 공개 개발셋 결과만 사용하고, 고정 뒤 별도 보류셋을 평가합니다.
 평가 질문이나 정답을 프롬프트에 복사해 정확도를 올리는 것은 금지합니다.
+
+보류셋이 결정 라우터 키워드를 포함하지 않는지는 다음처럼 검사합니다.
+
+```bash
+python3 eval/check-keyword-gap.py eval/keyword-gap-holdout.json
+```
