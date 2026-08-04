@@ -1,0 +1,262 @@
+{
+  "metadata": {
+    "dataset": "keyword-gap GRAPH subset",
+    "model": "gemma3:4b",
+    "router": "semantic-ai",
+    "mcpServer": "spring-graph-semantic-aggregation-v3"
+  },
+  "summary": {
+    "answerAccuracyPct": 80.0,
+    "routeAccuracyPct": 90.0,
+    "answerCorrect": 8,
+    "routeCorrect": 9,
+    "total": 10,
+    "errors": 0,
+    "averageLatencyMs": 4797
+  },
+  "rows": [
+    {
+      "id": "K-G1",
+      "question": "Client-A가 지금 쓰고 있는 것들은 뭐가 있어?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "Product-C3",
+        "Product-S1"
+      ],
+      "latencyMs": 3655,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [
+        "knowledge-graph"
+      ],
+      "answer": "Client-A는 Product-C3, Product-S1, Product-S3를 사용하고 있습니다.\n\n[출처: knowledge-graph]",
+      "error": null
+    },
+    {
+      "id": "K-G2",
+      "question": "Product-C1을 쓰고 있는 고객사는 어디야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "Client-H",
+        "Client-D",
+        "Client-T",
+        "Client-Y",
+        "Client-Q"
+      ],
+      "latencyMs": 4881,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [
+        "knowledge-graph"
+      ],
+      "answer": "Client-H, Client-D, Client-T, Client-Y, Client-Q, Client-V, Client-K, Client-S, Client-Z, Client-AC, Client-AB, Client-J 가 Product-C1을 사용하고 있습니다.\n\n[출처: knowledge-graph]",
+      "error": null
+    },
+    {
+      "id": "K-G3",
+      "question": "클라우드사업부에 속한 사람들은 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "안진우",
+        "강현우",
+        "서재원",
+        "김도윤",
+        "조동현",
+        "이지훈",
+        "황다은",
+        "한은지"
+      ],
+      "latencyMs": 4408,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [
+        "knowledge-graph"
+      ],
+      "answer": "클라우드사업부에 속한 사람은 안진우, 강현우, 서재원, 김도윤, 조동현, 이지훈, 황다은, 한은지, 황재원, 김준혁입니다.\n\n[출처: knowledge-graph]",
+      "error": null
+    },
+    {
+      "id": "K-G4",
+      "question": "서울물산을 맡고 있는 엔지니어는 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "찾을 수 없",
+        "없습니다"
+      ],
+      "latencyMs": 3301,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [
+        "knowledge-graph"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다. \n\n[출처: knowledge-graph]",
+      "error": null
+    },
+    {
+      "id": "K-G5",
+      "question": "Product-D1과 이어지는 프로젝트는 어떤 게 있어?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "CI/CD",
+        "AI 예측",
+        "DevOps"
+      ],
+      "latencyMs": 9645,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [
+        "knowledge-graph"
+      ],
+      "answer": "Product-D1 관련 프로젝트로는 다음과 같은 것들이 있습니다.\n\n*   Client-AA 재해 복구 시스템\n*   Client-AB DevOps 전환\n*   Client-B 하이브리드 클라우드\n*   Client-B CI/CD 파이프라인 구축\n*   Client-M 하이브리드 클라우드\n*   Client-N 보안 감사 자동화\n*   Client-N K8s 클러스터 구축\n*   Client-Q AI 예측 모델 구축\n*   Client-U AI 예측 모델 구축\n*   Client-U API 게이트웨이 구축\n*   Client-V 하이브리드 클라우드\n*   Client-V DevOps 전환\n*   Client-W MLOps 파이프라인\n*   Client-X 로그 분석 시스템\n\n[출처: knowledge-graph]",
+      "error": null
+    },
+    {
+      "id": "K-G6",
+      "question": "기술 지원 요청이 다른 것보다 훨씬 많이 들어온 쪽은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 4000,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [
+        "knowledge-graph"
+      ],
+      "answer": "기술 지원 요청 건수가 13건으로 가장 많습니다.\n\n[출처: knowledge-graph]",
+      "error": null
+    },
+    {
+      "id": "K-G7",
+      "question": "경영지원팀에서 제일 윗자리에 있는 사람은 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "윤소연"
+      ],
+      "latencyMs": 3434,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [
+        "knowledge-graph"
+      ],
+      "answer": "경영지원팀의 부서장은 윤소연입니다. [knowledge-graph]",
+      "error": null
+    },
+    {
+      "id": "K-G8",
+      "question": "지금 진행되고 있는 프로젝트마다 앞장서는 사람이 누구누구야",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "류서연",
+        "안진우",
+        "권소연",
+        "박성민",
+        "조동현",
+        "강현우",
+        "김준혁",
+        "한태호"
+      ],
+      "latencyMs": 6561,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [
+        "knowledge-graph"
+      ],
+      "answer": "현재 진행 중인 프로젝트의 리더는 강현우, 권소연, 권진우, 김도윤, 김준혁, 류서연, 박민수, 박성민, 서재원, 신미라, 안소연, 안진우, 이지훈, 장미라, 조동현, 조재원, 조현우, 한은지, 한태호입니다.\n\n[출처: knowledge-graph]",
+      "error": null
+    },
+    {
+      "id": "K-G9",
+      "question": "Product-S1을 쓰다가 고객들이 겪은 상황은 어때?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": false,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 4151,
+      "toolCalls": [
+        "vector_search"
+      ],
+      "contextSources": [
+        "DOC-013.md",
+        "DOC-003.md",
+        "DOC-034.md",
+        "DOC-033.md"
+      ],
+      "answer": "Client-C에서 Product-S1 서비스의 DB 연결 풀 고갈로 인해 서비스 응답 지연 현상이 발생했습니다. (DOC-003.md)",
+      "error": null
+    },
+    {
+      "id": "K-G10",
+      "question": "다른 사람보다 훨씬 많은 고객을 맡고 있는 사람은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "김준혁",
+        "조현우",
+        "안소연"
+      ],
+      "latencyMs": 3930,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [
+        "knowledge-graph"
+      ],
+      "answer": "김준혁, 안소연, 조현우가 다른 사람보다 훨씬 더 많은 고객 수를 담당하고 있습니다. (knowledge-graph)",
+      "error": null
+    }
+  ]
+}
