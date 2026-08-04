@@ -1,6 +1,6 @@
 name: 문서
 description: README, 가이드, 예제, 다이어그램의 개선을 제안합니다.
-title: "[문서] "
+title: "[Docs] "
 labels: ["type: docs"]
 body:
   - type: input

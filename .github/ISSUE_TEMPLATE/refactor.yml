@@ -1,6 +1,6 @@
 name: 리팩터링·유지보수
 description: 외부 동작을 유지하는 구조, 빌드, 의존성 개선을 제안합니다.
-title: "[리팩터링] "
+title: "[Refactor] "
 labels: ["type: refactor"]
 body:
   - type: textarea

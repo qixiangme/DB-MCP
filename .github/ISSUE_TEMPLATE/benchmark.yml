@@ -1,6 +1,6 @@
 name: 벤치마크
 description: 재현 가능한 평가 추가, 성능 회귀, 실험 결과를 다룹니다.
-title: "[벤치마크] "
+title: "[Benchmark] "
 labels: ["type: benchmark"]
 body:
   - type: textarea

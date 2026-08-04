@@ -1,6 +1,6 @@
 name: 보안·안전성 개선
 description: 공개해도 안전한 하드닝, 권한, 개인정보, 안전장치 개선을 제안합니다.
-title: "[보안] "
+title: "[Security] "
 labels: ["type: security"]
 body:
   - type: markdown
