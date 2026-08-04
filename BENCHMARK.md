@@ -127,3 +127,17 @@ powershell -File eval\run-eval.ps1 -Label official-air -Reps 1 -SetFile official
 # 키워드 미매칭 갭 — 에이전트를 ROUTER_FALLBACK=embedding 또는 ai 로 기동 후
 powershell -File eval\run-eval.ps1 -Label gap-embedding-air -Reps 1 -SetFile keyword-gap-eval.json
 ```
+
+## 7. 의미 기반 폴백 — 90%대 재현
+
+기존 키워드를 질문에서 모두 제거한 공개 30문항과, 프롬프트 고정 뒤 새로 만든 보류
+30문항을 `gemma3:4b` + `semantic-ai`로 평가했다.
+
+| 평가셋 | 라우팅 적중률 | 오류/잘못된 출력 |
+|---|---:|---:|
+| 공개 keyword-gap | **93.3% (28/30)** | 0 |
+| 키워드 무교집합 보류셋 | **96.7% (29/30)** | 0 |
+
+보류셋은 현재 결정 라우터의 96개 키워드와 교집합이 0이다. 100%에는 도달하지 않았으며,
+다중 도구가 같은 사실을 보유한 경계 문항이 남았다. 후보별 수치, 실패 문항, 누수 방지 절차와
+재현 명령은 [키워드 없는 라우팅 실험 결과](./docs/research/KEYWORDLESS_ROUTING_RESULTS.md)에 기록했다.
