@@ -111,12 +111,13 @@ class RetrievalTools(
     fun kgSearch(
         @ToolParam(description = "관계를 조회할 자연어 질의 또는 엔티티 이름") query: String,
     ): String = guard {
+        val semantic = semanticGraphSummary(query)
         val tokens = query.split(Regex("[\\s,.?!'\"()]+"))
             .map { it.trim() }
             .filter { it.length >= 2 }
             .distinct()
             .take(8)
-        if (tokens.isEmpty()) return@guard emptyList<Any>()
+        if (tokens.isEmpty()) return@guard semantic
 
         // 양방향 포함 매칭: 엔티티가 토큰에 포함되는 경우("air는" ⊃ "air")도 잡아
         // 한국어 조사가 붙은 질의에서도 매칭된다.
@@ -142,10 +143,60 @@ class RetrievalTools(
                 )
             }
         // 직접 매칭을 앞에 배치 (관련도 순) — 총 40개로 제한해 컨텍스트 예산 보호
-        (direct + neighbors)
-            .distinctBy { "${it["subject"]}|${it["predicate"]}|${it["object"]}" }
+        (semantic + (direct + neighbors).map { "${it["subject"]} --[${it["predicate"]}]--> ${it["object"]}" })
+            .distinct()
             .take(40)
-            .map { "${it["subject"]} --[${it["predicate"]}]--> ${it["object"]}" }
+    }
+
+    private fun semanticGraphSummary(query: String): List<String> {
+        val normalized = query.lowercase()
+        val asksForRanking = SUPERLATIVE_TERMS.any(normalized::contains)
+        val asksForSupport = SUPPORT_TERMS.any(normalized::contains)
+        if (asksForRanking && asksForSupport) {
+            return jdbc.queryForList(
+                "SELECT object AS entity, count(*) AS relation_count FROM kg_triples " +
+                    "WHERE predicate = '이슈보고' GROUP BY object ORDER BY relation_count DESC, object LIMIT 1",
+            ).map { "집계: ${it["entity"]} --[이슈보고 건수]--> ${it["relation_count"]}" }
+        }
+
+        val asksForCustomerOwner = CUSTOMER_TERMS.any(normalized::contains) && OWNER_TERMS.any(normalized::contains)
+        if (asksForRanking && asksForCustomerOwner) {
+            return jdbc.queryForList(
+                "SELECT subject AS entity, count(DISTINCT object) AS relation_count FROM kg_triples " +
+                    "WHERE predicate = '담당한다' GROUP BY subject ORDER BY relation_count DESC, subject LIMIT 5",
+            ).map { "집계: ${it["entity"]} --[담당 고객 수]--> ${it["relation_count"]}" }
+        }
+
+        val product = PRODUCT_ID.find(query)?.value
+        if (product != null && PROJECT_TERMS.any(normalized::contains)) {
+            val projects = jdbc.queryForList(
+                """
+                WITH related_clients AS (
+                    SELECT DISTINCT subject AS client
+                    FROM kg_triples
+                    WHERE object = ? AND predicate IN ('사용한다', '이슈보고')
+                )
+                SELECT p.subject, p.predicate, p.object
+                FROM kg_triples p
+                JOIN related_clients c ON c.client = p.subject
+                WHERE p.predicate = '프로젝트'
+                ORDER BY p.object
+                LIMIT 30
+                """.trimIndent(),
+                product,
+            ).map { it["object"].toString() }.distinct()
+            if (projects.isNotEmpty()) return listOf("$product 관련 프로젝트: ${projects.joinToString(", ")}")
+        }
+
+        val asksForLeader = PROJECT_TERMS.any(normalized::contains) && LEADER_TERMS.any(normalized::contains)
+        if (asksForLeader) {
+            val leaders = jdbc.queryForList(
+                "SELECT DISTINCT subject FROM kg_triples WHERE predicate = '이끈다' ORDER BY subject",
+                String::class.java,
+            )
+            if (leaders.isNotEmpty()) return listOf("프로젝트 리더 전체: ${leaders.joinToString(", ")}")
+        }
+        return emptyList()
     }
 
     /**
@@ -163,5 +214,12 @@ class RetrievalTools(
     companion object {
         const val MAX_OUTPUT_CHARS = 4000
         const val MAX_HINT_VALUES = 12
+        val PRODUCT_ID = Regex("Product-[A-Za-z0-9]+", RegexOption.IGNORE_CASE)
+        val SUPERLATIVE_TERMS = setOf("가장", "제일", "최다", "많이", "많은", "훨씬")
+        val SUPPORT_TERMS = setOf("지원", "요청", "이슈", "장애", "문제")
+        val CUSTOMER_TERMS = setOf("고객", "고객사", "클라이언트")
+        val OWNER_TERMS = setOf("담당", "맡", "관리")
+        val PROJECT_TERMS = setOf("프로젝트", "과제", "구축", "전환")
+        val LEADER_TERMS = setOf("이끈", "리드", "앞장", "책임", "매니저", "담당자")
     }
 }
