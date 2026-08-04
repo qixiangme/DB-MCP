@@ -48,7 +48,13 @@ class AgentService(
         val items = futures.flatMap { it.join() }
 
         val curated = curator.curate(items, routes)
-        val answer = generateAnswer(question, curated)
+        var answer = generateAnswer(question, curated)
+        if (curated.isNotEmpty() && shouldRecoverAnswer(question, curated, answer)) {
+            // Claude Code의 Stop Hook / Withhold & Recover 패턴: 복구 가능한 불완전 답변은
+            // 사용자에게 노출하기 전에 동일 근거로 한 번만 재작성한다.
+            toolCalls += "answer_stop_hook(retry)"
+            answer = generateAnswer(question, curated, previousAnswer = answer)
+        }
 
         return AgentAnswer(
             answer = answer,
@@ -172,10 +178,41 @@ class AgentService(
             listOf(ContextItem("document", json, 0.5))
         }
 
-    private fun generateAnswer(question: String, context: List<ContextItem>): String {
+    private fun shouldRecoverAnswer(
+        question: String,
+        context: List<ContextItem>,
+        draft: String,
+    ): Boolean {
+        val contextBlock = context.joinToString("\n\n") { "[출처: ${it.source}]\n${it.text}" }
+        val verdict = chatClient.prompt()
+            .system(
+                "너는 답변 완료 직전의 읽기 전용 Stop Hook이다. 초안이 질문에 직접 답하고, " +
+                    "요청한 개체·수치·목록을 빠뜨리지 않았으며, 모든 주장이 컨텍스트에 근거하면 PASS만 출력한다. " +
+                    "근거가 있는데도 찾을 수 없다고 했거나, 핵심 식별자/수치/목록을 누락했거나, 근거와 모순되면 RETRY만 출력한다.",
+            )
+            .user("컨텍스트:\n$contextBlock\n\n질문: $question\n\n초안: $draft\n\n판정:")
+            .call()
+            .content()
+            .orEmpty()
+            .trim()
+            .uppercase()
+        log.info("답변 Stop Hook 판정: {}", verdict.take(20))
+        return verdict.startsWith("RETRY")
+    }
+
+    private fun generateAnswer(
+        question: String,
+        context: List<ContextItem>,
+        previousAnswer: String? = null,
+    ): String {
         val contextBlock =
             if (context.isEmpty()) "(검색된 컨텍스트 없음)"
             else context.joinToString("\n\n") { "[출처: ${it.source}]\n${it.text}" }
+
+        val recoveryBlock = previousAnswer?.let {
+            "\n\n검증에서 누락 또는 모순이 발견된 이전 초안:\n$it\n" +
+                "컨텍스트를 다시 읽고 핵심 식별자·수치·목록을 생략하지 말고 수정한다."
+        }.orEmpty()
 
         return chatClient.prompt()
             .system(
@@ -184,7 +221,7 @@ class AgentService(
                     "컨텍스트에 없는 내용은 '제공된 데이터에서 찾을 수 없습니다'라고 답한다. " +
                     "답변 끝에 사용한 출처를 표기한다.",
             )
-            .user("컨텍스트:\n$contextBlock\n\n질문: $question")
+            .user("컨텍스트:\n$contextBlock\n\n질문: $question$recoveryBlock")
             .call()
             .content()
             .orEmpty()
