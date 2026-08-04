@@ -1,6 +1,6 @@
 name: 버그 신고
 description: 재현 가능한 오동작이나 회귀를 신고합니다.
-title: "[Bug] "
+title: "[버그] "
 labels: ["type: bug"]
 body:
   - type: textarea
@@ -29,3 +29,21 @@ body:
       options:
         - label: 공개하면 위험한 취약점이나 비밀정보가 포함되지 않았습니다.
           required: true
+  - type: dropdown
+    id: evaluation_category
+    attributes:
+      label: 주 평가항목
+      description: 수정이 가장 직접적으로 개선할 평가항목을 선택해 주세요.
+      options:
+        - 프로젝트 구조 및 코드 완성도
+        - 오픈소스 프로젝트의 발전 가능성
+        - 개발 문서의 구체성
+        - 프로젝트 혁신성
+        - 프로젝트 팀워크
+    validations: {required: true}
+  - type: textarea
+    id: evaluation_impact
+    attributes:
+      label: 0.1점 이상 개선 가설과 근거
+      description: 현재 문제, 평가 문구와의 연결, 예상 상승 폭, 수정 전후 증거를 적어 주세요. 점수는 확정값이 아닌 가설로 표현합니다.
+    validations: {required: true}

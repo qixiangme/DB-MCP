@@ -1,6 +1,6 @@
 name: 보안·안전성 개선
 description: 공개해도 안전한 하드닝, 권한, 개인정보, 안전장치 개선을 제안합니다.
-title: "[Security] "
+title: "[보안] "
 labels: ["type: security"]
 body:
   - type: markdown
@@ -17,4 +17,22 @@ body:
   - type: textarea
     id: validation
     attributes: {label: 검증 방법, description: 음성 테스트와 회귀 테스트를 포함해 주세요.}
+    validations: {required: true}
+  - type: dropdown
+    id: evaluation_category
+    attributes:
+      label: 주 평가항목
+      description: 안전성 개선이 가장 직접적으로 개선할 평가항목을 선택해 주세요.
+      options:
+        - 프로젝트 구조 및 코드 완성도
+        - 오픈소스 프로젝트의 발전 가능성
+        - 개발 문서의 구체성
+        - 프로젝트 혁신성
+        - 프로젝트 팀워크
+    validations: {required: true}
+  - type: textarea
+    id: evaluation_impact
+    attributes:
+      label: 0.1점 이상 개선 가설과 근거
+      description: 현재 위험, 평가 문구와의 연결, 예상 상승 폭, 완화 전후 검증 방법을 적어 주세요. 점수는 확정값이 아닌 가설로 표현합니다.
     validations: {required: true}
