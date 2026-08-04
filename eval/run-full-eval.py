@@ -92,8 +92,14 @@ def main() -> int:
     for route in ("SQL", "VECTOR", "GRAPH"):
         selected = [row for row in rows if row["expectedRoute"] == route]
         by_route[route] = {
-            "answerAccuracyPct": round(100 * sum(bool(row["answerCorrect"]) for row in selected) / len(selected), 1),
-            "routeAccuracyPct": round(100 * sum(bool(row["routeCorrect"]) for row in selected) / len(selected), 1),
+            "answerAccuracyPct": (
+                round(100 * sum(bool(row["answerCorrect"]) for row in selected) / len(selected), 1)
+                if selected else None
+            ),
+            "routeAccuracyPct": (
+                round(100 * sum(bool(row["routeCorrect"]) for row in selected) / len(selected), 1)
+                if selected else None
+            ),
             "count": len(selected),
         }
     failure_types = Counter(
