@@ -6,6 +6,8 @@ MCP(Model Context Protocol) 표준 규격만으로 PostgreSQL과 온프레미스
 - **Stack**: Kotlin · Spring Boot 3.5 · Spring AI 1.0 (MCP Server/Client) · PostgreSQL 16 + pgvector · Ollama
 - **설계 문서**: [ARCHITECTURE.md](./ARCHITECTURE.md)
 - **경량·안정성 원칙 (심사 기준 대응)**: [LIGHT-AND-STABLE.md](./LIGHT-AND-STABLE.md)
+- **기여 가이드**: [CONTRIBUTING.md](./CONTRIBUTING.md) · [이슈/PR 운영 절차](./docs/contributing/WORKFLOW.md)
+- **벤치마크 무결성**: [docs/contributing/BENCHMARK_POLICY.md](./docs/contributing/BENCHMARK_POLICY.md)
 
 ## 구성
 
@@ -69,3 +71,9 @@ curl -s -X POST http://localhost:8081/admin/ingest
 ```
 
 라우터 규칙, TACC 큐레이션, SQL 읽기 전용 가드(인젝션 차단)에 대한 단위 테스트가 실행됩니다.
+
+## 기여하기
+
+기능, 버그, 벤치마크, 문서, 리팩터링, 보안 유형별 이슈·PR 템플릿을 제공합니다.
+변경 전 이슈에 완료 조건과 안전성 영향을 기록하고, PR에는 실행한 테스트와 원시 벤치마크
+결과를 남겨 주세요. 자세한 분류와 리뷰 게이트는 [CONTRIBUTING.md](./CONTRIBUTING.md)를 참고하세요.

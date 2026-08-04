@@ -1,0 +1,30 @@
+name: 벤치마크
+description: 재현 가능한 평가 추가, 성능 회귀, 실험 결과를 다룹니다.
+title: "[Benchmark] "
+labels: ["type: benchmark"]
+body:
+  - type: textarea
+    id: hypothesis
+    attributes: {label: 가설, description: 바꾸려는 한 가지 요인과 예상 효과를 적어 주세요.}
+    validations: {required: true}
+  - type: textarea
+    id: protocol
+    attributes: {label: 평가 프로토콜, description: 데이터셋, 공개/숨은 분할, 반복 수, 모델, seed, 채점기를 적어 주세요.}
+    validations: {required: true}
+  - type: textarea
+    id: baseline
+    attributes: {label: 기준선, description: 커밋과 정확도·라우팅·지연·오류 수를 적어 주세요.}
+    validations: {required: true}
+  - type: textarea
+    id: target
+    attributes: {label: 통과 기준, description: 목표값과 허용 가능한 회귀 한도를 수치로 적어 주세요.}
+    validations: {required: true}
+  - type: checkboxes
+    id: leakage
+    attributes:
+      label: 평가 무결성
+      options:
+        - label: 테스트 정답이나 문항을 런타임 프롬프트·규칙에 복사하지 않았습니다.
+          required: true
+        - label: 실패 결과도 결과 파일과 보고서에 남기겠습니다.
+          required: true

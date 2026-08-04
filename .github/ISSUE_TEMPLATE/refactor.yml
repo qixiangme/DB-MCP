@@ -1,0 +1,17 @@
+name: 리팩터링·유지보수
+description: 외부 동작을 유지하는 구조, 빌드, 의존성 개선을 제안합니다.
+title: "[Refactor] "
+labels: ["type: refactor"]
+body:
+  - type: textarea
+    id: debt
+    attributes: {label: 기술 부채, description: 현재 구조의 비용과 근거를 적어 주세요.}
+    validations: {required: true}
+  - type: textarea
+    id: scope
+    attributes: {label: 변경 범위와 비범위, description: 바뀌는 것과 의도적으로 바꾸지 않는 것을 적어 주세요.}
+    validations: {required: true}
+  - type: textarea
+    id: proof
+    attributes: {label: 동작 보존 증명, description: 테스트, 벤치마크, 호환성 확인 방법을 적어 주세요.}
+    validations: {required: true}
