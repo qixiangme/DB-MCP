@@ -1,0 +1,32 @@
+name: 기능 제안
+description: 사용자 가치가 있는 새 기능이나 동작 개선을 제안합니다.
+title: "[Feature] "
+labels: ["type: feature"]
+body:
+  - type: markdown
+    attributes:
+      value: 먼저 중복 이슈를 검색하고, 해결책보다 문제와 성공 기준을 명확히 적어 주세요.
+  - type: textarea
+    id: problem
+    attributes:
+      label: 문제와 사용자 가치
+      description: 누가 어떤 상황에서 무엇 때문에 어려운가요?
+    validations: {required: true}
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 제안 동작
+      description: 입력, 출력, 실패 동작을 예시와 함께 적어 주세요.
+    validations: {required: true}
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 완료 조건
+      placeholder: "- [ ] 기존 동작 회귀 없음\n- [ ] 단위 테스트 추가"
+    validations: {required: true}
+  - type: textarea
+    id: safety
+    attributes:
+      label: 안전성·호환성 영향
+      description: SQL 읽기 전용 가드, 개인정보, 권한, API 호환성, 자원 사용 영향을 적어 주세요.
+    validations: {required: true}

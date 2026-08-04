@@ -1,0 +1,17 @@
+name: 문서
+description: README, 가이드, 예제, 다이어그램의 개선을 제안합니다.
+title: "[Docs] "
+labels: ["type: docs"]
+body:
+  - type: input
+    id: location
+    attributes: {label: 대상 문서, placeholder: "README.md 또는 URL"}
+    validations: {required: true}
+  - type: textarea
+    id: problem
+    attributes: {label: 현재 문제, description: 틀린 내용, 빠진 설명, 따라 하기 어려운 부분을 적어 주세요.}
+    validations: {required: true}
+  - type: textarea
+    id: proposal
+    attributes: {label: 제안 내용, description: 독자와 검증 방법까지 적어 주세요.}
+    validations: {required: true}
