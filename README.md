@@ -1,79 +1,227 @@
 # Riwonace MCP 지능형 데이터 플랫폼
 
-MCP(Model Context Protocol) 표준 규격만으로 PostgreSQL과 온프레미스 소형 LLM(기본 1B)을 연결해,
-일상어 질문에 스스로 정답을 찾아주는 지능형 AI 검색 비서입니다.
+사내의 문서, 관계형 테이블, 지식 그래프를 한곳에서 조회하고 일상어 질문에 근거 있는 답을
+제공하는 **온프레미스 AI 데이터 검색 플랫폼**입니다. 외부 AI API 대신 로컬 Ollama 모델을
+사용하고, 데이터 접근은 MCP(Model Context Protocol) 도구로 표준화합니다.
 
-- **Stack**: Kotlin · Spring Boot 3.5 · Spring AI 1.0 (MCP Server/Client) · PostgreSQL 16 + pgvector · Ollama
-- **설계 문서**: [ARCHITECTURE.md](./ARCHITECTURE.md)
-- **경량·안정성 원칙 (심사 기준 대응)**: [LIGHT-AND-STABLE.md](./LIGHT-AND-STABLE.md)
-- **기여 가이드**: [CONTRIBUTING.md](./CONTRIBUTING.md) · [이슈/PR 운영 절차](./docs/contributing/WORKFLOW.md)
-- **벤치마크 무결성**: [docs/contributing/BENCHMARK_POLICY.md](./docs/contributing/BENCHMARK_POLICY.md)
+질문은 성격에 따라 다음 경로로 처리됩니다.
 
-## 구성
+- 개념·정책·문서 질문 → pgvector 기반 `vector_search`
+- 통계·집계·목록 질문 → 스키마 기반 NL2SQL → 읽기 전용 `run_sql`
+- 사람·제품·프로젝트 사이의 관계 질문 → 지식 그래프 `kg_search`
+- 복합 질문 → 필요한 도구를 병렬 호출한 뒤 근거를 선별하여 답변 생성
+
+답변에는 선택한 라우트, 호출한 MCP 도구, 컨텍스트 출처, 지연 시간을 함께 제공하므로
+어떤 데이터로 답했는지 확인할 수 있습니다.
+
+## 전체 구조
+
+```text
+사용자 / React 웹 클라이언트
+              │ HTTP :8080
+              ▼
+       agent-app (Spring AI)
+       라우팅 · NL2SQL · 답변 생성
+              │ MCP/SSE
+       ┌──────┴────────────────────┐
+       ▼                           ▼
+mcp-server :8081             air-server :8082
+기본 Spring AI 구현           선택형 AIR 구현
+       └──────┬────────────────────┘
+              ▼
+ PostgreSQL 16 + pgvector ── Ollama
+ 관계형·벡터·그래프 저장       로컬 추론·임베딩
+```
+
+기본 실행 경로는 `agent-app` → `mcp-server`입니다. `air-server`는 기본 서버를 동시에
+실행하기 위한 모듈이 아니라, 같은 MCP 도구 계약을 다른 프레임워크로 구현해 서버를
+교체할 수 있음을 검증하기 위한 선택형 구현입니다.
+
+## 기술 스택
+
+| 영역 | 기술 | 사용 목적 |
+|---|---|---|
+| 언어·런타임 | Kotlin 2.1, Java 21 | 에이전트와 기본 MCP 서버 |
+| 애플리케이션 | Spring Boot 3.5, Spring AI 1.0 | Ollama, MCP 서버·클라이언트, pgvector 연동 |
+| 표준 프로토콜 | MCP, SSE | 에이전트와 데이터 도구의 구현 분리 |
+| 데이터베이스 | PostgreSQL 16, pgvector | 관계형 데이터, 문서 벡터, 지식 그래프 통합 저장 |
+| 로컬 AI | Ollama, `gemma3:1b`, `nomic-embed-text` | 답변·NL2SQL 생성과 문서 임베딩 |
+| 대체 MCP 구현 | Node.js, `@airmcp-dev/core`, `pg` | AIR 호환성 및 서버 교체 가능성 검증 |
+| 웹 클라이언트 | React 19, TypeScript 5.7, Vite 6 | 선택형 대화 UI |
+| 빌드·검증 | Gradle Kotlin DSL, npm, JUnit 5, Docker Compose | 빌드, 테스트, 로컬 인프라 실행 |
+
+저사양 PC의 기본 모델 용량은 약 1.1GB입니다. 환경에 따라
+`OLLAMA_MODEL=qwen2.5:3b`처럼 모델만 교체할 수 있습니다. 자세한 선택 기준은
+[경량·안정성 원칙](./LIGHT-AND-STABLE.md)을 참고하세요.
+
+## 모듈
 
 | 모듈 | 포트 | 역할 |
-|---|---|---|
-| `mcp-server` | 8081 | MCP 표준 도구 서버 — `vector_search` / `run_sql` / `kg_search` / `get_schema` |
-| `agent-app`  | 8080 | AI 에이전트 — 규칙 기반 라우터, NL2SQL, TACC 컨텍스트 큐레이션, 답변 생성 |
-| PostgreSQL + pgvector | 5433 | 문서 벡터 · 관계형 데이터 · 지식 그래프(triple) 통합 저장소 |
-| Ollama | 11434 | `gemma3:1b`(추론, 기본) + `nomic-embed-text`(임베딩) |
+|---|---:|---|
+| `agent-app` | 8080 | 질문 라우팅, NL2SQL, 컨텍스트 큐레이션, 답변 생성, HTTP API |
+| `mcp-server` | 8081 | 기본 MCP 서버. 검색·SQL·그래프·스키마 도구와 데이터 적재 제공 |
+| `air-server` | 8082 | 동일한 도구 이름과 안전 정책을 제공하는 선택형 Node.js MCP 서버 |
+| `client` | 5173 | 선택형 React 웹 클라이언트 |
+| PostgreSQL + pgvector | 5433 | 문서 벡터, 관계형 데이터, 지식 그래프 저장 |
+| Ollama | 11434 | 로컬 대화 모델과 임베딩 모델 실행 |
 
-저사양 PC 기준 필요한 모델 용량은 **약 1.1GB**(gemma3:1b 815MB + nomic-embed-text 274MB)입니다.
-사양이 되면 환경변수 하나로 상위 모델로 교체합니다: `OLLAMA_MODEL=qwen2.5:3b` (모델 선택표는 [LIGHT-AND-STABLE.md](./LIGHT-AND-STABLE.md) 참고)
+MCP 서버가 제공하는 도구는 다음과 같습니다.
+
+| 도구 | 역할 |
+|---|---|
+| `vector_search` | 질문과 의미적으로 가까운 문서 검색 |
+| `get_schema` | SQL 생성에 필요한 테이블·열·값 힌트 조회 |
+| `run_sql` | 검증을 통과한 읽기 전용 SELECT/WITH 실행 |
+| `kg_search` | 주어–관계–목적어 형태의 지식 그래프 탐색 |
+
+## AIR와 Spring AI 구현이 모두 있는 이유
+
+이 프로젝트의 핵심 경계는 특정 프레임워크가 아니라 MCP 도구 계약입니다.
+
+- **Spring AI `mcp-server`가 기본 구현**입니다. Gradle 멀티모듈 빌드, Spring AI MCP,
+  Ollama, pgvector가 통합되어 있고 데이터 적재와 자동화 테스트를 담당합니다.
+- **AIR `air-server`는 선택형 비교 구현**입니다. Node.js의 AIR MCP 프레임워크로 같은
+  도구 이름을 노출해, `agent-app` 코드를 바꾸지 않고 서버 URL만 교체할 수 있음을 검증합니다.
+- 두 구현을 둠으로써 프로토콜 호환성, 프레임워크 종속성, 성능과 동작 차이를 같은
+  클라이언트에서 비교할 수 있습니다.
+- AIR는 현재 Gradle 기본 빌드와 기본 실행 경로에 포함되지 않으며, 벡터 데이터 적재는
+  Spring AI 서버에서 먼저 수행해야 합니다.
+
+AIR 구현으로 전환할 때는 Spring AI 서버로 데이터를 한 번 적재한 뒤 다음과 같이 실행합니다.
+
+```bash
+npm ci --prefix air-server
+npm --prefix air-server start
+
+# 별도 터미널
+MCP_SERVER_URL=http://localhost:8082 ./gradlew :agent-app:bootRun
+```
+
+기본 Spring AI 구현으로 돌아가려면 `MCP_SERVER_URL`을 생략하거나
+`http://localhost:8081`로 설정합니다.
 
 ## 빠른 시작
 
+필수 조건은 Docker 엔진과 Java 21입니다.
+
 ```bash
-# 1. 인프라 기동 (PostgreSQL + Ollama)
+# 1. PostgreSQL과 Ollama 실행
 docker compose up -d
 
-# 2. 모델 다운로드 (최초 1회)
+# 2. 모델 다운로드(최초 1회)
 docker exec riwonace-ollama ollama pull gemma3:1b
 docker exec riwonace-ollama ollama pull nomic-embed-text
 
-# 3. MCP 서버 기동 (기동 시 시드 문서 10건 자동 임베딩)
+# 3. 기본 Spring AI MCP 서버 실행
 ./gradlew :mcp-server:bootRun
 
-# 4. 에이전트 기동 (별도 터미널)
+# 4. 별도 터미널에서 에이전트 실행
 ./gradlew :agent-app:bootRun
 ```
 
-## 사용 예시
+웹 UI를 사용하려면 별도 터미널에서 다음 명령을 실행합니다.
 
 ```bash
-# 개념 질문 → vector_search 라우팅
+cd client
+npm ci
+npm run dev
+```
+
+### 사용 예시
+
+```bash
+# 개념 질문 → vector_search
 curl -s -X POST http://localhost:8080/api/chat -H "Content-Type: application/json" \
   -d '{"question": "MCP가 기존 RAG보다 뭐가 좋아?"}'
 
-# 집계 질문 → NL2SQL + run_sql 라우팅
+# 집계 질문 → NL2SQL + run_sql
 curl -s -X POST http://localhost:8080/api/chat -H "Content-Type: application/json" \
   -d '{"question": "플랫폼팀 직원의 평균 급여는 얼마야?"}'
 
-# 관계 질문 → kg_search 라우팅
+# 관계 질문 → kg_search
 curl -s -X POST http://localhost:8080/api/chat -H "Content-Type: application/json" \
-  -d '{"question": "air는 누가 개발했어?"}'
+  -d '{"question": "AIR는 누가 개발했어?"}'
 
-# MCP 연결 상태 / 노출된 도구 확인
+# MCP 연결 상태와 노출 도구 확인
 curl -s http://localhost:8080/api/tools
 
-# 시드 문서 재임베딩 (Ollama를 나중에 켠 경우)
+# Ollama를 나중에 실행한 경우 시드 문서 재적재
 curl -s -X POST http://localhost:8081/admin/ingest
 ```
-
-응답에는 답변과 함께 라우팅 결과(`routes`), 호출된 MCP 도구(`toolCalls`),
-사용한 컨텍스트 출처(`contextSources`), 지연 시간(`latencyMs`)이 포함되어
-시스템의 판단 과정을 투명하게 확인할 수 있습니다.
 
 ## 테스트
 
 ```bash
+# Kotlin 전체 테스트
 ./gradlew test
+
+# 웹 클라이언트 빌드
+cd client
+npm ci
+npm run build
 ```
 
-라우터 규칙, TACC 큐레이션, SQL 읽기 전용 가드(인젝션 차단)에 대한 단위 테스트가 실행됩니다.
+벤치마크를 변경했다면 같은 데이터셋·모델·설정·반복 횟수로 기준선과 후보를 모두 측정하고,
+문항별 원시 JSON 결과를 보존해야 합니다.
+
+## 문서 안내
+
+| 문서 | 내용 |
+|---|---|
+| [ARCHITECTURE.md](./ARCHITECTURE.md) | 전체 구조, 요청 처리 흐름, 주요 설계 결정 |
+| [LIGHT-AND-STABLE.md](./LIGHT-AND-STABLE.md) | 소형 모델 선택과 경량·안정성 원칙 |
+| [CONTRIBUTING.md](./CONTRIBUTING.md) | 기여자가 먼저 확인할 핵심 규칙 |
+| [이슈와 PR 운영 절차](./docs/contributing/WORKFLOW.md) | 작업 유형, 브랜치, 리뷰 게이트, PR 절차 |
+| [벤치마크 무결성 정책](./docs/contributing/BENCHMARK_POLICY.md) | 데이터 누수 방지, 재현 조건, 최소 통과 기준 |
 
 ## 기여하기
 
-기능, 버그, 벤치마크, 문서, 리팩터링, 보안 유형별 이슈·PR 템플릿을 제공합니다.
-변경 전 이슈에 완료 조건과 안전성 영향을 기록하고, PR에는 실행한 테스트와 원시 벤치마크
-결과를 남겨 주세요. 자세한 분류와 리뷰 게이트는 [CONTRIBUTING.md](./CONTRIBUTING.md)를 참고하세요.
+작은 이슈 하나와 검증 가능한 PR 하나를 기본 단위로 사용합니다. 기능, 버그, 벤치마크,
+문서, 리팩터링, 보안 작업을 서로 분리해 주세요.
+
+### 1. 이슈 등록
+
+1. [기존 이슈](https://github.com/qixiangme/DB-MCP/issues)를 검색해 중복을 확인합니다.
+2. [새 이슈 만들기](https://github.com/qixiangme/DB-MCP/issues/new/choose)에서 기능, 버그,
+   벤치마크, 문서, 리팩터링, 보안 중 목적에 맞는 양식을 선택합니다.
+3. 문제와 범위, 완료 조건, 안전성 영향, 재현 방법을 작성합니다.
+4. 보안 취약점이나 비밀정보는 공개 이슈 대신
+   [비공개 보안 제보](https://github.com/qixiangme/DB-MCP/security/advisories/new)를 사용합니다.
+
+완료 조건이 모두 충족되면 근거를 댓글로 남기고 이슈를 `완료됨`으로 닫습니다.
+정확도가 개선되지 않은 벤치마크는 결과와 실패 원인을 보존하고 `계획하지 않음`으로 닫습니다.
+
+### 2. 브랜치와 구현
+
+```bash
+git switch main
+git pull --ff-only
+git switch -c feature/짧은-설명
+```
+
+작업 성격에 따라 `feature/`, `fix/`, `benchmark/`, `docs/`, `refactor/`, `security/`,
+`chore/` 접두사를 사용합니다. 한 브랜치와 PR에는 한 가지 목적만 포함합니다.
+
+### 3. 검증과 기록
+
+- 코드 변경: 관련 단위 테스트와 `./gradlew test` 실행
+- 웹 변경: `cd client && npm ci && npm run build` 실행
+- 벤치마크: 기준선·후보 수치, 모델, 설정, 반복 횟수, 지연 시간, 오류, 원시 결과 기록
+- 외부 동작 변경: README 또는 관련 문서도 함께 갱신
+- 보안 변경: 입력 검증, 읽기 전용 SQL, 최소 권한, 비밀정보 노출 여부 확인
+
+세부 기준은 [CONTRIBUTING.md](./CONTRIBUTING.md)와
+[벤치마크 무결성 정책](./docs/contributing/BENCHMARK_POLICY.md)을 따릅니다.
+
+### 4. PR 등록
+
+1. 브랜치를 푸시하고 GitHub에서 새 PR을 만듭니다.
+2. 기능, 버그, 벤치마크, 문서, 리팩터링, 보안 중 목적에 맞는
+   [PR 템플릿](./.github/PULL_REQUEST_TEMPLATE)을 선택합니다.
+3. 본문에 `Closes #이슈번호`를 작성해 이슈를 연결합니다.
+4. 변경 이유, 구현 범위, 실행한 테스트, 전후 수치, 위험과 되돌리기 방법을 작성합니다.
+5. 정확성, 안전성, 체계성, 재현성, 회귀 여부를 확인한 뒤 리뷰를 요청합니다.
+
+PR 화면에서 템플릿이 자동으로 열리지 않으면 주소 끝에 `?template=feature.md` 또는
+`?template=benchmark.md`처럼 템플릿 파일명을 지정할 수 있습니다. 전체 분류와 리뷰 기준은
+[이슈와 PR 운영 절차](./docs/contributing/WORKFLOW.md)에 정리되어 있습니다.
