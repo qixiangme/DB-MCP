@@ -9,9 +9,11 @@
 ## 로컬 확인
 
 ```bash
-bash ./gradlew test
+./gradlew test
 cd client && npm ci && npm run build
 ```
+
+Unix 계열 환경에서는 clone 직후 별도 `chmod` 없이 Gradle 래퍼를 직접 실행할 수 있습니다.
 
 벤치마크 변경은 위 테스트에 더해 해당 평가셋의 기준선과 후보 결과를 모두 첨부해야 합니다.
 외부 동작을 바꾸는 PR은 README 또는 관련 문서도 함께 갱신합니다.
