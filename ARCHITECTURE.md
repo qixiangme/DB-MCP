@@ -84,6 +84,11 @@ DML·DDL·주석·다중 문장·`pg_sleep` 차단, LIMIT 자동 보강. 단위 
 2. `McpGateway.schema()` — MCP `get_schema` 호출 (캐시됨)
 3. 1B 모델이 스키마 기반으로 `SELECT avg(salary) FROM employees WHERE dept='플랫폼팀'` 생성
 4. MCP `run_sql` 호출 → 서버의 `SqlGuard` 검증 통과 후 실행, 결과 JSON 반환
+
+모든 MCP 도구 응답은 4,000자 예산 안에서 유효한 JSON을 유지합니다. 직렬화 결과가 예산을
+넘으면 일부 JSON 문자열을 그대로 자르지 않고 `tool_output_too_large`, `truncated`,
+`originalChars`, `maxOutputChars`를 포함한 구조화된 오류 객체를 반환합니다. 호출자는 이 경우
+부분 데이터를 정상 결과로 해석하지 말고 질의를 좁히거나 더 작은 `topK`로 다시 요청해야 합니다.
 5. `ContextCurator`가 예산 내 컨텍스트 구성
 6. 1B 모델이 컨텍스트 근거로 한국어 답변 생성 (+출처 표기)
 
