@@ -12,6 +12,14 @@ import org.springframework.stereotype.Service
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
 
+/**
+ * 에이전트 API의 관측 가능한 실행 결과.
+ *
+ * @property routes 질문에 선택된 검색 경로
+ * @property toolCalls 실제로 시도한 MCP 도구 호출 순서
+ * @property contextSources 최종 답변 컨텍스트에 포함된 출처
+ * @property latencyMs 라우팅부터 답변 생성까지의 전체 지연 시간
+ */
 data class AgentAnswer(
     val answer: String,
     val routes: List<Route>,
@@ -35,6 +43,7 @@ class AgentService(
     private val log = LoggerFactory.getLogger(javaClass)
     private val executor = Executors.newFixedThreadPool(4)
 
+    /** 질문을 라우팅하고 근거를 수집·선별한 뒤 출처가 포함된 답변을 생성한다. */
     fun chat(question: String): AgentAnswer {
         val started = System.currentTimeMillis()
         val routes = router.route(question)
