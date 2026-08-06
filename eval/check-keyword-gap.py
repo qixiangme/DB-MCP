@@ -6,7 +6,33 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from pathlib import Path
+
+EXPECTED_BLOCKS = {"sqlKeywords", "graphKeywords", "vectorKeywords"}
+
+
+def extract_keywords(source: str) -> list[str]:
+    blocks = {
+        name: body
+        for name, body in re.findall(
+            r"private val (\w+Keywords) = listOf\((.*?)\n    \)",
+            source,
+            re.DOTALL,
+        )
+    }
+    missing = EXPECTED_BLOCKS - blocks.keys()
+    if missing:
+        raise ValueError(f"router keyword blocks not found: {', '.join(sorted(missing))}")
+
+    keywords = [
+        value.lower()
+        for name in sorted(EXPECTED_BLOCKS)
+        for value in re.findall(r'"([^"]+)"', blocks[name])
+    ]
+    if not keywords:
+        raise ValueError("router keyword extraction returned no keywords")
+    return keywords
 
 
 def main() -> int:
@@ -16,8 +42,11 @@ def main() -> int:
     args = parser.parse_args()
 
     source = Path(args.router).read_text(encoding="utf-8")
-    blocks = re.findall(r"private val \w+Keywords = listOf\((.*?)\n    \)", source, re.DOTALL)
-    keywords = [value.lower() for block in blocks for value in re.findall(r'"([^"]+)"', block)]
+    try:
+        keywords = extract_keywords(source)
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 2
     questions = json.loads(Path(args.dataset).read_text(encoding="utf-8"))["questions"]
     violations = []
     for item in questions:
