@@ -176,56 +176,7 @@ npm run build
 
 ## 기여하기
 
-작은 이슈 하나와 검증 가능한 PR 하나를 기본 단위로 사용합니다. 기능, 버그, 벤치마크,
-문서, 리팩터링, 보안 작업을 서로 분리해 주세요.
-
-모든 제안은 코드 완성도, 오픈소스 발전 가능성, 문서 구체성, 혁신성, 팀워크 중 주
-평가항목을 지정하고, 최소 0.1점 이상 기여할 수 있다는 가설과 검증 근거를 남깁니다.
-근거가 없거나 기존 작업과 중복되는 제안은 게시하지 않으며, 자동으로 병합하지 않습니다.
-
-### 1. 이슈 등록
-
-1. [기존 이슈](https://github.com/qixiangme/DB-MCP/issues)를 검색해 중복을 확인합니다.
-2. [새 이슈 만들기](https://github.com/qixiangme/DB-MCP/issues/new/choose)에서 기능, 버그,
-   벤치마크, 문서, 리팩터링, 보안 중 목적에 맞는 양식을 선택합니다.
-3. 문제와 범위, 완료 조건, 안전성 영향, 재현 방법을 작성합니다.
-4. 보안 취약점이나 비밀정보는 공개 이슈 대신
-   [비공개 보안 제보](https://github.com/qixiangme/DB-MCP/security/advisories/new)를 사용합니다.
-
-완료 조건이 모두 충족되면 근거를 댓글로 남기고 이슈를 `완료됨`으로 닫습니다.
-정확도가 개선되지 않은 벤치마크는 결과와 실패 원인을 보존하고 `계획하지 않음`으로 닫습니다.
-
-### 2. 브랜치와 구현
-
-```bash
-git switch main
-git pull --ff-only
-git switch -c feature/짧은-설명
-```
-
-작업 성격에 따라 `feature/`, `fix/`, `benchmark/`, `docs/`, `refactor/`, `security/`,
-`chore/` 접두사를 사용합니다. 한 브랜치와 PR에는 한 가지 목적만 포함합니다.
-
-### 3. 검증과 기록
-
-- 코드 변경: 관련 단위 테스트와 `./gradlew test` 실행
-- 웹 변경: `cd client && npm ci && npm run build` 실행
-- 벤치마크: 기준선·후보 수치, 모델, 설정, 반복 횟수, 지연 시간, 오류, 원시 결과 기록
-- 외부 동작 변경: README 또는 관련 문서도 함께 갱신
-- 보안 변경: 입력 검증, 읽기 전용 SQL, 최소 권한, 비밀정보 노출 여부 확인
-
-세부 기준은 [CONTRIBUTING.md](./CONTRIBUTING.md)와
-[벤치마크 무결성 정책](./docs/contributing/BENCHMARK_POLICY.md)을 따릅니다.
-
-### 4. PR 등록
-
-1. 브랜치를 푸시하고 GitHub에서 새 PR을 만듭니다.
-2. 기능, 버그, 벤치마크, 문서, 리팩터링, 보안 중 목적에 맞는
-   [PR 템플릿](./.github/PULL_REQUEST_TEMPLATE)을 선택합니다.
-3. 본문에 `Closes #이슈번호`를 작성해 이슈를 연결합니다.
-4. 변경 이유, 구현 범위, 실행한 테스트, 전후 수치, 위험과 되돌리기 방법을 작성합니다.
-5. 정확성, 안전성, 체계성, 재현성, 회귀 여부를 확인한 뒤 리뷰를 요청합니다.
-
-PR 화면에서 템플릿이 자동으로 열리지 않으면 주소 끝에 `?template=feature.md` 또는
-`?template=benchmark.md`처럼 템플릿 파일명을 지정할 수 있습니다. 전체 분류와 리뷰 기준은
-[이슈와 PR 운영 절차](./docs/contributing/WORKFLOW.md)에 정리되어 있습니다.
+기여를 시작하기 전에 [CONTRIBUTING.md](./CONTRIBUTING.md)를 읽어 주세요. 이슈 등록,
+브랜치 작성, 테스트와 벤치마크, PR 템플릿, Draft·Ready·Close 판정 기준을 한곳에
+정리했습니다. 보안 취약점은 공개 이슈 대신
+[비공개 보안 제보](https://github.com/qixiangme/DB-MCP/security/advisories/new)를 이용해 주세요.
