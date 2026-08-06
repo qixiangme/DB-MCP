@@ -9,10 +9,11 @@
 ## 로컬 확인
 
 ```bash
-bash ./gradlew test
+./gradlew test
 cd client && npm ci && npm audit --audit-level=high && npm run build
 ```
 
+Unix 계열 환경에서는 clone 직후 별도 `chmod` 없이 Gradle 래퍼를 직접 실행할 수 있습니다.
 클라이언트 의존성 감사는 High 또는 Critical 공개 권고가 있으면 실패합니다. 잠금 파일을
 갱신한 PR은 깨끗한 `npm ci` 뒤 같은 감사 명령을 실행해 결과를 기록해 주세요.
 
