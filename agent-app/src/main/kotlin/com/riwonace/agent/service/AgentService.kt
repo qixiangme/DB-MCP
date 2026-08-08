@@ -6,6 +6,7 @@ import com.riwonace.agent.context.ContextItem
 import com.riwonace.agent.mcp.McpGateway
 import com.riwonace.agent.router.Route
 import com.riwonace.agent.router.RuleBasedRouter
+import com.riwonace.agent.sql.FewShotSelector
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.stereotype.Service
@@ -39,6 +40,7 @@ class AgentService(
     private val curator: ContextCurator,
     private val chatClient: ChatClient,
     private val mapper: ObjectMapper,
+    private val fewShotSelector: FewShotSelector,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
     private val executor = Executors.newFixedThreadPool(4)
@@ -108,10 +110,18 @@ class AgentService(
 
     /**
      * NL2SQL: MCP로 받은 스키마를 근거로 소형 LLM이 SELECT 한 문장을 생성한다.
-     * 1B급 모델 안정화를 위해 원샷 예시를 포함한다 (출력 형식을 좁힐수록 소형 모델이 안정적이다).
+     *
+     * 동적 Few-Shot 선택: 고정 예시 대신 질문과 유사한 예시를 동적으로 선택한다.
+     * 논문 참고: Instructional Prompt Optimization for Few-Shot LLM (2025)
      */
     private fun generateSql(question: String, previousAttempt: String? = null, error: String? = null): String {
         val schema = gateway.schema()
+
+        // 동적 Few-Shot 선택: 질문과 유사한 예시 3개 선택
+        val selectedExamples = fewShotSelector.selectExamples(question, topK = 3)
+        val examplesBlock = fewShotSelector.formatExamplesForPrompt(selectedExamples)
+        log.info("Few-shot 예시 선택: {}", selectedExamples.map { it.pattern })
+
         val retryBlock =
             if (previousAttempt == null) ""
             else "직전 시도: $previousAttempt\n오류: ${error?.take(300)}\n오류를 고쳐서 다시 작성한다.\n\n"
@@ -122,12 +132,7 @@ class AgentService(
             )
             .user(
                 "스키마:\n$schema\n\n" +
-                    // 예시 2개: 1B 모델은 예시 하나면 그 WHERE절까지 그대로 베낀다.
-                    // 필터 집계 + 조인 패턴을 모두 보여 패턴을 분리한다.
-                    "예시1 — 질문: 완료된 프로젝트는 몇 개야?\n" +
-                    "SQL: SELECT count(*) FROM projects WHERE status = 'completed'\n" +
-                    "예시2 — 질문: 영업팀 직원 이름과 연봉을 알려줘\n" +
-                    "SQL: SELECT e.name, e.salary FROM employees e JOIN departments d ON e.dept_id = d.id WHERE d.name = '영업팀'\n\n" +
+                    "$examplesBlock\n\n" +
                     retryBlock +
                     "질문: $question\nSQL:",
             )
