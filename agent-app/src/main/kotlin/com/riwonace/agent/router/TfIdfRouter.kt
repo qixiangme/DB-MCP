@@ -100,7 +100,7 @@ class TfIdfRouter : RouteFallback {
      * @param question 사용자 질문
      * @return 예측된 라우트
      */
-    fun classify(question: String): Route {
+    override fun classify(question: String): Route {
         val queryVector = computeTfIdf(question)
 
         // 각 학습 데이터와의 코사인 유사도 계산
