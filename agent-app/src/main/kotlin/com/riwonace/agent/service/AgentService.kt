@@ -167,8 +167,8 @@ class AgentService(
      * @return 재시도가 필요하면 피드백 문자열, 불필요하면 null
      */
     @Suppress("UNCHECKED_CAST")
-    private fun analyzeSqlResult(json: String, question: String): String? =
-        try {
+    private fun analyzeSqlResult(json: String, question: String): String? {
+        return try {
             // 1단계: JSON 파싱 오류 검출
             val parsed: Map<String, Any?> = mapper.readValue(
                 json,
@@ -178,40 +178,39 @@ class AgentService(
             // 2단계: 에러 응답 검출
             val error = parsed["error"]?.toString()
             if (!error.isNullOrBlank()) {
-                return "SQL 실행 오류: $error"
-            }
-
-            // 3단계: 빈 결과 검출 (0행)
-            val rows = parsed["rows"] as? List<Map<String, Any?>>
-            if (rows == null) {
-                return "응답에 rows 필드가 없음"
-            }
-            if (rows.isEmpty()) {
-                // 빈 결과가 예상되는 질문인지 확인 (부정형 질문)
-                val negationKeywords = listOf("없", "아닌", "제외", "빼고", "않")
-                val isNegationQuestion = negationKeywords.any { question.contains(it) }
-                if (!isNegationQuestion) {
-                    return "조회 결과가 0행임. 조건을 완화하거나 테이블/컬럼명을 확인해야 함"
+                "SQL 실행 오류: $error"
+            } else {
+                // 3단계: 빈 결과 검출 (0행)
+                val rows = parsed["rows"] as? List<Map<String, Any?>>
+                when {
+                    rows == null -> "응답에 rows 필드가 없음"
+                    rows.isEmpty() -> {
+                        // 빈 결과가 예상되는 질문인지 확인 (부정형 질문)
+                        val negationKeywords = listOf("없", "아닌", "제외", "빼고", "않")
+                        val isNegationQuestion = negationKeywords.any { question.contains(it) }
+                        if (!isNegationQuestion) {
+                            "조회 결과가 0행임. 조건을 완화하거나 테이블/컬럼명을 확인해야 함"
+                        } else {
+                            null
+                        }
+                    }
+                    else -> {
+                        // 4단계: 결과 유효성 검증 (NULL 값 과다)
+                        val nullCount = rows.sumOf { row -> row.values.count { it == null } }
+                        val totalValues = rows.size * rows.first().size
+                        if (totalValues > 0 && nullCount.toDouble() / totalValues > 0.5) {
+                            "결과의 50% 이상이 NULL임. JOIN 조건이나 컬럼 선택을 확인해야 함"
+                        } else {
+                            null // 검증 통과
+                        }
+                    }
                 }
             }
-
-            // 4단계: 결과 유효성 검증 (NULL 값 과다)
-            if (rows.isNotEmpty()) {
-                val nullCount = rows.sumOf { row ->
-                    row.values.count { it == null }
-                }
-                val totalValues = rows.size * rows.first().size
-                if (totalValues > 0 && nullCount.toDouble() / totalValues > 0.5) {
-                    return "결과의 50% 이상이 NULL임. JOIN 조건이나 컬럼 선택을 확인해야 함"
-                }
-            }
-
-            // 검증 통과 - 재시도 불필요
-            null
         } catch (e: Exception) {
             // JSON 파싱 실패 = SQL 실행 자체가 실패한 것
             "SQL 결과 파싱 실패: ${e.message}"
         }
+    }
 
     private fun parseVectorResult(json: String): List<ContextItem> =
         try {
