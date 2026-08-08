@@ -35,6 +35,11 @@ class AgentService(
     private val log = LoggerFactory.getLogger(javaClass)
     private val executor = Executors.newFixedThreadPool(4)
 
+    companion object {
+        /** Self-Corrective SQL 최대 재시도 횟수 (Self-RAG ICLR 2024 영감) */
+        private const val MAX_SQL_RETRIES = 2
+    }
+
     fun chat(question: String): AgentAnswer {
         val started = System.currentTimeMillis()
         val routes = router.route(question)
@@ -76,18 +81,19 @@ class AgentService(
                     toolCalls += "run_sql"
                     var sql = generateSql(question)
                     var result = gateway.runSql(sql)
-                    // 오류·0행 시 1회 자가수정: MCP 도구의 피드백을 근거로 SQL 재생성
-                    val feedback = when {
-                        result.contains("\"error\"") -> result.take(300)
-                        result.contains("\"rows\":[]") ->
-                            "결과가 0행이었다. WHERE 값이 스키마 valueHints의 실제 값과 정확히 일치하는지 확인한다."
-                        else -> null
-                    }
-                    if (feedback != null) {
-                        log.info("run_sql 자가수정 재시도 — 사유: {}", feedback.take(100))
-                        toolCalls += "run_sql(retry)"
+                    var retryCount = 0
+
+                    // Self-Corrective SQL: 2단계 검증과 최대 2회 자가수정
+                    // 논문 참고: Self-RAG (ICLR 2024) - 생성 결과를 자가 비평하고 필요시 재시도
+                    while (retryCount < MAX_SQL_RETRIES) {
+                        val feedback = analyzeSqlResult(result, question)
+                        if (feedback == null) break
+
+                        log.info("run_sql 자가수정 재시도 {}/{} — 사유: {}", retryCount + 1, MAX_SQL_RETRIES, feedback.take(100))
+                        toolCalls += "run_sql(retry-${retryCount + 1})"
                         sql = generateSql(question, previousAttempt = sql, error = feedback)
                         result = gateway.runSql(sql)
+                        retryCount++
                     }
                     listOf(ContextItem("sql", "실행한 SQL: $sql\n조회 결과:\n${humanizeSqlResult(result)}", 1.0))
                 }
@@ -152,6 +158,59 @@ class AgentService(
             }
         } catch (e: Exception) {
             json
+        }
+
+    /**
+     * Self-Corrective SQL: 결과를 분석하여 재시도 필요 여부를 판단한다.
+     * 논문 참고: Self-RAG (ICLR 2024) - 생성 결과를 자가 비평하고 필요시 재시도
+     *
+     * @return 재시도가 필요하면 피드백 문자열, 불필요하면 null
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun analyzeSqlResult(json: String, question: String): String? =
+        try {
+            // 1단계: JSON 파싱 오류 검출
+            val parsed: Map<String, Any?> = mapper.readValue(
+                json,
+                mapper.typeFactory.constructMapType(Map::class.java, String::class.java, Any::class.java),
+            )
+
+            // 2단계: 에러 응답 검출
+            val error = parsed["error"]?.toString()
+            if (!error.isNullOrBlank()) {
+                return "SQL 실행 오류: $error"
+            }
+
+            // 3단계: 빈 결과 검출 (0행)
+            val rows = parsed["rows"] as? List<Map<String, Any?>>
+            if (rows == null) {
+                return "응답에 rows 필드가 없음"
+            }
+            if (rows.isEmpty()) {
+                // 빈 결과가 예상되는 질문인지 확인 (부정형 질문)
+                val negationKeywords = listOf("없", "아닌", "제외", "빼고", "않")
+                val isNegationQuestion = negationKeywords.any { question.contains(it) }
+                if (!isNegationQuestion) {
+                    return "조회 결과가 0행임. 조건을 완화하거나 테이블/컬럼명을 확인해야 함"
+                }
+            }
+
+            // 4단계: 결과 유효성 검증 (NULL 값 과다)
+            if (rows.isNotEmpty()) {
+                val nullCount = rows.sumOf { row ->
+                    row.values.count { it == null }
+                }
+                val totalValues = rows.size * rows.first().size
+                if (totalValues > 0 && nullCount.toDouble() / totalValues > 0.5) {
+                    return "결과의 50% 이상이 NULL임. JOIN 조건이나 컬럼 선택을 확인해야 함"
+                }
+            }
+
+            // 검증 통과 - 재시도 불필요
+            null
+        } catch (e: Exception) {
+            // JSON 파싱 실패 = SQL 실행 자체가 실패한 것
+            "SQL 결과 파싱 실패: ${e.message}"
         }
 
     private fun parseVectorResult(json: String): List<ContextItem> =
