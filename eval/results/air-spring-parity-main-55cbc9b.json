@@ -1,0 +1,1010 @@
+{
+  "metadata": {
+    "createdAt": "2026-08-08T20:59:07.477Z",
+    "commit": "55cbc9b570094b30026fb4f36bd44c620711d1bd",
+    "dataset": "official-eval.json",
+    "repetitions": 1,
+    "model": "gemma3:1b",
+    "temperature": 0,
+    "vectorSearchMode": "exact",
+    "serverOrder": "alternating",
+    "urls": {
+      "spring-ai": "http://localhost:8080",
+      "air-exact": "http://localhost:8083"
+    }
+  },
+  "summary": {
+    "spring-ai": {
+      "samples": 30,
+      "answerAccuracyPct": 23.3,
+      "routeAccuracyPct": 100,
+      "averageLatencyMs": 1786,
+      "medianLatencyMs": 1403,
+      "errors": 0
+    },
+    "air-exact": {
+      "samples": 30,
+      "answerAccuracyPct": 23.3,
+      "routeAccuracyPct": 100,
+      "averageLatencyMs": 5609,
+      "medianLatencyMs": 1632,
+      "errors": 0
+    }
+  },
+  "results": [
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "N1",
+      "question": "서울 지역 매출 상위 5개 고객사를 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2186,
+      "wallLatencyMs": 2307,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "N1",
+      "question": "서울 지역 매출 상위 5개 고객사를 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2317,
+      "wallLatencyMs": 2394,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "N2",
+      "question": "2025년 3분기 총 매출액은 얼마야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2081,
+      "wallLatencyMs": 2084,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "N2",
+      "question": "2025년 3분기 총 매출액은 얼마야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2098,
+      "wallLatencyMs": 2101,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "N3",
+      "question": "보안 솔루션 카테고리 제품들의 월 평균 매출은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1742,
+      "wallLatencyMs": 1744,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "N3",
+      "question": "보안 솔루션 카테고리 제품들의 월 평균 매출은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1784,
+      "wallLatencyMs": 1786,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "N4",
+      "question": "현재 활성 상태인 계약 수는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1510,
+      "wallLatencyMs": 1512,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "N4",
+      "question": "현재 활성 상태인 계약 수는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1564,
+      "wallLatencyMs": 1566,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "N5",
+      "question": "기술지원팀 직원 목록과 연봉을 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1908,
+      "wallLatencyMs": 1910,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "N5",
+      "question": "기술지원팀 직원 목록과 연봉을 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2003,
+      "wallLatencyMs": 2005,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "N6",
+      "question": "가장 많은 프로젝트를 진행 중인 고객사는?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1374,
+      "wallLatencyMs": 1376,
+      "answer": "client-b ci/cd pipeline 구축",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "N6",
+      "question": "가장 많은 프로젝트를 진행 중인 고객사는?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1083,
+      "wallLatencyMs": 1084,
+      "answer": "client-b ci/cd pipeline 구축",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "N7",
+      "question": "Critical 우선순위 티켓 중 아직 해결되지 않은 건은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2774,
+      "wallLatencyMs": 2776,
+      "answer": "제공된 데이터에서 Critical 우선순위를 가진 티켓은 다음과 같습니다:\n\n*   id=28\n*   id=37\n*   id=62\n*   id=64\n*   id=66\n*   id=69\n*   id=80\n*   id=81\n*   id=82\n*   id=89",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "N7",
+      "question": "Critical 우선순위 티켓 중 아직 해결되지 않은 건은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 7107,
+      "wallLatencyMs": 7109,
+      "answer": "제공된 데이터에서 Critical 우선순위를 가진 티켓은 다음과 같습니다:\n\n*   id=28, client_id=18, product_id=10, assignee_id=5, title='PV 마운트 실패', description='모니터링 대시보드에서 이상 징후가 감지되었습니다.', priority=critical, status=closed, created_at=2025-03-04T14:08:08.000+00:00, resolved_at=2025-03-08T21:18:31.000+00:00\n*   id=37, client_id=26, product_id=9, assignee_id=41, title='프로덕션 핫픽스 요청', description='정기 점검 중 발견된 이슈입니다.', priority=critical, status=in_progress, created_at=2026-03-20T07:08:23.000+00:00, resolved_at=null\n*   id=62, client\\_id=5, product\\_id=10, assignee\\_id=5, title='SSL 인증서 만료 알림', description='모니터링 대시보드에서 이상 징후가 감지되었습니다.', priority=critical, status=in_progress, created_at=2025-05-06T08:23:07.000+00:00, resolved\\_at=null\n*   id=64, client\\_id=3, product\\_id=12, assignee\\_id=14, title='디스크 용량 부족 경고', description='고객사에서 문의가 들어왔습니다.', priority=critical, status=open, created_at=2025-04-15T02:32:44.000+00:00, resolved\\_at=null\n*   id=66, client\\_id=8, product\\_id=12, assignee\\_id=32, title='ETL 작업 실패', description='고객사에서 문의가 들어왔습니다.', priority=critical, status=in_progress, created_at=2",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "N8",
+      "question": "제품별 총 계약 금액을 큰 순서로 보여줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2062,
+      "wallLatencyMs": 2064,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "N8",
+      "question": "제품별 총 계약 금액을 큰 순서로 보여줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2267,
+      "wallLatencyMs": 2269,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "N9",
+      "question": "2024년에 등록된 고객사는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1326,
+      "wallLatencyMs": 1328,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "N9",
+      "question": "2024년에 등록된 고객사는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1024,
+      "wallLatencyMs": 1026,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "N10",
+      "question": "평균 연봉이 가장 높은 부서는 어디야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1301,
+      "wallLatencyMs": 1302,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "N10",
+      "question": "평균 연봉이 가장 높은 부서는 어디야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 980,
+      "wallLatencyMs": 982,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "V1",
+      "question": "최근 서버 장애 사례와 원인을 알려줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1700,
+      "wallLatencyMs": 1702,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "V1",
+      "question": "최근 서버 장애 사례와 원인을 알려줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 493,
+      "wallLatencyMs": 495,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "V2",
+      "question": "Product-C1 설치 방법이 궁금해",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1025,
+      "wallLatencyMs": 1027,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "V2",
+      "question": "Product-C1 설치 방법이 궁금해",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 386,
+      "wallLatencyMs": 388,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "V3",
+      "question": "Kubernetes 관련 장애 대응 방법은?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 931,
+      "wallLatencyMs": 932,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "V3",
+      "question": "Kubernetes 관련 장애 대응 방법은?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 383,
+      "wallLatencyMs": 385,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "V4",
+      "question": "성능 최적화를 위한 DB 튜닝 방법 알려줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 4662,
+      "wallLatencyMs": 4663,
+      "answer": "성능 최적화를 위해 DB 최적화, 애플리케이션 최적화, 네트워크 최적화에 집중해야 합니다. 각 항목별로 구체적인 방법을 제시해 드릴 수 있습니다.\n\n**1. DB 최적화:**\n\n*   **Connection Pool:** 최소 14, 최대 52개 연결을 확보하여 리소스를 효율적으로 사용합니다.\n*   **인덱스 점검:** 슬로우 쿼리 로그를 분석하여 불필요한 쿼리를 식별하고, 해당 쿼리에 대한 인덱스를 추가하거나 수정합니다.\n*   **쿼리 캐싱:** Redis에 TTL 200초 설정하여 데이터가 유효하지 않을 때 즉시 캐시에서 가져오도록 합니다.\n\n**2. 애플리케이션 최적화:**\n\n*   **JVM 힙:** 2GB로 설정하여 메모리 사용량을 줄입니다.\n*   **GC:** G1GC를 사용하여 GC 횟수를 최소화합니다.\n*   **스레드풀:** 코어 수 × 4로 설정하여 스레드를 효율적으로 관리합니다.\n\n**3. 네트워크 최적화:**\n\n*   **Keep-Alive 활성화:** 연결 유지 시간을 늘려 네트워크 지연을 줄입니다.\n*   **gzip 압축 적용:** 데이터 전송량을 줄여 네트워크 트래픽을 감소시킵니다.\n*   **CDN 적용 시 캐시 적중률 91% 달성 가능:** CDN을 활용하여 데이터를 효율적으로 제공합니다.\n\n이러한 방법들을 통해 성능 개선 효과를 얻을 수 있을 것입니다. 혹시 특정 부분에 대한 더 자세한 설명이나 추가적인 조언이 필요하시면 말씀해주세요.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "V4",
+      "question": "성능 최적화를 위한 DB 튜닝 방법 알려줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 3934,
+      "wallLatencyMs": 3935,
+      "answer": "성능 최적화를 위해 DB 최적화, 애플리케이션 최적화, 네트워크 최적화에 집중해야 합니다. 각 항목별로 구체적인 방법을 제시해 드리겠습니다.\n\n**1. DB 최적화:**\n\n*   **Connection Pool:** 최소 14, 최대 52개 연결을 확보하여 리소스를 효율적으로 사용합니다.\n*   **인덱스 점검:** 슬로우 쿼리 로그를 분석하여 불필요한 쿼리를 식별하고, 해당 쿼리에 대한 인덱스를 추가하거나 수정합니다.\n*   **쿼리 캐싱:** Redis에 TTL 200초 설정하여 데이터가 유효하지 않을 때 즉시 캐시에서 가져오도록 합니다.\n\n**2. 애플리케이션 최적화:**\n\n*   **JVM 힙:** 2GB로 설정하여 메모리 사용량을 줄입니다.\n*   **GC:** G1GC를 사용하여 GC 횟수를 최소화합니다.\n*   **스레드풀:** 코어 수 x 4로 설정하여 스레드를 효율적으로 관리합니다.\n\n**3. 네트워크 최적화:**\n\n*   **Keep-Alive 활성화:** 연결 유지 시간을 늘려 네트워크 지연을 줄입니다.\n*   **gzip 압축 적용:** 데이터 전송량을 줄여 네트워크 트래픽을 감소시킵니다.\n*   **CDN 적용 시 캐시 적중률 91% 달성 가능:** CDN을 활용하여 데이터를 효율적으로 제공합니다.\n\n이러한 방법들을 통해 성능 개선 효과를 얻을 수 있을 것입니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "V5",
+      "question": "보안 취약점 점검 관련 내용이 있어?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 683,
+      "wallLatencyMs": 685,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "V5",
+      "question": "보안 취약점 점검 관련 내용이 있어?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 401,
+      "wallLatencyMs": 403,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "V6",
+      "question": "백업 정책은 어떻게 되어 있어?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 975,
+      "wallLatencyMs": 977,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "V6",
+      "question": "백업 정책은 어떻게 되어 있어?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 420,
+      "wallLatencyMs": 422,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "V7",
+      "question": "API 인증 방식은 뭐야?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 1162,
+      "wallLatencyMs": 1164,
+      "answer": "API 인증 방식은 Bearer 토큰 방식을 사용합니다. /auth/token 엔드포인트에서 발급받습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "V7",
+      "question": "API 인증 방식은 뭐야?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 620,
+      "wallLatencyMs": 621,
+      "answer": "API 인증 방식은 Bearer 토큰 방식을 사용합니다. /auth/token 엔드포인트에서 발급받습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "V8",
+      "question": "고객사 미팅에서 논의된 일정 지연 이슈는?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "GRAPH",
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1038,
+      "wallLatencyMs": 1039,
+      "answer": "고객사 미팅에서 논의된 일정 지연 이슈는 다음과 같습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "V8",
+      "question": "고객사 미팅에서 논의된 일정 지연 이슈는?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "GRAPH",
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 120455,
+      "wallLatencyMs": 120456,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "V9",
+      "question": "클라우드 마이그레이션 제안서 내용 보여줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 876,
+      "wallLatencyMs": 878,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "V9",
+      "question": "클라우드 마이그레이션 제안서 내용 보여줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 375,
+      "wallLatencyMs": 378,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "V10",
+      "question": "SSL 인증서 관련 장애가 있었어?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 958,
+      "wallLatencyMs": 960,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "V10",
+      "question": "SSL 인증서 관련 장애가 있었어?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 376,
+      "wallLatencyMs": 378,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "G1",
+      "question": "Client-A가 사용 중인 제품 목록은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 2752,
+      "wallLatencyMs": 2754,
+      "answer": "Client-A는 다음과 같은 제품을 사용하고 있습니다.\n* Product-S1\n* Product-S3\n* Product-S3\n* Product-S1\n* Product-C3\n* Product-S3\n* Product-S3\n* Product-S1\n* Product-C3\n\n출처: sql",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "G1",
+      "question": "Client-A가 사용 중인 제품 목록은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 2643,
+      "wallLatencyMs": 2644,
+      "answer": "Client-A는 다음 제품을 사용하고 있습니다.\n*   Product-S1\n*   Product-S3\n*   Product-S3\n*   Product-S1\n*   Product-C3\n*   Product-S3\n\n출처: sql\n",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "G2",
+      "question": "Product-C1을 사용하는 고객사는 어디야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 1432,
+      "wallLatencyMs": 1433,
+      "answer": "Product-C1을 사용하는 고객사는 다음과 같습니다.\n\n*   Client-H\n*   Client-D\n*   Client-T\n*   Client-Y\n*   Client-Q\n*   Client-V\n*   Client-Z\n*   Client-AC\n*   Client-AB\n*   Client-J\n*   Client-Q\n\n출처: knowledge-graph",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "G2",
+      "question": "Product-C1을 사용하는 고객사는 어디야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 1128,
+      "wallLatencyMs": 1130,
+      "answer": "Product-C1을 사용하는 고객사는 다음과 같습니다.\n\n*   Client-H\n*   Client-D\n*   Client-T\n*   Client-Y\n*   Client-Q\n*   Client-V\n*   Client-Z\n*   Client-AC\n*   Client-AB\n*   Client-J\n*   Client-Q\n\n출처: knowledge-graph",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "G3",
+      "question": "클라우드사업부 소속 직원들은 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2038,
+      "wallLatencyMs": 2039,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "G3",
+      "question": "클라우드사업부 소속 직원들은 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2167,
+      "wallLatencyMs": 2168,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "G4",
+      "question": "서울물산 담당 엔지니어는 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 429,
+      "wallLatencyMs": 431,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "G4",
+      "question": "서울물산 담당 엔지니어는 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 369,
+      "wallLatencyMs": 371,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "G5",
+      "question": "Product-D1 제품과 관련된 프로젝트는?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1838,
+      "wallLatencyMs": 1839,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "G5",
+      "question": "Product-D1 제품과 관련된 프로젝트는?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1891,
+      "wallLatencyMs": 1892,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "G6",
+      "question": "기술 지원 이슈가 가장 많은 제품은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1957,
+      "wallLatencyMs": 1958,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "G6",
+      "question": "기술 지원 이슈가 가장 많은 제품은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1810,
+      "wallLatencyMs": 1811,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "G7",
+      "question": "경영지원팀 팀장은 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 492,
+      "wallLatencyMs": 493,
+      "answer": "경영지원팀 팀장은 윤소연입니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "G7",
+      "question": "경영지원팀 팀장은 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 383,
+      "wallLatencyMs": 385,
+      "answer": "경영지원팀 팀장은 윤소연입니다.",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "G8",
+      "question": "진행 중인 프로젝트를 이끄는 직원 목록",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2234,
+      "wallLatencyMs": 2236,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "G8",
+      "question": "진행 중인 프로젝트를 이끄는 직원 목록",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 2021,
+      "wallLatencyMs": 2023,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "G9",
+      "question": "Product-S1 관련 고객 이슈 현황은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 5930,
+      "wallLatencyMs": 5931,
+      "answer": "Product-S1 관련 고객 이슈 현황은 다음과 같습니다.\n\n*   Client-D - 이슈보고\n*   Client-J - 이슈보고\n*   Client-X - 이슈보고\n*   Client-V - 이슈보고\n*   Client-O - 이슈보고\n*   Client-A - 이슈보고\n*   Client-K - 이슈보고\n*   Client-D - 사용한다\n*   Client-N - 사용한다\n*   Client-A - 사용한다\n*   Client-K - 사용한다\n*   Client-D - 이슈보고\n*   Client-J - 이슈보고\n*   Client-X - 이슈보고\n*   Client-V - 이슈보고\n*   Client-O - 이슈보고\n*   Client-S - 이슈보고\n*   Client-AA - 이슈보고\n*   Client-E - 이슈보고\n*   Client-D - 사용한다\n*   Client-C2 - 사용한다\n*   Client-C1 - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C2 - 사용한다\n*   Client-C1 - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C4 - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-S3 - 사용한다\n*   Client-D - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-S2 - 사용한다\n*   Client-D - 사용한다\n*   Client-E - 사용한다\n*   Client-X - 사용한다\n*   Product-C2 - 사용한다\n*   Client-X - 사용한다\n*   Client-A - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C1 - 사용한다\n*   Client-D - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C4 - 사용한다\n*   Client-E - 사용한다\n*   Client-X - 사용한다\n*   Product-D2 - 사용한다\n*   Client-X - 사용한다\n*   ",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "G9",
+      "question": "Product-S1 관련 고객 이슈 현황은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "answerCorrect": true,
+      "routeCorrect": true,
+      "latencyMs": 5582,
+      "wallLatencyMs": 5583,
+      "answer": "Product-S1 관련 고객 이슈 현황은 다음과 같습니다.\n\n*   Client-D - 이슈보고\n*   Client-J - 이슈보고\n*   Client-X - 이슈보고\n*   Client-V - 이슈보고\n*   Client-O - 이슈보고\n*   Client-A - 이슈보고\n*   Client-K - 이슈보고\n*   Client-D - 사용한다\n*   Client-N - 사용한다\n*   Client-A - 사용한다\n*   Client-K - 사용한다\n*   Client-D - 이슈보고\n*   Client-J - 이슈보고\n*   Client-X - 이슈보고\n*   Client-V - 이슈보고\n*   Client-O - 이슈보고\n*   Client-S - 이슈보고\n*   Client-AA - 이슈보고\n*   Client-E - 이슈보고\n*   Client-D - 사용한다\n*   Client-C2 - 사용한다\n*   Client-C1 - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C2 - 사용한다\n*   Client-C1 - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C4 - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-S3 - 사용한다\n*   Client-D - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-S2 - 사용한다\n*   Client-D - 사용한다\n*   Client-E - 사용한다\n*   Client-X - 사용한다\n*   Product-C2 - 사용한다\n*   Client-X - 사용한다\n*   Client-A - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C1 - 사용한다\n*   Client-D - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C4 - 사용한다\n*   Client-E - 사용한다\n*   Client-X - 사용한다\n*   Product-D2 - 사용한다\n*   Client-X - 사용한다\n*   ",
+      "error": null
+    },
+    {
+      "server": "spring-ai",
+      "rep": 1,
+      "id": "G10",
+      "question": "가장 많은 고객을 담당하는 직원은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1354,
+      "wallLatencyMs": 1356,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "server": "air-exact",
+      "rep": 1,
+      "id": "G10",
+      "question": "가장 많은 고객을 담당하는 직원은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "answerCorrect": false,
+      "routeCorrect": true,
+      "latencyMs": 1034,
+      "wallLatencyMs": 1036,
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    }
+  ]
+}

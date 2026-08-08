@@ -1,0 +1,27 @@
+{
+  "description": "AIR와 Spring AI MCP 서버의 동작 동등성을 확인하는 공개 개발셋. 기존 공식 30문항과 질문을 겹치지 않게 구성했으며 최종 보류셋이 아니다.",
+  "split": "development",
+  "groundTruth": "companyx-dataset-v1.0의 SQL, 문서, 그래프에서 직접 확인",
+  "questions": [
+    { "id": "PS1", "question": "완료된 프로젝트는 총 몇 개야?", "expectedRoute": "SQL", "keywords": ["6개", "6건", "6 개", "여섯"] },
+    { "id": "PS2", "question": "취소된 계약 수를 알려줘", "expectedRoute": "SQL", "keywords": ["10개", "10건", "10 개", "열"] },
+    { "id": "PS3", "question": "2024년 4분기 총 매출액은 얼마야?", "expectedRoute": "SQL", "keywords": ["42404", "42,404"] },
+    { "id": "PS4", "question": "월 가격이 가장 비싼 제품을 알려줘", "expectedRoute": "SQL", "keywords": ["Product-D3"] },
+    { "id": "PS5", "question": "데이터플랫폼팀 직원은 몇 명이야?", "expectedRoute": "SQL", "keywords": ["5명", "5 명", "다섯"] },
+    { "id": "PS6", "question": "전체 고객사 수는 몇 개야?", "expectedRoute": "SQL", "keywords": ["30개", "30곳", "30 개"] },
+
+    { "id": "PV1", "question": "Product-C1 설치 가이드의 RAM 요구사항 알려줘", "expectedRoute": "VECTOR", "keywords": ["5GB", "5 GB"] },
+    { "id": "PV2", "question": "Product-C2 아키텍처에서 오토스케일링 기준 내용은?", "expectedRoute": "VECTOR", "keywords": ["78%", "78 %"] },
+    { "id": "PV3", "question": "Product-S1 운영 매뉴얼의 로그 보관 정책은?", "expectedRoute": "VECTOR", "keywords": ["71일", "71 일"] },
+    { "id": "PV4", "question": "Product-S2 DB 튜닝 방법에서 Redis 캐시 TTL은?", "expectedRoute": "VECTOR", "keywords": ["222초", "222 초"] },
+    { "id": "PV5", "question": "Product-D2 설치 방법에서 초기 구동 시간 내용 알려줘", "expectedRoute": "VECTOR", "keywords": ["46초", "46 초"] },
+    { "id": "PV6", "question": "Product-D3 성능 튜닝 가이드의 GC 일시정지 설정은?", "expectedRoute": "VECTOR", "keywords": ["157", "MaxGCPauseMillis"] },
+
+    { "id": "PG1", "question": "Client-B가 사용 중인 제품 목록은?", "expectedRoute": "GRAPH", "keywords": ["Product-S3", "Product-C2", "Product-D1", "Product-S2"] },
+    { "id": "PG2", "question": "Product-D2를 사용하는 고객사는 어디야?", "expectedRoute": "GRAPH", "keywords": ["Client-AC", "Client-W", "Client-X"] },
+    { "id": "PG3", "question": "윤소연은 어느 부서 소속이야?", "expectedRoute": "GRAPH", "keywords": ["경영지원팀"] },
+    { "id": "PG4", "question": "Client-B와 관련된 프로젝트를 알려줘", "expectedRoute": "GRAPH", "keywords": ["하이브리드 클라우드", "CI/CD 파이프라인"] },
+    { "id": "PG5", "question": "Product-D2 이슈와 관련된 고객은?", "expectedRoute": "GRAPH", "keywords": ["Client-B", "Client-E", "Client-F", "Client-J", "Client-O", "Client-W", "Client-X"] },
+    { "id": "PG6", "question": "가상고객-Z 담당 직원은 누구야?", "expectedRoute": "GRAPH", "keywords": ["찾을 수 없", "없습니다"] }
+  ]
+}

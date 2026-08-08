@@ -1,0 +1,326 @@
+{
+  "description": "다양한 질문 유형과 난이도를 포괄하는 확장 평가 데이터셋. 단순 사실, 복합 추론, 멀티홉, 부정형, 모호성 해소, 집계, 시계열, 비교 등 8가지 유형을 커버한다. answerRule로 채점 기준을 명시한다.",
+  "version": "1.0",
+  "questions": [
+    {
+      "id": "FACT-01",
+      "type": "factual",
+      "question": "플랫폼팀 팀장은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["박성민"],
+      "answerRule": {"type": "anyOf", "required": ["박성민"]}
+    },
+    {
+      "id": "FACT-02",
+      "type": "factual",
+      "question": "Product-C1의 월 구독료는 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": ["350"],
+      "answerRule": {"type": "anyOf", "required": ["350"]}
+    },
+    {
+      "id": "FACT-03",
+      "type": "factual",
+      "question": "Client-A는 어느 지역에 있어?",
+      "expectedRoute": "SQL",
+      "keywords": ["서울"],
+      "answerRule": {"type": "anyOf", "required": ["서울"]}
+    },
+    {
+      "id": "FACT-04",
+      "type": "factual",
+      "question": "MCP 프로토콜이 뭐야?",
+      "expectedRoute": "VECTOR",
+      "keywords": ["Model Context Protocol", "표준", "도구"],
+      "answerRule": {"type": "anyOf", "required": ["Model Context Protocol", "MCP"]}
+    },
+    {
+      "id": "FACT-05",
+      "type": "factual",
+      "question": "클라우드사업부 이사는 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["안진우"],
+      "answerRule": {"type": "anyOf", "required": ["안진우"]}
+    },
+    {
+      "id": "AGG-01",
+      "type": "aggregation",
+      "question": "전체 직원 수는 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": ["45"],
+      "answerRule": {"type": "anyOf", "required": ["45"]}
+    },
+    {
+      "id": "AGG-02",
+      "type": "aggregation",
+      "question": "활성 계약의 총 금액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": ["167170", "167,170"],
+      "answerRule": {"type": "exactNumeric", "expected": [167170]}
+    },
+    {
+      "id": "AGG-03",
+      "type": "aggregation",
+      "question": "부서별 평균 연봉을 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": ["클라우드", "보안", "데이터", "기술지원", "영업", "경영"],
+      "answerRule": {"type": "minMatches", "count": 3, "from": ["클라우드", "보안", "데이터", "기술지원", "영업", "경영"]}
+    },
+    {
+      "id": "AGG-04",
+      "type": "aggregation",
+      "question": "제품 카테고리별 계약 건수는?",
+      "expectedRoute": "SQL",
+      "keywords": ["cloud", "security", "data", "consulting"],
+      "answerRule": {"type": "minMatches", "count": 2, "from": ["cloud", "security", "data", "consulting", "클라우드", "보안", "데이터", "컨설팅"]}
+    },
+    {
+      "id": "AGG-05",
+      "type": "aggregation",
+      "question": "지역별 고객사 수를 보여줘",
+      "expectedRoute": "SQL",
+      "keywords": ["서울", "경기", "부산", "대전", "대구"],
+      "answerRule": {"type": "minMatches", "count": 3, "from": ["서울", "경기", "부산", "대전", "대구", "인천", "광주", "제주"]}
+    },
+    {
+      "id": "MULTI-01",
+      "type": "multi-hop",
+      "question": "Client-A가 사용하는 제품의 카테고리는 뭐야?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["cloud", "security", "클라우드", "보안"],
+      "answerRule": {"type": "anyOf", "required": ["cloud", "security", "클라우드", "보안"]}
+    },
+    {
+      "id": "MULTI-02",
+      "type": "multi-hop",
+      "question": "기술지원팀 직원들이 담당하는 고객사 목록은?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["Client-"],
+      "answerRule": {"type": "anyOf", "required": ["Client-"]}
+    },
+    {
+      "id": "MULTI-03",
+      "type": "multi-hop",
+      "question": "서울 지역 고객사들이 진행 중인 프로젝트는 뭐가 있어?",
+      "expectedRoute": "SQL",
+      "keywords": ["프로젝트", "마이그레이션", "구축", "시스템"],
+      "answerRule": {"type": "anyOf", "required": ["프로젝트"]}
+    },
+    {
+      "id": "MULTI-04",
+      "type": "multi-hop",
+      "question": "Product-D1을 사용하는 고객사의 산업군은?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["제조", "금융", "IT", "유통", "의료", "교육", "미디어", "에너지", "건설", "공공"],
+      "answerRule": {"type": "anyOf", "required": ["제조", "금융", "IT", "유통", "의료", "교육", "미디어", "에너지", "건설", "공공"]}
+    },
+    {
+      "id": "MULTI-05",
+      "type": "multi-hop",
+      "question": "클라우드사업부 직원들이 담당하는 프로젝트 중 진행 중인 건 몇 개야?",
+      "expectedRoute": "SQL",
+      "keywords": ["10"],
+      "answerRule": {"type": "exactNumeric", "expected": [10]}
+    },
+    {
+      "id": "NEG-01",
+      "type": "negation",
+      "question": "현재 비활성 상태인 고객사가 있어?",
+      "expectedRoute": "SQL",
+      "keywords": ["없", "0", "비활성", "is_active"],
+      "answerRule": {"type": "anyOf", "required": ["없", "0건", "0개", "없습니다"]}
+    },
+    {
+      "id": "NEG-02",
+      "type": "negation",
+      "question": "완료되지 않은 Critical 티켓은 몇 개야?",
+      "expectedRoute": "SQL",
+      "keywords": ["5", "다섯"],
+      "answerRule": {"type": "anyOf", "required": ["5"]}
+    },
+    {
+      "id": "NEG-03",
+      "type": "negation",
+      "question": "매출이 없는 제품이 있어?",
+      "expectedRoute": "SQL",
+      "keywords": ["없", "0개", "0건"],
+      "answerRule": {"type": "anyOf", "required": ["없", "0개", "0건"]}
+    },
+    {
+      "id": "NEG-04",
+      "type": "negation",
+      "question": "담당자가 없는 티켓이 있어?",
+      "expectedRoute": "SQL",
+      "keywords": ["없", "0", "NULL", "null"],
+      "answerRule": {"type": "anyOf", "required": ["없", "0"]}
+    },
+    {
+      "id": "NEG-05",
+      "type": "negation",
+      "question": "프로젝트가 없는 고객사 목록은?",
+      "expectedRoute": "SQL",
+      "keywords": ["없", "0개", "0곳"],
+      "answerRule": {"type": "anyOf", "required": ["없", "0개", "0곳"]}
+    },
+    {
+      "id": "COMP-01",
+      "type": "comparison",
+      "question": "가장 비싼 제품과 가장 싼 제품의 가격 차이는?",
+      "expectedRoute": "SQL",
+      "keywords": ["420", "Product-D3", "Product-T1"],
+      "answerRule": {"type": "anyOf", "required": ["420"]}
+    },
+    {
+      "id": "COMP-02",
+      "type": "comparison",
+      "question": "서울과 경기 지역 중 어디 매출이 더 높아?",
+      "expectedRoute": "SQL",
+      "keywords": ["서울", "경기"],
+      "answerRule": {"type": "anyOf", "required": ["서울"]}
+    },
+    {
+      "id": "COMP-03",
+      "type": "comparison",
+      "question": "클라우드 카테고리와 보안 카테고리 중 어디 계약 건수가 많아?",
+      "expectedRoute": "SQL",
+      "keywords": ["cloud", "security", "클라우드", "보안"],
+      "answerRule": {"type": "anyOf", "required": ["cloud", "클라우드"]}
+    },
+    {
+      "id": "COMP-04",
+      "type": "comparison",
+      "question": "영업팀과 기술지원팀 중 평균 연봉이 더 높은 곳은?",
+      "expectedRoute": "SQL",
+      "keywords": ["영업", "기술지원"],
+      "answerRule": {"type": "anyOf", "required": ["기술지원"]}
+    },
+    {
+      "id": "COMP-05",
+      "type": "comparison",
+      "question": "2024년과 2025년 중 신규 고객이 더 많이 등록된 해는?",
+      "expectedRoute": "SQL",
+      "keywords": ["2024", "2025"],
+      "answerRule": {"type": "anyOf", "required": ["2025"]}
+    },
+    {
+      "id": "TIME-01",
+      "type": "temporal",
+      "question": "2025년 상반기 매출 총액은?",
+      "expectedRoute": "SQL",
+      "keywords": ["57119", "57,119"],
+      "answerRule": {"type": "exactNumeric", "expected": [57119]}
+    },
+    {
+      "id": "TIME-02",
+      "type": "temporal",
+      "question": "최근에 해결된 티켓 3개는 뭐야?",
+      "expectedRoute": "SQL",
+      "keywords": ["컨테이너 OOM 발생", "CPU 사용률 90% 초과", "PV 마운트 실패"],
+      "answerRule": {"type": "minMatches", "count": 2, "from": ["컨테이너 OOM 발생", "CPU 사용률 90% 초과", "PV 마운트 실패"]}
+    },
+    {
+      "id": "TIME-03",
+      "type": "temporal",
+      "question": "2026년 8월에 시작된 프로젝트가 있어?",
+      "expectedRoute": "SQL",
+      "keywords": ["없", "0개", "0건"],
+      "answerRule": {"type": "anyOf", "required": ["없", "0개", "0건"]}
+    },
+    {
+      "id": "TIME-04",
+      "type": "temporal",
+      "question": "가장 오래된 계약은 언제 체결됐어?",
+      "expectedRoute": "SQL",
+      "keywords": ["2024", "2025", "계약"],
+      "answerRule": {"type": "anyOf", "required": ["2024-02-21", "2024년 2월 21일"]}
+    },
+    {
+      "id": "TIME-05",
+      "type": "temporal",
+      "question": "분기별 매출 추이를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": ["Q1", "Q2", "Q3", "Q4", "1분기", "2분기", "3분기", "4분기"],
+      "answerRule": {"type": "minMatches", "count": 2, "from": ["Q1", "Q2", "Q3", "Q4", "1분기", "2분기", "3분기", "4분기"]}
+    },
+    {
+      "id": "AMB-01",
+      "type": "ambiguous",
+      "question": "팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["어느 팀", "구체", "명확"],
+      "answerRule": {"type": "anyOf", "required": ["어느 팀", "구체", "명확"]}
+    },
+    {
+      "id": "AMB-02",
+      "type": "ambiguous",
+      "question": "최고 실적은?",
+      "expectedRoute": "SQL",
+      "keywords": ["어떤 실적", "기준", "구체"],
+      "answerRule": {"type": "anyOf", "required": ["어떤 실적", "기준", "구체"]}
+    },
+    {
+      "id": "AMB-03",
+      "type": "ambiguous",
+      "question": "문제가 많은 제품은?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["문제의 기준", "이슈", "티켓", "구체"],
+      "answerRule": {"type": "anyOf", "required": ["문제의 기준", "어떤 문제", "구체"]}
+    },
+    {
+      "id": "AMB-04",
+      "type": "ambiguous",
+      "question": "새로 들어온 건 뭐야?",
+      "expectedRoute": "SQL",
+      "keywords": ["무엇", "대상", "구체"],
+      "answerRule": {"type": "anyOf", "required": ["무엇", "대상", "구체"]}
+    },
+    {
+      "id": "AMB-05",
+      "type": "ambiguous",
+      "question": "가장 잘 나가는 건?",
+      "expectedRoute": "SQL",
+      "keywords": ["기준", "매출", "계약", "구체"],
+      "answerRule": {"type": "anyOf", "required": ["기준", "구체"]}
+    },
+    {
+      "id": "DOC-01",
+      "type": "document",
+      "question": "DB 튜닝 방법을 자세히 알려줘",
+      "expectedRoute": "VECTOR",
+      "keywords": ["인덱스", "쿼리", "캐싱", "Connection Pool", "Redis"],
+      "answerRule": {"type": "minMatches", "count": 2, "from": ["인덱스", "쿼리", "캐싱", "Connection Pool", "Redis", "슬로우"]}
+    },
+    {
+      "id": "DOC-02",
+      "type": "document",
+      "question": "Kubernetes 장애 대응 절차가 어떻게 돼?",
+      "expectedRoute": "VECTOR",
+      "keywords": ["Pod", "노드", "재시작", "Helm", "컨테이너"],
+      "answerRule": {"type": "minMatches", "count": 2, "from": ["Pod", "노드", "재시작", "Helm", "컨테이너", "kubectl"]}
+    },
+    {
+      "id": "DOC-03",
+      "type": "document",
+      "question": "백업 정책과 복구 절차를 설명해줘",
+      "expectedRoute": "VECTOR",
+      "keywords": ["백업", "S3", "자동", "복구", "2:00"],
+      "answerRule": {"type": "minMatches", "count": 2, "from": ["백업", "S3", "자동", "복구", "2:00", "26일"]}
+    },
+    {
+      "id": "DOC-04",
+      "type": "document",
+      "question": "API 인증은 어떤 방식을 사용해?",
+      "expectedRoute": "VECTOR",
+      "keywords": ["Bearer", "토큰", "JWT", "인증"],
+      "answerRule": {"type": "minMatches", "count": 1, "from": ["Bearer", "토큰", "JWT", "인증"]}
+    },
+    {
+      "id": "DOC-05",
+      "type": "document",
+      "question": "클라우드 마이그레이션 전략이 뭐야?",
+      "expectedRoute": "VECTOR",
+      "keywords": ["2단계", "멀티클라우드", "마이그레이션"],
+      "answerRule": {"type": "minMatches", "count": 1, "from": ["2단계", "멀티클라우드", "마이그레이션", "클라우드"]}
+    }
+  ]
+}

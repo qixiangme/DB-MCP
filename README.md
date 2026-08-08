@@ -97,6 +97,18 @@ npm --prefix air-server start
 MCP_SERVER_URL=http://localhost:8082 ./gradlew :agent-app:bootRun
 ```
 
+AIR는 기본적으로 Spring AI 기준선과 같은 pgvector exact cosine 검색을 사용합니다. 한국어
+키워드 리콜을 보완하는 하이브리드 RRF는 프레임워크 비교와 검색 알고리즘 실험을 섞지 않도록
+명시적으로 활성화합니다.
+
+```bash
+VECTOR_SEARCH_MODE=hybrid npm --prefix air-server start
+```
+
+두 서버의 성능을 비교할 때는 `VECTOR_SEARCH_MODE=exact`, DB 풀 크기 10,
+MCP 도구 타임아웃 120초를 공통 조건으로 사용합니다. AIR의 해당 기본값은 Spring AI 설정과
+맞춰져 있으며 `PGPOOL_MAX`, `MCP_TOOL_TIMEOUT_MS`로만 재정의할 수 있습니다.
+
 기본 Spring AI 구현으로 돌아가려면 `MCP_SERVER_URL`을 생략하거나
 `http://localhost:8081`로 설정합니다.
 
@@ -155,6 +167,10 @@ curl -s -X POST http://localhost:8081/admin/ingest
 # Kotlin 전체 테스트
 ./gradlew test
 
+# AIR 도구 계약·SQL 가드 단위 테스트
+npm ci --prefix air-server
+npm test --prefix air-server
+
 # 웹 클라이언트 빌드
 cd client
 npm ci
@@ -163,6 +179,18 @@ npm run build
 
 벤치마크를 변경했다면 같은 데이터셋·모델·설정·반복 횟수로 기준선과 후보를 모두 측정하고,
 문항별 원시 JSON 결과를 보존해야 합니다.
+
+AIR와 Spring AI를 동시에 기동했다면 서버 순서를 문항마다 교대하는 동일 조건 비교를 실행할
+수 있습니다. Spring AI 연결 에이전트는 8080, AIR 연결 에이전트는 8083을 사용하는 예입니다.
+
+```bash
+node eval/compare-servers.mjs --set official-eval.json --reps 3 \
+  --spring-url http://localhost:8080 --air-url http://localhost:8083 \
+  --label air-spring-parity --model gemma3:1b
+```
+
+`framework-parity-eval.json`은 기존 공식셋과 겹치지 않는 SQL·문서·그래프 각 6문항의 공개
+개발셋입니다. 구현을 고정한 뒤의 최종 전환 판단은 별도 보류셋에서 다시 확인해야 합니다.
 
 ## 문서 안내
 

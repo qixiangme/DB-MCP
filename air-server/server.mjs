@@ -3,17 +3,21 @@
 // — "L3 프로토콜 계층의 구현체 교체 가능성" 실증.
 import { defineServer, defineTool, cachePlugin, timeoutPlugin } from '@airmcp-dev/core';
 import pg from 'pg';
+import { pathToFileURL } from 'node:url';
 
 const pool = new pg.Pool({
-  host: 'localhost',
-  port: 5433,
-  database: 'riwonace',
-  user: 'riwonace',
-  password: 'riwonace',
-  max: 5,
+  host: process.env.PGHOST ?? 'localhost',
+  port: Number(process.env.PGPORT ?? 5433),
+  database: process.env.PGDATABASE ?? 'riwonace',
+  user: process.env.PGUSER ?? 'riwonace',
+  password: process.env.PGPASSWORD ?? 'riwonace',
+  // Spring Boot(HikariCP)의 기본 풀 크기와 맞춰 서버 프레임워크 비교 시 풀 크기를 통제한다.
+  max: Number(process.env.PGPOOL_MAX ?? 10),
 });
 
 const OLLAMA = process.env.OLLAMA_BASE_URL ?? 'http://localhost:11434';
+const EMBEDDING_MODEL = process.env.OLLAMA_EMBEDDING_MODEL ?? 'nomic-embed-text';
+const VECTOR_SEARCH_MODE = process.env.VECTOR_SEARCH_MODE ?? 'exact';
 const MAX_OUTPUT_CHARS = 4000;
 const MAX_HINT_VALUES = 12;
 
@@ -28,7 +32,7 @@ const guard = async (fn) => {
 };
 
 /** 제로 트러스트 SQL 검증 (Kotlin SqlGuard 포팅) */
-const sqlGuard = (sql) => {
+export const sqlGuard = (sql) => {
   const s = sql.trim().replace(/;+\s*$/, '');
   const upper = s.toUpperCase();
   if (!upper.startsWith('SELECT') && !upper.startsWith('WITH')) throw new Error('SELECT/WITH 문만 허용됩니다.');
@@ -44,18 +48,29 @@ const embed = async (text) => {
   const res = await fetch(`${OLLAMA}/api/embeddings`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'nomic-embed-text', prompt: text }),
+    body: JSON.stringify({ model: EMBEDDING_MODEL, prompt: text }),
   });
   if (!res.ok) throw new Error(`임베딩 실패: HTTP ${res.status}`);
   return (await res.json()).embedding;
 };
 
+export const queryTokens = (query) => {
+  const stop = new Set(['어떻게', '무엇', '되어', '있어', '있었', '있는', '해줘', '알려줘', '궁금해', '보여줘', '관련', '내용', '방법', '어디', '누구']);
+  return [...new Set(query
+    .split(/[\s,.?!'"()]+/)
+    .map((token) => token.replace(/(은|는|이|가|을|를|의|에서|으로|로|와|과|도|만|야|이야)$/, ''))
+    .filter((token) => token.length >= 2 && !stop.has(token)))]
+    .slice(0, 6);
+};
+
 const server = defineServer({
   name: 'riwonace-data-platform-air',
   version: '1.0.0',
-  transport: { type: 'sse', port: 8082 },
+  transport: { type: 'sse', port: Number(process.env.PORT ?? 8082) },
   use: [
-    timeoutPlugin({ timeoutMs: 30_000 }),
+    // Spring AI MCP client의 request-timeout(120s)과 동일하게 맞춘다.
+    // PERF: 단계별 지연 계측 후 도구별 timeout으로 좁히는 것은 별도 벤치마크에서 검증한다.
+    timeoutPlugin({ timeoutMs: Number(process.env.MCP_TOOL_TIMEOUT_MS ?? 120_000) }),
     cachePlugin({ ttlMs: 60_000, tools: ['get_schema'] }),
   ],
   tools: [
@@ -67,8 +82,6 @@ const server = defineServer({
       handler: ({ query, topK }) =>
         guard(async () => {
           const k = Math.min(Math.max(topK ?? 4, 1), 10);
-          // 하이브리드 검색: 벡터 유사도 + 키워드 매칭을 RRF로 융합 (pgvector README 권장 패턴).
-          // 임베딩 모델이 한국어 리콜을 놓치는 경우("백업 정책" → 운영 매뉴얼)를 키워드가 보완한다.
           const vec = `[${(await embed(query)).join(',')}]`;
           const { rows: vRows } = await pool.query(
             `SELECT metadata->>'source' AS source, content AS text,
@@ -76,12 +89,23 @@ const server = defineServer({
              FROM vector_store ORDER BY embedding <=> $1::vector LIMIT 10`,
             [vec],
           );
-          const STOP = new Set(['어떻게', '무엇', '되어', '있어', '있었', '있는', '해줘', '알려줘', '궁금해', '보여줘', '관련', '내용', '방법', '어디', '누구']);
-          const tokens = query
-            .split(/[\s,.?!'"()]+/)
-            .map((t) => t.replace(/(은|는|이|가|을|를|의|에서|으로|로|와|과|도|만|야|이야)$/, ''))
-            .filter((t) => t.length >= 2 && !STOP.has(t))
-            .slice(0, 6);
+
+          // Spring AI 기준선은 pgvector exact cosine 검색이다. AIR의 기본 모드도 같은 SQL과
+          // top-k를 사용해야 프레임워크 외 변수를 통제한 비교가 된다.
+          if (VECTOR_SEARCH_MODE === 'exact') {
+            return vRows.slice(0, k).map((row) => ({
+              source: row.source ?? 'unknown',
+              score: Number(row.score),
+              text: row.text,
+            }));
+          }
+          if (VECTOR_SEARCH_MODE !== 'hybrid') {
+            throw new Error(`지원하지 않는 VECTOR_SEARCH_MODE: ${VECTOR_SEARCH_MODE}`);
+          }
+
+          // 선택형 성능 후보: 한국어 임베딩 리콜을 키워드 검색과 RRF로 보완한다.
+          // exact 기준선과 섞지 말고 VECTOR_SEARCH_MODE=hybrid로 별도 측정한다.
+          const tokens = queryTokens(query);
           let kRows = [];
           if (tokens.length > 0) {
             // 매칭된 토큰 수로 정렬 — 흔한 단어 하나만 걸린 문서가 앞서지 않게 한다
@@ -109,7 +133,7 @@ const server = defineServer({
           return [...fused.values()]
             .sort((a, b) => b.rrf - a.rrf)
             .slice(0, k)
-            .map((r) => ({ source: r.source ?? 'unknown', score: Math.max(Number(r.score), 0.5), text: r.text }));
+            .map((r) => ({ source: r.source ?? 'unknown', score: Number(r.score), text: r.text }));
         }),
     }),
 
@@ -161,7 +185,7 @@ const server = defineServer({
       params: { query: 'string' },
       handler: ({ query }) =>
         guard(async () => {
-          const tokens = query.split(/[\s,.?!'"()]+/).map((t) => t.trim()).filter((t) => t.length >= 2).slice(0, 8);
+          const tokens = [...new Set(query.split(/[\s,.?!'"()]+/).map((t) => t.trim()).filter((t) => t.length >= 2))].slice(0, 8);
           if (tokens.length === 0) return [];
           const where = tokens
             .map((_, i) => {
@@ -200,5 +224,10 @@ const server = defineServer({
   ],
 });
 
-server.start();
-console.log('air MCP server on :8082 (tools: vector_search, run_sql, kg_search, get_schema)');
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  server.start();
+  console.log(
+    `air MCP server on :${process.env.PORT ?? 8082} ` +
+      `(vector=${VECTOR_SEARCH_MODE}; tools: vector_search, run_sql, kg_search, get_schema)`,
+  );
+}

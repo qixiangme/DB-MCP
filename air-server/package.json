@@ -5,7 +5,8 @@
   "type": "module",
   "description": "동일한 MCP 도구 4종의 air 프레임워크 구현체 — MCP 표준 덕분에 에이전트는 URL만 바꿔 연결된다 (L3 계층 교체 가능성 실증)",
   "scripts": {
-    "start": "node server.mjs"
+    "start": "node server.mjs",
+    "test": "node --test"
   },
   "dependencies": {
     "@airmcp-dev/core": "^0.3.0",
