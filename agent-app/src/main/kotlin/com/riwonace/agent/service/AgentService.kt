@@ -3,6 +3,7 @@ package com.riwonace.agent.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.riwonace.agent.context.ContextCurator
 import com.riwonace.agent.context.ContextItem
+import com.riwonace.agent.decomposition.QueryDecomposer
 import com.riwonace.agent.mcp.McpGateway
 import com.riwonace.agent.router.Route
 import com.riwonace.agent.router.RuleBasedRouter
@@ -39,33 +40,79 @@ class AgentService(
     private val curator: ContextCurator,
     private val chatClient: ChatClient,
     private val mapper: ObjectMapper,
+    private val queryDecomposer: QueryDecomposer,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
     private val executor = Executors.newFixedThreadPool(4)
 
-    /** 질문을 라우팅하고 근거를 수집·선별한 뒤 출처가 포함된 답변을 생성한다. */
+    /**
+     * 질문을 라우팅하고 근거를 수집·선별한 뒤 출처가 포함된 답변을 생성한다.
+     *
+     * IRCoT (Trivedi et al., 2023) 영감: 멀티홉 질문은 하위 질문으로 분해하여
+     * 순차적으로 검색-추론을 반복한다.
+     */
     fun chat(question: String): AgentAnswer {
         val started = System.currentTimeMillis()
-        val routes = router.route(question)
         val toolCalls = mutableListOf<String>()
-        log.info("질문 라우팅 결과: {} → {}", question, routes)
+        val allRoutes = mutableListOf<Route>()
+        val allContextItems = mutableListOf<ContextItem>()
 
-        // MCP Parallel 패턴: 선택된 도구들을 병렬 호출
-        val futures = routes.map { route ->
-            CompletableFuture.supplyAsync({ collectContext(route, question, toolCalls) }, executor)
+        // IRCoT: 질문 분해 후 순차 처리
+        val subQuestions = queryDecomposer.decompose(question)
+        var accumulatedContext = ""
+
+        for ((index, subQuestion) in subQuestions.withIndex()) {
+            // 이전 답변을 다음 질문에 통합
+            val enrichedQuestion = if (index > 0 && accumulatedContext.isNotBlank()) {
+                queryDecomposer.integrateContext(subQuestion, accumulatedContext)
+            } else {
+                subQuestion
+            }
+
+            val routes = router.route(enrichedQuestion)
+            allRoutes.addAll(routes)
+            log.info("하위 질문 {}/{} 라우팅: {} → {}", index + 1, subQuestions.size, enrichedQuestion, routes)
+
+            // MCP Parallel 패턴: 선택된 도구들을 병렬 호출
+            val futures = routes.map { route ->
+                CompletableFuture.supplyAsync({ collectContext(route, enrichedQuestion, toolCalls) }, executor)
+            }
+            val items = futures.flatMap { it.join() }
+            allContextItems.addAll(items)
+
+            // 중간 답변 생성 (마지막 질문이 아닌 경우)
+            if (index < subQuestions.lastIndex && items.isNotEmpty()) {
+                val curated = curator.curate(items, routes)
+                accumulatedContext = generateIntermediateAnswer(enrichedQuestion, curated)
+                log.info("중간 답변 생성: {} → {}", enrichedQuestion, accumulatedContext.take(100))
+            }
         }
-        val items = futures.flatMap { it.join() }
 
-        val curated = curator.curate(items, routes)
+        val curated = curator.curate(allContextItems, allRoutes.distinct())
         val answer = generateAnswer(question, curated)
 
         return AgentAnswer(
             answer = answer,
-            routes = routes,
+            routes = allRoutes.distinct(),
             toolCalls = toolCalls,
             contextSources = curated.map { it.source },
             latencyMs = System.currentTimeMillis() - started,
         )
+    }
+
+    /**
+     * 중간 질문에 대한 간결한 답변을 생성한다.
+     * 다음 질문의 컨텍스트로 사용되므로 핵심 정보만 추출한다.
+     */
+    private fun generateIntermediateAnswer(question: String, context: List<ContextItem>): String {
+        val contextBlock = context.joinToString("\n") { it.text }
+        return chatClient.prompt()
+            .system("질문에 대한 핵심 답변만 한 문장으로 출력한다. 설명 없이 사실만 말한다.")
+            .user("컨텍스트:\n$contextBlock\n\n질문: $question")
+            .call()
+            .content()
+            .orEmpty()
+            .take(200) // 중간 답변은 짧게 유지
     }
 
     private fun collectContext(route: Route, question: String, toolCalls: MutableList<String>): List<ContextItem> =
