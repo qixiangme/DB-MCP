@@ -131,8 +131,8 @@ class AgentService(
         val rawSchema = gateway.schema()
         val schema = schemaPromptFormatter.format(rawSchema)
 
-        // 동적 Few-Shot 선택: 질문과 유사한 예시 3개 선택
-        val selectedExamples = fewShotSelector.selectExamples(question, topK = 3)
+        // 1B급 모델은 서로 다른 SQL 패턴을 섞는 경향이 있어 가장 가까운 예시 하나만 제공한다.
+        val selectedExamples = fewShotSelector.selectExamples(question, topK = 1)
         val examplesBlock = fewShotSelector.formatExamplesForPrompt(selectedExamples)
         log.info("Few-shot 예시 선택: {}", selectedExamples.map { it.pattern })
 

@@ -27,6 +27,8 @@ class FewShotSelector {
      * - GROUP BY
      * - ORDER BY + LIMIT
      */
+    // 예시는 반드시 Company-X MCP 스키마의 실제 식별자와 외래키만 사용한다.
+    // 스키마와 무관한 범용 예시는 작은 모델이 존재하지 않는 컬럼을 복사하게 만든다.
     private val examplePool = listOf(
         // 단순 필터
         SqlExample(
@@ -37,8 +39,8 @@ class FewShotSelector {
         ),
         // JOIN
         SqlExample(
-            question = "영업팀 직원 이름과 연봉을 알려줘",
-            sql = "SELECT e.name, e.salary FROM employees e JOIN departments d ON e.dept_id = d.id WHERE d.name = '영업팀'",
+            question = "경영지원팀 직원 이름과 연봉을 알려줘",
+            sql = "SELECT e.name, e.salary FROM employees e JOIN departments d ON e.dept_id = d.id WHERE d.name = '경영지원팀'",
             pattern = "join-filter",
             keywords = setOf("팀", "부서", "직원"),
         ),
@@ -56,6 +58,12 @@ class FewShotSelector {
             pattern = "sum",
             keywords = setOf("합계", "총", "전체", "sum"),
         ),
+        SqlExample(
+            question = "활성 계약은 몇 건이야?",
+            sql = "SELECT count(*) FROM contracts WHERE status = 'active'",
+            pattern = "active-contract-count",
+            keywords = setOf("활성", "계약", "몇", "개", "건", "수"),
+        ),
         // AVG 집계
         SqlExample(
             question = "평균 연봉은 얼마야?",
@@ -65,14 +73,14 @@ class FewShotSelector {
         ),
         // MAX/MIN
         SqlExample(
-            question = "가장 비싼 제품은?",
-            sql = "SELECT name, price FROM products ORDER BY price DESC LIMIT 1",
+            question = "가장 비싼 월 구독 제품은?",
+            sql = "SELECT name, price_monthly FROM products ORDER BY price_monthly DESC LIMIT 1",
             pattern = "max-order",
             keywords = setOf("가장", "최고", "최대", "max"),
         ),
         SqlExample(
-            question = "가장 싼 제품은?",
-            sql = "SELECT name, price FROM products ORDER BY price ASC LIMIT 1",
+            question = "가장 싼 월 구독 제품은?",
+            sql = "SELECT name, price_monthly FROM products ORDER BY price_monthly ASC LIMIT 1",
             pattern = "min-order",
             keywords = setOf("가장", "최저", "최소", "min"),
         ),
@@ -107,9 +115,59 @@ class FewShotSelector {
         // LEFT JOIN + NULL 체크
         SqlExample(
             question = "담당자가 배정되지 않은 티켓은?",
-            sql = "SELECT id, title FROM tickets WHERE assignee_id IS NULL",
+            sql = "SELECT id, title FROM support_tickets WHERE assignee_id IS NULL",
             pattern = "null-check",
             keywords = setOf("없", "미배정", "null", "배정되지"),
+        ),
+        // 매출/고객사 조인 + 그룹 순위
+        SqlExample(
+            question = "부산 지역 고객사별 매출 합계를 큰 순서로 보여줘",
+            sql = "SELECT c.name, sum(s.amount) AS total_sales FROM sales s JOIN clients c ON s.client_id = c.id WHERE s.region = '부산' GROUP BY c.id, c.name ORDER BY total_sales DESC",
+            pattern = "sales-client-ranking",
+            keywords = setOf("매출", "고객사", "지역", "상위", "순서"),
+        ),
+        // 분기 문자열은 sale_date 추론보다 데이터셋의 quarter 컬럼을 우선한다.
+        SqlExample(
+            question = "2024년 2분기 매출 합계는?",
+            sql = "SELECT sum(amount) FROM sales WHERE quarter = '2024-Q2'",
+            pattern = "quarter-sales",
+            keywords = setOf("분기", "매출", "합계", "총"),
+        ),
+        SqlExample(
+            question = "클라우드 카테고리의 건당 평균 매출은?",
+            sql = "SELECT avg(amount) FROM sales WHERE category = 'cloud'",
+            pattern = "category-sales-average",
+            keywords = setOf("카테고리", "평균", "매출"),
+        ),
+        SqlExample(
+            question = "고객사별 진행 중 프로젝트 수를 많은 순서로 보여줘",
+            sql = "SELECT c.name, count(*) AS project_count FROM projects p JOIN clients c ON p.client_id = c.id WHERE p.status = 'in_progress' GROUP BY c.id, c.name ORDER BY project_count DESC",
+            pattern = "project-client-ranking",
+            keywords = setOf("프로젝트", "고객사", "가장", "많은", "진행 중"),
+        ),
+        SqlExample(
+            question = "해결되지 않은 High 우선순위 티켓 수는?",
+            sql = "SELECT count(*) FROM support_tickets WHERE priority = 'high' AND status IN ('open', 'in_progress')",
+            pattern = "unresolved-ticket-count",
+            keywords = setOf("티켓", "우선순위", "해결", "건", "수"),
+        ),
+        SqlExample(
+            question = "제품별 계약 합계를 큰 순서로 보여줘",
+            sql = "SELECT p.name, sum(c.amount) AS total_amount FROM contracts c JOIN products p ON c.product_id = p.id GROUP BY p.id, p.name ORDER BY total_amount DESC",
+            pattern = "product-contract-sum",
+            keywords = setOf("제품별", "계약", "금액", "합계", "순서"),
+        ),
+        SqlExample(
+            question = "2023년에 등록한 고객사 수는?",
+            sql = "SELECT count(*) FROM clients WHERE registered_at >= DATE '2023-01-01' AND registered_at < DATE '2024-01-01'",
+            pattern = "client-registration-year",
+            keywords = setOf("등록", "고객사", "년", "몇", "수"),
+        ),
+        SqlExample(
+            question = "부서별 평균 연봉을 높은 순서로 보여줘",
+            sql = "SELECT d.name, avg(e.salary) AS average_salary FROM employees e JOIN departments d ON e.dept_id = d.id GROUP BY d.id, d.name ORDER BY average_salary DESC",
+            pattern = "department-salary-ranking",
+            keywords = setOf("부서", "평균", "연봉", "높은", "가장"),
         ),
     )
 
