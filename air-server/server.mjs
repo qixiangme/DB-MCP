@@ -3,6 +3,7 @@
 // — "L3 프로토콜 계층의 구현체 교체 가능성" 실증.
 import { defineServer, defineTool, cachePlugin, timeoutPlugin } from '@airmcp-dev/core';
 import pg from 'pg';
+import { guard, loadSchema, MAX_SCHEMA_OUTPUT_CHARS } from './tool-contract.mjs';
 
 const pool = new pg.Pool({
   host: 'localhost',
@@ -14,19 +15,6 @@ const pool = new pg.Pool({
 });
 
 const OLLAMA = process.env.OLLAMA_BASE_URL ?? 'http://localhost:11434';
-const MAX_OUTPUT_CHARS = 4000;
-const MAX_HINT_VALUES = 12;
-
-/** 모든 도구 공통 방어막: 예외를 오류 JSON으로, 출력 크기 제한 (Kotlin guard()와 동일 정책) */
-const guard = async (fn) => {
-  try {
-    const json = JSON.stringify(await fn());
-    return json.length > MAX_OUTPUT_CHARS ? json.slice(0, MAX_OUTPUT_CHARS) + '"...(truncated)"' : json;
-  } catch (e) {
-    return JSON.stringify({ error: e.message ?? String(e) });
-  }
-};
-
 /** 제로 트러스트 SQL 검증 (Kotlin SqlGuard 포팅) */
 const sqlGuard = (sql) => {
   const s = sql.trim().replace(/;+\s*$/, '');
@@ -119,26 +107,7 @@ const server = defineServer({
         'SQL을 작성하기 전에 반드시 호출한다.',
       params: {},
       handler: () =>
-        guard(async () => {
-          const { rows } = await pool.query(
-            `SELECT table_name, column_name, data_type FROM information_schema.columns
-             WHERE table_schema = 'public'
-               AND table_name NOT IN ('vector_store', 'kg_triples', 'document_chunks')
-             ORDER BY table_name, ordinal_position`,
-          );
-          const tables = {};
-          for (const r of rows) (tables[r.table_name] ??= []).push(`${r.column_name} (${r.data_type})`);
-          const valueHints = {};
-          for (const r of rows.filter((r) => r.data_type.includes('char'))) {
-            const { rows: vals } = await pool.query(
-              `SELECT DISTINCT ${r.column_name} AS v FROM ${r.table_name}
-               WHERE ${r.column_name} IS NOT NULL LIMIT ${MAX_HINT_VALUES + 1}`,
-            );
-            if (vals.length >= 1 && vals.length <= MAX_HINT_VALUES)
-              valueHints[`${r.table_name}.${r.column_name}`] = vals.map((x) => x.v);
-          }
-          return { tables, valueHints };
-        }),
+        guard(() => loadSchema(pool), MAX_SCHEMA_OUTPUT_CHARS),
     }),
 
     defineTool('run_sql', {
