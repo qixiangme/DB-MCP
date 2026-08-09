@@ -34,14 +34,53 @@ class ToolResponseEncoderTest {
     }
 
     @Test
-    fun `예외 응답은 메시지를 제한하고 유효한 JSON을 유지한다`() {
-        val encoder = ToolResponseEncoder(mapper, 200)
+    fun `예외 응답은 일반화된 메시지를 반환하고 내부 정보를 노출하지 않는다`() {
+        val encoder = ToolResponseEncoder(mapper, 500)
 
-        val encoded = encoder.encodeError(IllegalStateException("x".repeat(1_000)))
+        val encoded = encoder.encodeError(
+            RuntimeException("column employees.secret_salary does not exist")
+        )
         val parsed = mapper.readTree(encoded)
 
-        assertTrue(encoded.length <= 200)
-        assertEquals("IllegalStateException", parsed["error"].asText())
-        assertTrue(parsed["truncated"].asBoolean())
+        // 내부 컬럼명이 노출되지 않고 일반화된 메시지 반환
+        assertEquals("요청한 데이터를 찾을 수 없습니다.", parsed["error"].asText())
+        assertEquals("SQL_NOT_FOUND", parsed["type"].asText())
+    }
+
+    @Test
+    fun `SQL 문법 오류는 일반화된 메시지를 반환한다`() {
+        val encoder = ToolResponseEncoder(mapper, 500)
+
+        val encoded = encoder.encodeError(
+            RuntimeException("syntax error at or near \"SELEC\" at position 1")
+        )
+        val parsed = mapper.readTree(encoded)
+
+        assertEquals("SQL 문법 오류입니다. 질의를 다시 확인해주세요.", parsed["error"].asText())
+        assertEquals("SQL_SYNTAX", parsed["type"].asText())
+    }
+
+    @Test
+    fun `권한 오류는 일반화된 메시지를 반환한다`() {
+        val encoder = ToolResponseEncoder(mapper, 500)
+
+        val encoded = encoder.encodeError(
+            RuntimeException("permission denied for table employees")
+        )
+        val parsed = mapper.readTree(encoded)
+
+        assertEquals("데이터베이스 접근 권한이 없습니다.", parsed["error"].asText())
+        assertEquals("SQL_PERMISSION", parsed["type"].asText())
+    }
+
+    @Test
+    fun `알 수 없는 오류는 UNKNOWN 타입을 반환한다`() {
+        val encoder = ToolResponseEncoder(mapper, 500)
+
+        val encoded = encoder.encodeError(RuntimeException("unexpected error"))
+        val parsed = mapper.readTree(encoded)
+
+        assertEquals("내부 오류가 발생했습니다.", parsed["error"].asText())
+        assertEquals("UNKNOWN", parsed["type"].asText())
     }
 }

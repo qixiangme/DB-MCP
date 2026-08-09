@@ -46,4 +46,31 @@ class SqlGuardTest {
     fun `SELECT로 위장한 위험 함수는 거부한다`() {
         assertThrows<IllegalArgumentException> { SqlGuard.sanitize("SELECT pg_sleep(10)") }
     }
+
+    @Test
+    fun `대소문자 섞은 우회 시도 차단`() {
+        assertThrows<IllegalArgumentException> { SqlGuard.sanitize("sElEcT DeLeTe FROM users") }
+        assertThrows<IllegalArgumentException> { SqlGuard.sanitize("SELECT InSeRt FROM users") }
+    }
+
+    @Test
+    fun `위험 함수 우회 시도 차단`() {
+        assertThrows<IllegalArgumentException> { SqlGuard.sanitize("SELECT PG_SLEEP(5)") }
+        assertThrows<IllegalArgumentException> { SqlGuard.sanitize("SELECT pg_read_file('/etc/passwd')") }
+        assertThrows<IllegalArgumentException> { SqlGuard.sanitize("SELECT lo_import('/etc/passwd')") }
+    }
+
+    @Test
+    fun `서브쿼리 내 위험 함수 차단`() {
+        assertThrows<IllegalArgumentException> {
+            SqlGuard.sanitize("SELECT * FROM (SELECT pg_sleep(1)) t")
+        }
+    }
+
+    @Test
+    fun `INTO 키워드 차단`() {
+        assertThrows<IllegalArgumentException> {
+            SqlGuard.sanitize("SELECT * INTO new_table FROM employees")
+        }
+    }
 }
