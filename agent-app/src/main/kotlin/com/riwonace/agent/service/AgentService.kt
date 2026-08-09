@@ -6,6 +6,7 @@ import com.riwonace.agent.context.ContextItem
 import com.riwonace.agent.mcp.McpGateway
 import com.riwonace.agent.router.Route
 import com.riwonace.agent.router.RuleBasedRouter
+import com.riwonace.agent.sql.SchemaLinker
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.stereotype.Service
@@ -39,6 +40,7 @@ class AgentService(
     private val curator: ContextCurator,
     private val chatClient: ChatClient,
     private val mapper: ObjectMapper,
+    private val schemaLinker: SchemaLinker,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
     private val executor = Executors.newFixedThreadPool(4)
@@ -115,19 +117,31 @@ class AgentService(
     /**
      * NL2SQL: MCP로 받은 스키마를 근거로 소형 LLM이 SELECT 한 문장을 생성한다.
      * 1B급 모델 안정화를 위해 원샷 예시를 포함한다 (출력 형식을 좁힐수록 소형 모델이 안정적이다).
+     *
+     * SchemaGraphSQL (2025) 영감: 질문의 엔티티를 스키마 테이블/컬럼과 명시적으로 연결하여
+     * 소형 모델의 테이블/컬럼 선택 오류를 방지한다.
      */
     private fun generateSql(question: String, previousAttempt: String? = null, error: String? = null): String {
         val schema = gateway.schema()
+
+        // SchemaGraphSQL: 질문에서 스키마 값 매칭
+        val schemaHints = schemaLinker.linkEntities(schema, question)
+        val hintBlock = schemaLinker.formatHintsForPrompt(schemaHints)
+        if (schemaHints.isNotEmpty()) {
+            log.info("스키마 링킹 결과: {}", schemaHints.map { it.suggestion })
+        }
+
         val retryBlock =
             if (previousAttempt == null) ""
             else "직전 시도: $previousAttempt\n오류: ${error?.take(300)}\n오류를 고쳐서 다시 작성한다.\n\n"
         val raw = chatClient.prompt()
             .system(
                 "너는 PostgreSQL 전문가다. 주어진 스키마만 사용해서 질문에 답하는 " +
-                    "SELECT 문 한 문장만 출력한다. 설명, 마크다운, 세미콜론 없이 SQL만 출력한다.",
+                    "SELECT 문 한 문장만 출력한다. 설명, 마크다운, 세미콜론 없이 SQL만 출력한다." +
+                    if (schemaHints.isNotEmpty()) " 스키마 힌트에 표시된 테이블.컬럼과 값을 반드시 사용한다." else "",
             )
             .user(
-                "스키마:\n$schema\n\n" +
+                "스키마:\n$schema$hintBlock\n\n" +
                     // 예시 2개: 1B 모델은 예시 하나면 그 WHERE절까지 그대로 베낀다.
                     // 필터 집계 + 조인 패턴을 모두 보여 패턴을 분리한다.
                     "예시1 — 질문: 완료된 프로젝트는 몇 개야?\n" +
