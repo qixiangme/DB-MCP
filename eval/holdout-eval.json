@@ -1,0 +1,147 @@
+{
+  "description": "프롬프트 동결 후 테스트하는 독립 보류셋. 개발 중 어떤 문항도 공개하지 않으며, 최종 주장 시에만 사용한다. 기존 평가셋과 동일 분포를 유지하되 표현과 엔티티가 다르다.",
+  "version": "1.0",
+  "holdout_policy": "이 파일의 질문, 키워드, 기대 라우트는 런타임 코드나 프롬프트에 복사하지 않는다.",
+  "questions": [
+    {
+      "id": "H-SQL-01",
+      "question": "인천 지역 고객사 중 계약 금액이 가장 큰 곳은?",
+      "expectedRoute": "SQL",
+      "keywords": ["Client-N", "Client-AD", "Client-V"],
+      "answerRule": {"type": "anyOf", "required": ["Client-"]}
+    },
+    {
+      "id": "H-SQL-02",
+      "question": "데이터 카테고리 제품들의 평균 가격은?",
+      "expectedRoute": "SQL",
+      "keywords": ["360", "data"],
+      "answerRule": {"type": "anyOf", "required": ["360", "data", "데이터"]}
+    },
+    {
+      "id": "H-SQL-03",
+      "question": "2026년 1분기 예상 매출이 있는 계약 건수는?",
+      "expectedRoute": "SQL",
+      "keywords": ["0", "없", "2026"],
+      "answerRule": {"type": "anyOf", "required": ["0", "없", "2026"]}
+    },
+    {
+      "id": "H-SQL-04",
+      "question": "보안솔루션팀 직원 중 차장 직급은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": ["3", "세", "한태호", "박성민", "권진우"],
+      "answerRule": {"type": "anyOf", "required": ["3", "세 명"]}
+    },
+    {
+      "id": "H-SQL-05",
+      "question": "월 구독료가 200 이상인 제품은 몇 개야?",
+      "expectedRoute": "SQL",
+      "keywords": ["6", "여섯", "Product-"],
+      "answerRule": {"type": "anyOf", "required": ["6", "여섯"]}
+    },
+    {
+      "id": "H-VEC-01",
+      "question": "SSL 인증서 만료 시 대응 방법은?",
+      "expectedRoute": "VECTOR",
+      "keywords": ["갱신", "인증서", "SSL", "TLS"],
+      "answerRule": {"type": "anyOf", "required": ["인증서", "갱신", "SSL"]}
+    },
+    {
+      "id": "H-VEC-02",
+      "question": "성능 모니터링 도구로 뭘 쓰고 있어?",
+      "expectedRoute": "VECTOR",
+      "keywords": ["Prometheus", "Grafana", "모니터링"],
+      "answerRule": {"type": "anyOf", "required": ["모니터링", "Product-"]}
+    },
+    {
+      "id": "H-VEC-03",
+      "question": "데이터 암호화 정책이 어떻게 되어 있어?",
+      "expectedRoute": "VECTOR",
+      "keywords": ["암호화", "AES", "TLS", "보안"],
+      "answerRule": {"type": "anyOf", "required": ["암호화", "보안"]}
+    },
+    {
+      "id": "H-VEC-04",
+      "question": "장애 발생 시 에스컬레이션 절차는?",
+      "expectedRoute": "VECTOR",
+      "keywords": ["에스컬레이션", "장애", "대응", "팀"],
+      "answerRule": {"type": "anyOf", "required": ["장애", "대응"]}
+    },
+    {
+      "id": "H-VEC-05",
+      "question": "CI/CD 파이프라인 구성 방법을 알려줘",
+      "expectedRoute": "VECTOR",
+      "keywords": ["CI/CD", "Jenkins", "GitHub Actions", "파이프라인"],
+      "answerRule": {"type": "anyOf", "required": ["CI", "CD", "파이프라인"]}
+    },
+    {
+      "id": "H-GRP-01",
+      "question": "Client-K를 담당하는 영업 담당자는?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["담당"],
+      "answerRule": {"type": "anyOf", "required": ["담당"]}
+    },
+    {
+      "id": "H-GRP-02",
+      "question": "Product-S2를 사용 중인 고객사 목록은?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["Client-"],
+      "answerRule": {"type": "anyOf", "required": ["Client-"]}
+    },
+    {
+      "id": "H-GRP-03",
+      "question": "데이터플랫폼팀에서 프로젝트를 이끄는 사람은?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["류서연", "박성민", "안소연"],
+      "answerRule": {"type": "anyOf", "required": ["류서연", "박성민", "안소연"]}
+    },
+    {
+      "id": "H-GRP-04",
+      "question": "Client-E와 관련된 모든 프로젝트는?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["로그 분석", "DevOps", "마이그레이션", "모니터링"],
+      "answerRule": {"type": "anyOf", "required": ["프로젝트"]}
+    },
+    {
+      "id": "H-GRP-05",
+      "question": "보안 제품군을 가장 많이 사용하는 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["Client-"],
+      "answerRule": {"type": "anyOf", "required": ["Client-"]}
+    },
+    {
+      "id": "H-MIX-01",
+      "question": "경기 지역 스타트업 고객사들의 총 계약 금액은?",
+      "expectedRoute": "SQL",
+      "keywords": ["경기", "startup"],
+      "answerRule": {"type": "numeric", "description": "숫자 결과가 있어야 함"}
+    },
+    {
+      "id": "H-MIX-02",
+      "question": "on_hold 상태 프로젝트 중 예산이 가장 큰 건?",
+      "expectedRoute": "SQL",
+      "keywords": ["MLOps", "Client-R", "10186"],
+      "answerRule": {"type": "anyOf", "required": ["MLOps", "Client-R", "10186"]}
+    },
+    {
+      "id": "H-MIX-03",
+      "question": "completed 프로젝트를 이끈 직원 목록은?",
+      "expectedRoute": "GRAPH",
+      "keywords": ["완료", "이끈"],
+      "answerRule": {"type": "anyOf", "required": ["완료", "이끈"]}
+    },
+    {
+      "id": "H-MIX-04",
+      "question": "High 우선순위 티켓이 가장 많은 제품은?",
+      "expectedRoute": "SQL",
+      "keywords": ["Product-", "High"],
+      "answerRule": {"type": "anyOf", "required": ["Product-"]}
+    },
+    {
+      "id": "H-MIX-05",
+      "question": "영업팀에서 담당 고객이 3개 이상인 직원은?",
+      "expectedRoute": "SQL",
+      "keywords": ["영업", "담당"],
+      "answerRule": {"type": "anyOf", "required": ["영업"]}
+    }
+  ]
+}

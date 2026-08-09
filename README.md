@@ -100,6 +100,16 @@ MCP_SERVER_URL=http://localhost:8082 ./gradlew :agent-app:bootRun
 기본 Spring AI 구현으로 돌아가려면 `MCP_SERVER_URL`을 생략하거나
 `http://localhost:8081`로 설정합니다.
 
+키워드가 전혀 걸리지 않는 질문에서 90%대 라우팅을 재현한 설정은 다음과 같습니다.
+
+```bash
+OLLAMA_MODEL=gemma3:4b ROUTER_FALLBACK=semantic-ai ./gradlew :agent-app:bootRun
+```
+
+공개셋 93.3%, 키워드 무교집합 보류셋 96.7%이며 100%는 아닙니다. 평가 범위와 원시 결과는
+[키워드 없는 라우팅 실험 결과](./docs/research/KEYWORDLESS_ROUTING_RESULTS.md)를 참고하세요.
+Company-X 전체 스택에서는 공식 원문 답변 66.7%, 키워드 제거 답변 50.0%를 측정했습니다.
+
 ## 빠른 시작
 
 필수 조건은 Docker 엔진과 Java 21입니다.

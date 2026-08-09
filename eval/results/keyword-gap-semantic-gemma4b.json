@@ -1,0 +1,360 @@
+{
+  "metadata": {
+    "createdAt": "2026-08-04T13:33:08.856138+00:00",
+    "commit": "24f3383743445f807b6d87c82204e35795a10091",
+    "branch": "integration/keywordless-routing",
+    "dirty": false,
+    "dataset": "eval/keyword-gap-eval.json",
+    "prompt": "agent-app/src/main/resources/router/semantic-ai-prompt.txt",
+    "model": "gemma3:4b",
+    "reps": 1,
+    "temperature": 0
+  },
+  "summary": {
+    "accuracyPct": 93.3,
+    "correct": 28,
+    "total": 30,
+    "invalid": 0,
+    "errors": 0,
+    "averageLatencyMs": 1608,
+    "confusion": {
+      "GRAPH->GRAPH": 9,
+      "GRAPH->VECTOR": 1,
+      "SQL->GRAPH": 1,
+      "SQL->SQL": 9,
+      "VECTOR->VECTOR": 10
+    }
+  },
+  "rows": [
+    {
+      "rep": 1,
+      "id": "K-N1",
+      "question": "서울 지역에서 거래 규모가 가장 큰 고객사 다섯 곳을 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoute": "SQL",
+      "correct": true,
+      "latencyMs": 1716,
+      "raw": "SQL",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-N2",
+      "question": "2025년 7월부터 9월까지 거래로 생긴 돈은 얼마야?",
+      "expectedRoute": "SQL",
+      "actualRoute": "SQL",
+      "correct": true,
+      "latencyMs": 1596,
+      "raw": "SQL",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-N3",
+      "question": "보안 카테고리 쪽에서 한 달 동안 만들어내는 돈은 보통 얼마나 돼?",
+      "expectedRoute": "SQL",
+      "actualRoute": "SQL",
+      "correct": true,
+      "latencyMs": 1605,
+      "raw": "SQL",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-N4",
+      "question": "지금 유효하게 진행 중인 거래 건은 얼마나 있어?",
+      "expectedRoute": "SQL",
+      "actualRoute": "SQL",
+      "correct": true,
+      "latencyMs": 1591,
+      "raw": "SQL",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-N5",
+      "question": "기술지원팀에서 일하는 사람들이 누구고 각자 받는 돈이 얼마인지 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoute": "SQL",
+      "correct": true,
+      "latencyMs": 1650,
+      "raw": "SQL",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-N6",
+      "question": "다른 어느 곳보다 프로젝트를 더 맡고 있는 고객사는 어디야?",
+      "expectedRoute": "SQL",
+      "actualRoute": "GRAPH",
+      "correct": false,
+      "latencyMs": 1599,
+      "raw": "GRAPH",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-N7",
+      "question": "Critical 등급인데 아직 안 끝난 요청 건이 있어?",
+      "expectedRoute": "SQL",
+      "actualRoute": "SQL",
+      "correct": true,
+      "latencyMs": 1594,
+      "raw": "SQL",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-N8",
+      "question": "품목마다 지금까지 확정된 거래 돈이 얼마인지 큰 순서로 보여줘",
+      "expectedRoute": "SQL",
+      "actualRoute": "SQL",
+      "correct": true,
+      "latencyMs": 1603,
+      "raw": "SQL",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-N9",
+      "question": "2024년 한 해 동안 새로 생긴 고객사는 얼마나 있어?",
+      "expectedRoute": "SQL",
+      "actualRoute": "SQL",
+      "correct": true,
+      "latencyMs": 1596,
+      "raw": "SQL",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-N10",
+      "question": "사람들이 받는 돈이 부서 단위로 봤을 때 전반적으로 제일 두터운 곳은 어디야?",
+      "expectedRoute": "SQL",
+      "actualRoute": "SQL",
+      "correct": true,
+      "latencyMs": 1620,
+      "raw": "SQL",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-V1",
+      "question": "최근 서버에서 있었던 문제 상황과 그 이유를 알려줘",
+      "expectedRoute": "VECTOR",
+      "actualRoute": "VECTOR",
+      "correct": true,
+      "latencyMs": 1600,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-V2",
+      "question": "Product-C1을 어떻게 깔아야 하는지 궁금해",
+      "expectedRoute": "VECTOR",
+      "actualRoute": "VECTOR",
+      "correct": true,
+      "latencyMs": 1598,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-V3",
+      "question": "Kubernetes 쪽에서 문제가 생기면 어떤 조치를 취해야 해?",
+      "expectedRoute": "VECTOR",
+      "actualRoute": "VECTOR",
+      "correct": true,
+      "latencyMs": 1603,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-V4",
+      "question": "DB를 더 빠르게 돌리려면 뭘 손봐야 하는지 알려줘",
+      "expectedRoute": "VECTOR",
+      "actualRoute": "VECTOR",
+      "correct": true,
+      "latencyMs": 1599,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-V5",
+      "question": "보안 쪽에서 미리 점검해둔 게 있어?",
+      "expectedRoute": "VECTOR",
+      "actualRoute": "VECTOR",
+      "correct": true,
+      "latencyMs": 1613,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-V6",
+      "question": "백업은 어떻게 해두고 있어?",
+      "expectedRoute": "VECTOR",
+      "actualRoute": "VECTOR",
+      "correct": true,
+      "latencyMs": 1593,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-V7",
+      "question": "API 요청을 검증할 때 쓰는 방식은?",
+      "expectedRoute": "VECTOR",
+      "actualRoute": "VECTOR",
+      "correct": true,
+      "latencyMs": 1598,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-V8",
+      "question": "고객사와 만나서 얘기 나눈 자리에서 나온 일정 지연 문제는?",
+      "expectedRoute": "VECTOR",
+      "actualRoute": "VECTOR",
+      "correct": true,
+      "latencyMs": 1602,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-V9",
+      "question": "클라우드로 옮기는 계획을 정리한 문서 보여줘",
+      "expectedRoute": "VECTOR",
+      "actualRoute": "VECTOR",
+      "correct": true,
+      "latencyMs": 1596,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-V10",
+      "question": "SSL 쪽에서 문제가 있었어?",
+      "expectedRoute": "VECTOR",
+      "actualRoute": "VECTOR",
+      "correct": true,
+      "latencyMs": 1614,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-G1",
+      "question": "Client-A가 지금 쓰고 있는 것들은 뭐가 있어?",
+      "expectedRoute": "GRAPH",
+      "actualRoute": "GRAPH",
+      "correct": true,
+      "latencyMs": 1601,
+      "raw": "GRAPH",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-G2",
+      "question": "Product-C1을 쓰고 있는 고객사는 어디야?",
+      "expectedRoute": "GRAPH",
+      "actualRoute": "GRAPH",
+      "correct": true,
+      "latencyMs": 1602,
+      "raw": "GRAPH",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-G3",
+      "question": "클라우드사업부에 속한 사람들은 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoute": "GRAPH",
+      "correct": true,
+      "latencyMs": 1604,
+      "raw": "GRAPH",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-G4",
+      "question": "서울물산을 맡고 있는 엔지니어는 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoute": "GRAPH",
+      "correct": true,
+      "latencyMs": 1598,
+      "raw": "GRAPH",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-G5",
+      "question": "Product-D1과 이어지는 프로젝트는 어떤 게 있어?",
+      "expectedRoute": "GRAPH",
+      "actualRoute": "GRAPH",
+      "correct": true,
+      "latencyMs": 1617,
+      "raw": "GRAPH",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-G6",
+      "question": "기술 지원 요청이 다른 것보다 훨씬 많이 들어온 쪽은?",
+      "expectedRoute": "GRAPH",
+      "actualRoute": "GRAPH",
+      "correct": true,
+      "latencyMs": 1597,
+      "raw": "GRAPH",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-G7",
+      "question": "경영지원팀에서 제일 윗자리에 있는 사람은 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoute": "GRAPH",
+      "correct": true,
+      "latencyMs": 1603,
+      "raw": "GRAPH",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-G8",
+      "question": "지금 진행되고 있는 프로젝트마다 앞장서는 사람이 누구누구야",
+      "expectedRoute": "GRAPH",
+      "actualRoute": "GRAPH",
+      "correct": true,
+      "latencyMs": 1605,
+      "raw": "GRAPH",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-G9",
+      "question": "Product-S1을 쓰다가 고객들이 겪은 상황은 어때?",
+      "expectedRoute": "GRAPH",
+      "actualRoute": "VECTOR",
+      "correct": false,
+      "latencyMs": 1601,
+      "raw": "VECTOR",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "K-G10",
+      "question": "다른 사람보다 훨씬 많은 고객을 맡고 있는 사람은?",
+      "expectedRoute": "GRAPH",
+      "actualRoute": "GRAPH",
+      "correct": true,
+      "latencyMs": 1616,
+      "raw": "GRAPH",
+      "error": null
+    }
+  ]
+}
