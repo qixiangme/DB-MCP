@@ -39,7 +39,8 @@ agent:
   context:
     budget-chars: 2400
   router:
-    # 키워드 미매칭 시 폴백 전략: 빈 값(기본)=VECTOR 기본값 유지, embedding=코사인 유사도, ai=소형 LLM 분류
+    # 키워드 미매칭 시 폴백 전략: 빈 값(기본)=VECTOR, embedding=코사인,
+    # ai=기존 3-shot 분류, semantic-ai=데이터 형태·연산 경계를 명시한 의미 분류
     fallback: ${ROUTER_FALLBACK:}
 
 logging:

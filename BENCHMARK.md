@@ -127,3 +127,31 @@ powershell -File eval\run-eval.ps1 -Label official-air -Reps 1 -SetFile official
 # 키워드 미매칭 갭 — 에이전트를 ROUTER_FALLBACK=embedding 또는 ai 로 기동 후
 powershell -File eval\run-eval.ps1 -Label gap-embedding-air -Reps 1 -SetFile keyword-gap-eval.json
 ```
+
+## 7. 의미 기반 폴백 — 90%대 재현
+
+기존 키워드를 질문에서 모두 제거한 공개 30문항과, 프롬프트 고정 뒤 새로 만든 보류
+30문항을 `gemma3:4b` + `semantic-ai`로 평가했다.
+
+| 평가셋 | 라우팅 적중률 | 오류/잘못된 출력 |
+|---|---:|---:|
+| 공개 keyword-gap | **93.3% (28/30)** | 0 |
+| 키워드 무교집합 보류셋 | **96.7% (29/30)** | 0 |
+
+보류셋은 현재 결정 라우터의 96개 키워드와 교집합이 0이다. 100%에는 도달하지 않았으며,
+다중 도구가 같은 사실을 보유한 경계 문항이 남았다. 후보별 수치, 실패 문항, 누수 방지 절차와
+재현 명령은 [키워드 없는 라우팅 실험 결과](./docs/research/KEYWORDLESS_ROUTING_RESULTS.md)에 기록했다.
+
+### 전체 스택 답변 정확도
+
+Docker PostgreSQL에 Company-X SQL·그래프·문서 40건을 적재하고 Spring AI MCP 서버를
+실제로 연결한 `gemma3:4b` 측정값이다.
+
+| 평가셋 | 라우팅 | 답변 정확도 | 평균 지연 |
+|---|---:|---:|---:|
+| 공식 원문 30문항 | **100%** | **66.7% (20/30)** | 8,442ms |
+| 키워드 제거 30문항 | **93.3%** | **50.0% (15/30)** | 5,503ms |
+
+기존 1B/Spring 기록 대비 공식은 26.7%→66.7%, 키워드 제거셋은 23.3%→50.0%다.
+모델과 문서 적재가 함께 바뀌었으므로 단일 요인 개선으로 주장하지 않는다. 세부 실패 분석과
+원시 JSON은 [실험 결과 문서](./docs/research/KEYWORDLESS_ROUTING_RESULTS.md)를 참고한다.
