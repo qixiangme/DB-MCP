@@ -78,12 +78,105 @@ DML·DDL·주석·다중 문장·`pg_sleep` 차단, LIMIT 자동 보강. 단위 
 | L6 추론 | Ollama gemma3:1b (NL2SQL, 답변 생성) — `OLLAMA_MODEL`로 교체 가능 |
 | L7 응답 생성 | AgentAnswer (답변 + 라우팅/도구/출처/지연시간 투명 공개) |
 
-## 4. 요청 처리 흐름 (예: "플랫폼팀 평균 급여는?")
+## 4. 최신 NL2SQL 파이프라인
+
+### 4.1 컴포넌트 구조
+
+```
+질문: "플랫폼팀 평균 급여는?"
+         │
+         ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                        AgentService                                 │
+│  ┌──────────────────┐                                               │
+│  │ RuleBasedRouter  │──▶ SQL 라우트 선택                            │
+│  │ (+ TfIdfRouter)  │   (키워드 매칭 실패 시 TF-IDF 폴백)            │
+│  └────────┬─────────┘                                               │
+│           ▼                                                         │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │                    NL2SQL 파이프라인                         │   │
+│  │  ┌─────────────┐  ┌──────────────┐  ┌────────────────────┐   │   │
+│  │  │SchemaLinker │  │FewShotSelector│  │SchemaPromptFormatter│  │   │
+│  │  │ 값 힌트 매칭 │  │ 동적 예시 선택│  │ 프롬프트 포맷팅    │   │   │
+│  │  └──────┬──────┘  └───────┬──────┘  └─────────┬──────────┘   │   │
+│  │         │                 │                   │              │   │
+│  │         └─────────────────┼───────────────────┘              │   │
+│  │                           ▼                                  │   │
+│  │                    LLM (gemma3:1b)                           │   │
+│  │                    SELECT 문 생성                            │   │
+│  │                           │                                  │   │
+│  │                           ▼                                  │   │
+│  │               ┌───────────────────────┐                      │   │
+│  │               │  Self-Corrective SQL  │                      │   │
+│  │               │  (최대 2회 자가 수정)  │                      │   │
+│  │               └───────────┬───────────┘                      │   │
+│  └───────────────────────────┼──────────────────────────────────┘   │
+│                              ▼                                      │
+│                     MCP run_sql 호출                                │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### 4.2 NL2SQL 컴포넌트 상세
+
+| 컴포넌트 | 파일 | 역할 | 참조 논문 |
+|---|---|---|---|
+| **TfIdfRouter** | `router/TfIdfRouter.kt` | 키워드 미매칭 시 TF-IDF + k-NN으로 라우트 분류 | RAGRouter-Bench (2026) |
+| **SchemaLinker** | `sql/SchemaLinker.kt` | 질문의 엔티티를 스키마 테이블/컬럼 값과 매칭 (예: "플랫폼팀" → `departments.name='플랫폼팀'`) | SchemaGraphSQL (2025) |
+| **FewShotSelector** | `sql/FewShotSelector.kt` | 질문과 유사한 SQL 예시 3개를 동적 선택 (키워드+Jaccard+코사인) | Few-Shot Prompt Optimization (2025) |
+| **SchemaPromptFormatter** | `sql/SchemaPromptFormatter.kt` | 스키마 + 힌트 + 예시를 LLM 프롬프트로 포맷팅 | - |
+| **Self-Corrective SQL** | `service/AgentService.kt` | SQL 실행 결과 검증 후 오류 시 최대 2회 재생성 | Self-RAG (ICLR 2024) |
+
+### 4.3 Self-Corrective SQL 검증 단계
+
+```kotlin
+// AgentService.kt - analyzeSqlResult()
+1단계: JSON 파싱 오류 검출
+2단계: SQL 실행 에러 검출 (error 필드)
+3단계: 빈 결과 검출 (0행) - 부정형 질문은 예외 처리
+4단계: NULL 값 과다 검증 (50% 이상이면 재시도)
+```
+
+재시도 시 이전 SQL과 오류 피드백을 포함하여 LLM이 수정된 SQL을 생성합니다.
+
+### 4.4 라우팅 폴백 체인
+
+```
+질문 입력
+    │
+    ▼
+┌───────────────────┐
+│ RuleBasedRouter   │──▶ 키워드 매칭 성공 → 라우트 반환
+│ (키워드 규칙)     │
+└─────────┬─────────┘
+          │ 키워드 미매칭
+          ▼
+┌───────────────────┐
+│ TfIdfRouter       │──▶ TF-IDF 유사도로 분류 (기본 폴백)
+│ (32개 학습 데이터) │
+└─────────┬─────────┘
+          │ 또는
+          ▼
+┌───────────────────┐
+│ SemanticAiRouter  │──▶ LLM에게 라우트 판단 위임 (선택적)
+│ (gemma3:4b 권장)  │
+└───────────────────┘
+```
+
+환경변수 `ROUTER_FALLBACK`으로 폴백 전략 선택:
+- `tfidf` (기본): TF-IDF + k-NN 분류
+- `semantic-ai`: LLM 기반 분류 (더 정확하지만 느림)
+- `embedding`: 임베딩 유사도 분류
+
+## 5. 요청 처리 흐름 (예: "플랫폼팀 평균 급여는?")
 
 1. `RuleBasedRouter`가 "평균", "급여" 키워드로 **SQL 라우트** 선택
 2. `McpGateway.schema()` — MCP `get_schema` 호출 (캐시됨)
-3. 1B 모델이 스키마 기반으로 `SELECT avg(salary) FROM employees WHERE dept='플랫폼팀'` 생성
-4. MCP `run_sql` 호출 → 서버의 `SqlGuard` 검증 통과 후 실행, 결과 JSON 반환
+3. **SchemaLinker**가 "플랫폼팀"을 `departments.name` 값 힌트와 매칭
+4. **FewShotSelector**가 집계 패턴과 유사한 예시 3개 선택
+5. **SchemaPromptFormatter**가 스키마 + 힌트 + 예시로 프롬프트 구성
+6. 1B 모델이 `SELECT avg(salary) FROM employees WHERE dept='플랫폼팀'` 생성
+7. MCP `run_sql` 호출 → 서버의 `SqlGuard` 검증 통과 후 실행
+8. **Self-Corrective SQL**: 결과 검증 (오류 시 최대 2회 재생성)
 
 모든 MCP 도구 응답은 4,000자 예산 안에서 유효한 JSON을 유지합니다. 직렬화 결과가 예산을
 넘으면 일부 JSON 문자열을 그대로 자르지 않고 `tool_output_too_large`, `truncated`,
