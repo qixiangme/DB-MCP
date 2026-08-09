@@ -19,6 +19,7 @@ class RetrievalTools(
     private val jdbc: JdbcTemplate,
     private val mapper: ObjectMapper,
 ) {
+    private val responseEncoder = ToolResponseEncoder(mapper, MAX_OUTPUT_CHARS)
 
     @Tool(
         name = "vector_search",
@@ -154,10 +155,9 @@ class RetrievalTools(
      */
     private inline fun guard(block: () -> Any): String =
         try {
-            val json = mapper.writeValueAsString(block())
-            if (json.length > MAX_OUTPUT_CHARS) json.take(MAX_OUTPUT_CHARS) + "\"...(truncated)\"" else json
+            responseEncoder.encode(block())
         } catch (e: Exception) {
-            mapper.writeValueAsString(mapOf("error" to (e.message ?: e.javaClass.simpleName)))
+            responseEncoder.encodeError(e)
         }
 
     companion object {

@@ -1,0 +1,37 @@
+{
+  "description": "semantic-ai 프롬프트를 고정한 뒤 작성한 라우팅 보류셋. 기존 RuleBasedRouter 키워드를 포함하지 않는 새로운 의도 30개이며, 이 결과를 본 뒤 프롬프트를 다시 조정하지 않는다.",
+  "questions": [
+    {"id":"H-S1","question":"2026년 1월부터 3월까지 성사된 거래로 들어온 돈을 지역 단위로 묶어 보여줘","expectedRoute":"SQL"},
+    {"id":"H-S2","question":"현재 열려 있는 지원 요청 건을 심각도별로 세어줘","expectedRoute":"SQL"},
+    {"id":"H-S3","question":"연구개발 조직 구성원들이 받는 보수의 중간값을 구해줘","expectedRoute":"SQL"},
+    {"id":"H-S4","question":"부산에 자리한 고객사 중 거래액 기준 첫 다섯 곳을 보여줘","expectedRoute":"SQL"},
+    {"id":"H-S5","question":"품목 카테고리마다 판매로 얻은 돈을 비교해줘","expectedRoute":"SQL"},
+    {"id":"H-S6","question":"작년에 새로 생긴 거래처를 월 단위로 세어줘","expectedRoute":"SQL"},
+    {"id":"H-S7","question":"진행 상태인 사업 과제 예산을 모두 더해줘","expectedRoute":"SQL"},
+    {"id":"H-S8","question":"해결까지 걸린 시간이 긴 지원 요청을 앞에서 열 건 보여줘","expectedRoute":"SQL"},
+    {"id":"H-S9","question":"거래 약정 종료일이 지난 업무 레코드를 찾아줘","expectedRoute":"SQL"},
+    {"id":"H-S10","question":"조직 단위로 인건비 분포를 비교해줘","expectedRoute":"SQL"},
+
+    {"id":"H-V1","question":"Product-X를 처음 서버에 올리는 절차를 찾아줘","expectedRoute":"VECTOR"},
+    {"id":"H-V2","question":"어제 발생한 접속 중단의 원인과 복구 과정을 찾아줘","expectedRoute":"VECTOR"},
+    {"id":"H-V3","question":"쿠버네티스에서 Pod가 재시작될 때 문서에 적힌 조치를 찾아줘","expectedRoute":"VECTOR"},
+    {"id":"H-V4","question":"데이터베이스 응답을 빠르게 하기 위한 튜닝 절차를 찾아줘","expectedRoute":"VECTOR"},
+    {"id":"H-V5","question":"정기 백업이 실행되는 시각과 보관 위치를 찾아줘","expectedRoute":"VECTOR"},
+    {"id":"H-V6","question":"지난 고객 대화에서 납기 지연에 관해 정리한 부분을 찾아줘","expectedRoute":"VECTOR"},
+    {"id":"H-V7","question":"클라우드 이전 계획의 단계별 일정을 찾아줘","expectedRoute":"VECTOR"},
+    {"id":"H-V8","question":"SSL certificate 만료 때 벌어진 사건 기록을 찾아줘","expectedRoute":"VECTOR"},
+    {"id":"H-V9","question":"API 요청 신원을 확인하는 절차를 찾아줘","expectedRoute":"VECTOR"},
+    {"id":"H-V10","question":"보안 점검 자리에서 발견한 위험 항목을 찾아줘","expectedRoute":"VECTOR"},
+
+    {"id":"H-G1","question":"Client-Z가 도입한 상품을 찾아줘","expectedRoute":"GRAPH"},
+    {"id":"H-G2","question":"Product-A를 도입한 거래처들을 보여줘","expectedRoute":"GRAPH"},
+    {"id":"H-G3","question":"클라우드사업부 구성원 이름을 보여줘","expectedRoute":"GRAPH"},
+    {"id":"H-G4","question":"경영지원 조직의 책임자는 어느 사람이야","expectedRoute":"GRAPH"},
+    {"id":"H-G5","question":"Project-X의 리더 이름을 알려줘","expectedRoute":"GRAPH"},
+    {"id":"H-G6","question":"김민수가 관리하는 고객사를 보여줘","expectedRoute":"GRAPH"},
+    {"id":"H-G7","question":"Client-Q의 사업 과제들을 보여줘","expectedRoute":"GRAPH"},
+    {"id":"H-G8","question":"Product-T에 문제를 신고한 거래처를 보여줘","expectedRoute":"GRAPH"},
+    {"id":"H-G9","question":"고객 계정을 셋보다 많이 관리하는 사람들을 찾아줘","expectedRoute":"GRAPH"},
+    {"id":"H-G10","question":"Product-D에 딸린 사업 과제들을 보여줘","expectedRoute":"GRAPH"}
+  ]
+}
