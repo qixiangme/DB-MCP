@@ -17,8 +17,19 @@ class ContextCuratorTest {
             ContextItem("c", "z".repeat(50), 0.7),
         )
         val curated = curator.curate(items, listOf(Route.VECTOR))
-        assertTrue(curated.sumOf { it.text.length } <= 300 + 200)
+        assertTrue(curated.sumOf { it.text.length } <= 300)
         assertEquals("a", curated.first().source)
+    }
+
+    @Test
+    fun `첫 항목이 예산보다 크면 경계에서 잘라 상한을 지킨다`() {
+        val curated = curator.curate(
+            listOf(ContextItem("oversize", "긴 문장입니다. ".repeat(80), 0.9)),
+            listOf(Route.VECTOR),
+        )
+
+        assertTrue(curated.single().text.length <= 300)
+        assertTrue(curated.single().text.endsWith("…(truncated)"))
     }
 
     @Test
@@ -62,6 +73,12 @@ class ContextCuratorTest {
         // 전체 예산 300, SQL 단독이면 150 → 두 번째 항목은 탈락 (sql이 가중되어 선두)
         val curated = curator.curate(items, listOf(Route.SQL))
         assertEquals(listOf("sql"), curated.map { it.source })
+        assertTrue(curated.sumOf { it.text.length } <= 150)
+    }
+
+    @Test
+    fun `0 이하 예산 설정은 시작 시 거부한다`() {
+        kotlin.test.assertFailsWith<IllegalArgumentException> { ContextCurator(budgetChars = 0) }
     }
 
     @Test
