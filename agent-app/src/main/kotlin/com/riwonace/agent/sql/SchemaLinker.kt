@@ -39,50 +39,27 @@ class SchemaLinker(
                 mapper.typeFactory.constructMapType(Map::class.java, String::class.java, Any::class.java),
             )
 
-            val tables = schema["tables"] as? List<Map<String, Any?>> ?: return emptyList()
+            // get_schema의 실제 계약은 최상위 valueHints 객체에 "table.column": [values] 형태다.
+            val valueHints = schema["valueHints"] as? Map<String, List<Any?>> ?: return emptyList()
+            for ((qualifiedColumn, rawValues) in valueHints) {
+                val separator = qualifiedColumn.indexOf('.')
+                if (separator <= 0 || separator == qualifiedColumn.lastIndex) continue
+                val tableName = qualifiedColumn.substring(0, separator)
+                val columnName = qualifiedColumn.substring(separator + 1)
+                val values = rawValues.mapNotNull { it?.toString() }
 
-            for (table in tables) {
-                val tableName = table["name"]?.toString() ?: continue
-                val columns = table["columns"] as? List<Map<String, Any?>> ?: continue
-
-                for (column in columns) {
-                    val columnName = column["name"]?.toString() ?: continue
-                    val valueHints = column["valueHints"] as? List<String> ?: continue
-
-                    // 질문에 포함된 valueHints 찾기
-                    for (hint in valueHints) {
-                        if (question.contains(hint, ignoreCase = true)) {
-                            hints.add(
-                                SchemaHint(
-                                    table = tableName,
-                                    column = columnName,
-                                    matchedValue = hint,
-                                    suggestion = "$tableName.$columnName = '$hint'",
-                                )
-                            )
-                            log.debug("스키마 링킹: '{}' → {}.{}", hint, tableName, columnName)
-                        }
-                    }
-
-                    // 유사 매칭 (부분 일치)
-                    for (hint in valueHints) {
-                        // 이미 정확 매칭된 경우 스킵
-                        if (hints.any { it.matchedValue == hint }) continue
-
-                        // 한글 명사 부분 매칭 (예: "영업" in "영업팀")
-                        val partialMatch = findPartialMatch(question, hint)
-                        if (partialMatch != null) {
-                            hints.add(
-                                SchemaHint(
-                                    table = tableName,
-                                    column = columnName,
-                                    matchedValue = hint,
-                                    suggestion = "$tableName.$columnName = '$hint'",
-                                    confidence = 0.8, // 부분 매칭은 신뢰도 낮음
-                                )
-                            )
-                            log.debug("스키마 부분 링킹: '{}' ≈ '{}' → {}.{}", partialMatch, hint, tableName, columnName)
-                        }
+                for (hint in values) {
+                    val exact = question.contains(hint, ignoreCase = true)
+                    val partial = if (exact) null else findPartialMatch(question, hint)
+                    if (exact || partial != null) {
+                        hints += SchemaHint(
+                            table = tableName,
+                            column = columnName,
+                            matchedValue = hint,
+                            suggestion = "$tableName.$columnName = '${hint.replace("'", "''")}'",
+                            confidence = if (exact) 1.0 else 0.8,
+                        )
+                        log.debug("스키마 링킹: '{}' → {}.{}", hint, tableName, columnName)
                     }
                 }
             }
