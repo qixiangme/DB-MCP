@@ -33,6 +33,10 @@ class DataIngestor(
         }
     }
 
+    /**
+     * 저장소 전체가 비어 있을 때만 기본 문서를 추가한다.
+     * 동시 호출은 직렬화되며, 이미 데이터가 있으면 변경 없이 `0`을 반환한다.
+     */
     @Synchronized
     fun ingestIfEmpty(): Int {
         val count = jdbc.queryForObject("SELECT count(*) FROM vector_store", Long::class.java) ?: 0
