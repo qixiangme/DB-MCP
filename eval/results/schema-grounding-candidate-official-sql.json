@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "createdAt": "2026-08-09T05:50:50.465350+00:00",
-    "commit": "518628f03767bcbca8402338a461e0240c335da2",
+    "createdAt": "2026-08-09T06:06:12.403921+00:00",
+    "commit": "918ad72899acc097bae2fb9c4da6085099ba618e",
     "branch": "agent/schema-structured-nl2sql",
     "dirty": false,
     "dataset": "eval/official-eval.json",
@@ -21,7 +21,7 @@
     "routeCorrect": 30,
     "total": 30,
     "errors": 0,
-    "averageLatencyMs": 1956,
+    "averageLatencyMs": 1919,
     "byExpectedRoute": {
       "SQL": {
         "answerAccuracyPct": 40.0,
@@ -55,8 +55,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 3490,
-      "wallMs": 3603,
+      "latencyMs": 3592,
+      "wallMs": 3702,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -84,8 +84,8 @@
         "23859"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1181,
-      "wallMs": 1183,
+      "latencyMs": 1641,
+      "wallMs": 1644,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -109,8 +109,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2727,
-      "wallMs": 2729,
+      "latencyMs": 2671,
+      "wallMs": 2674,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -138,8 +138,8 @@
         "46"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1539,
-      "wallMs": 1542,
+      "latencyMs": 1650,
+      "wallMs": 1654,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -169,7 +169,7 @@
         "임우진"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1945,
+      "latencyMs": 1946,
       "wallMs": 1948,
       "toolCalls": [
         "get_schema",
@@ -194,8 +194,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2346,
-      "wallMs": 2348,
+      "latencyMs": 2363,
+      "wallMs": 2366,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -220,8 +220,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1204,
-      "wallMs": 1206,
+      "latencyMs": 1194,
+      "wallMs": 1198,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -245,8 +245,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1550,
-      "wallMs": 1553,
+      "latencyMs": 1525,
+      "wallMs": 1530,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -272,8 +272,8 @@
         "8개"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1515,
-      "wallMs": 1517,
+      "latencyMs": 1498,
+      "wallMs": 1502,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -297,8 +297,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2242,
-      "wallMs": 2244,
+      "latencyMs": 2189,
+      "wallMs": 2192,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -323,8 +323,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 3379,
-      "wallMs": 3381,
+      "latencyMs": 2933,
+      "wallMs": 2939,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -352,8 +352,8 @@
         "23859"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1163,
-      "wallMs": 1164,
+      "latencyMs": 1152,
+      "wallMs": 1157,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -377,8 +377,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2711,
-      "wallMs": 2713,
+      "latencyMs": 2624,
+      "wallMs": 2630,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -406,8 +406,8 @@
         "46"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1523,
-      "wallMs": 1525,
+      "latencyMs": 1517,
+      "wallMs": 1521,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -437,8 +437,8 @@
         "임우진"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1964,
-      "wallMs": 1966,
+      "latencyMs": 1902,
+      "wallMs": 1904,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -462,8 +462,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2351,
-      "wallMs": 2353,
+      "latencyMs": 2306,
+      "wallMs": 2312,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -488,8 +488,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1233,
-      "wallMs": 1235,
+      "latencyMs": 1177,
+      "wallMs": 1182,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -513,8 +513,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1376,
-      "wallMs": 1377,
+      "latencyMs": 1349,
+      "wallMs": 1353,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -540,8 +540,8 @@
         "8개"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1506,
-      "wallMs": 1508,
+      "latencyMs": 1480,
+      "wallMs": 1485,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -565,8 +565,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2258,
-      "wallMs": 2261,
+      "latencyMs": 2177,
+      "wallMs": 2181,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -591,8 +591,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 3400,
-      "wallMs": 3403,
+      "latencyMs": 2952,
+      "wallMs": 2958,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -621,7 +621,7 @@
       ],
       "ruleUsed": "legacy-anyOf",
       "latencyMs": 1165,
-      "wallMs": 1166,
+      "wallMs": 1170,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -645,8 +645,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2737,
-      "wallMs": 2739,
+      "latencyMs": 2634,
+      "wallMs": 2639,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -674,8 +674,8 @@
         "46"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1539,
-      "wallMs": 1540,
+      "latencyMs": 1516,
+      "wallMs": 1521,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -705,8 +705,8 @@
         "임우진"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1964,
-      "wallMs": 1967,
+      "latencyMs": 1907,
+      "wallMs": 1913,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -730,8 +730,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2352,
-      "wallMs": 2354,
+      "latencyMs": 2326,
+      "wallMs": 2330,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -756,8 +756,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1207,
-      "wallMs": 1209,
+      "latencyMs": 1186,
+      "wallMs": 1191,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -781,8 +781,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1373,
-      "wallMs": 1376,
+      "latencyMs": 1345,
+      "wallMs": 1351,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -808,8 +808,8 @@
         "8개"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1523,
-      "wallMs": 1525,
+      "latencyMs": 1469,
+      "wallMs": 1475,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -833,8 +833,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2218,
-      "wallMs": 2220,
+      "latencyMs": 2177,
+      "wallMs": 2182,
       "toolCalls": [
         "get_schema",
         "run_sql",

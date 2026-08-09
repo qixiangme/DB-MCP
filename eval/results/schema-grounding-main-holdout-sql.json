@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "createdAt": "2026-08-09T05:48:25.733153+00:00",
-    "commit": "788219ccaf666ca16da4df36183c2058b7cb84c3",
+    "createdAt": "2026-08-09T06:10:34.487166+00:00",
+    "commit": "f6357b77d28c2cf3d81af84bad9bc0a593b5ec71",
     "branch": "main",
     "dirty": false,
-    "provenance": "main was executed from a clean git archive; evaluator cwd metadata was corrected to the runtime commit",
+    "provenance": "main was executed from a clean git archive; evaluator metadata was corrected to the runtime commit",
     "dataset": "eval/holdout-eval.json",
     "datasetVersion": "1.0",
     "baseUrl": "http://localhost:8080",
@@ -16,30 +16,30 @@
     "evaluatorVersion": "2.0"
   },
   "summary": {
-    "answerAccuracyPct": 33.3,
+    "answerAccuracyPct": 44.4,
     "routeAccuracyPct": 100.0,
-    "answerCorrect": 9,
+    "answerCorrect": 12,
     "routeCorrect": 27,
     "total": 27,
     "errors": 0,
-    "averageLatencyMs": 2391,
+    "averageLatencyMs": 2303,
     "byExpectedRoute": {
       "SQL": {
-        "answerAccuracyPct": 33.3,
+        "answerAccuracyPct": 44.4,
         "routeAccuracyPct": 100.0,
         "count": 27
       }
     },
     "byQuestionType": {
       "unknown": {
-        "answerAccuracyPct": 33.3,
+        "answerAccuracyPct": 44.4,
         "routeAccuracyPct": 100.0,
         "count": 27
       }
     },
     "outcomes": {
-      "answer-only": 18,
-      "pass": 9
+      "answer-only": 15,
+      "pass": 12
     }
   },
   "rows": [
@@ -56,8 +56,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 4958,
-      "wallMs": 5062,
+      "latencyMs": 2645,
+      "wallMs": 2652,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -85,8 +85,8 @@
         "데이터"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 1359,
-      "wallMs": 1364,
+      "latencyMs": 1280,
+      "wallMs": 1286,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -112,8 +112,8 @@
         "없"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 1350,
-      "wallMs": 1353,
+      "latencyMs": 1302,
+      "wallMs": 1306,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -134,11 +134,13 @@
         "SQL"
       ],
       "routeCorrect": true,
-      "answerCorrect": false,
-      "matchedKeywords": [],
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "3"
+      ],
       "ruleUsed": "anyOf",
-      "latencyMs": 2418,
-      "wallMs": 2421,
+      "latencyMs": 2338,
+      "wallMs": 2342,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -147,7 +149,7 @@
       "contextSources": [
         "sql"
       ],
-      "answer": "한태호 - 1명\n출처: sql",
+      "answer": "보안솔루션팀 직원 중 차장 직급은 3명입니다.",
       "error": null
     },
     {
@@ -163,8 +165,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2272,
-      "wallMs": 2275,
+      "latencyMs": 2119,
+      "wallMs": 2124,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -190,11 +192,13 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "numeric",
-      "latencyMs": 1360,
-      "wallMs": 1362,
+      "latencyMs": 2768,
+      "wallMs": 2773,
       "toolCalls": [
         "get_schema",
-        "run_sql"
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
       ],
       "contextSources": [
         "sql"
@@ -215,8 +219,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2599,
-      "wallMs": 2602,
+      "latencyMs": 2386,
+      "wallMs": 2392,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -242,8 +246,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2516,
-      "wallMs": 2519,
+      "latencyMs": 2580,
+      "wallMs": 2585,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -272,8 +276,8 @@
         "영업"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 3785,
-      "wallMs": 3788,
+      "latencyMs": 3474,
+      "wallMs": 3479,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -285,7 +289,7 @@
         "sql",
         "knowledge-graph"
       ],
-      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당한다]--> Client-R",
+      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강유진\n* 안재원\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀\n출처: sql",
       "error": null
     },
     {
@@ -301,8 +305,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 4160,
-      "wallMs": 4162,
+      "latencyMs": 2620,
+      "wallMs": 2625,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -330,8 +334,8 @@
         "데이터"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 1330,
-      "wallMs": 1333,
+      "latencyMs": 1266,
+      "wallMs": 1270,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -357,8 +361,8 @@
         "없"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 1339,
-      "wallMs": 1341,
+      "latencyMs": 1313,
+      "wallMs": 1318,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -379,11 +383,13 @@
         "SQL"
       ],
       "routeCorrect": true,
-      "answerCorrect": false,
-      "matchedKeywords": [],
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "3"
+      ],
       "ruleUsed": "anyOf",
-      "latencyMs": 2332,
-      "wallMs": 2335,
+      "latencyMs": 2348,
+      "wallMs": 2354,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -392,7 +398,7 @@
       "contextSources": [
         "sql"
       ],
-      "answer": "한태호 - 1명\n출처: sql",
+      "answer": "보안솔루션팀 직원 중 차장 직급은 3명입니다.",
       "error": null
     },
     {
@@ -408,8 +414,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2221,
-      "wallMs": 2224,
+      "latencyMs": 2112,
+      "wallMs": 2118,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -435,11 +441,13 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "numeric",
-      "latencyMs": 1286,
-      "wallMs": 1289,
+      "latencyMs": 2774,
+      "wallMs": 2778,
       "toolCalls": [
         "get_schema",
-        "run_sql"
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
       ],
       "contextSources": [
         "sql"
@@ -460,8 +468,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2535,
-      "wallMs": 2539,
+      "latencyMs": 2377,
+      "wallMs": 2381,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -487,8 +495,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2451,
-      "wallMs": 2456,
+      "latencyMs": 2588,
+      "wallMs": 2592,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -517,8 +525,8 @@
         "영업"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 3592,
-      "wallMs": 3596,
+      "latencyMs": 3246,
+      "wallMs": 3251,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -530,7 +538,7 @@
         "sql",
         "knowledge-graph"
       ],
-      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당한다]--> Client-R",
+      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강유진\n* 안재원\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀\n출처: sql",
       "error": null
     },
     {
@@ -546,8 +554,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 3455,
-      "wallMs": 3459,
+      "latencyMs": 2617,
+      "wallMs": 2620,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -575,8 +583,8 @@
         "데이터"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 1349,
-      "wallMs": 1354,
+      "latencyMs": 1269,
+      "wallMs": 1274,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -602,8 +610,8 @@
         "없"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 1367,
-      "wallMs": 1371,
+      "latencyMs": 1314,
+      "wallMs": 1318,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -624,11 +632,13 @@
         "SQL"
       ],
       "routeCorrect": true,
-      "answerCorrect": false,
-      "matchedKeywords": [],
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "3"
+      ],
       "ruleUsed": "anyOf",
-      "latencyMs": 2375,
-      "wallMs": 2378,
+      "latencyMs": 2340,
+      "wallMs": 2345,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -637,7 +647,7 @@
       "contextSources": [
         "sql"
       ],
-      "answer": "한태호 - 1명\n출처: sql",
+      "answer": "보안솔루션팀 직원 중 차장 직급은 3명입니다.",
       "error": null
     },
     {
@@ -653,8 +663,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2220,
-      "wallMs": 2223,
+      "latencyMs": 2122,
+      "wallMs": 2126,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -680,11 +690,13 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "numeric",
-      "latencyMs": 1353,
-      "wallMs": 1357,
+      "latencyMs": 2767,
+      "wallMs": 2772,
       "toolCalls": [
         "get_schema",
-        "run_sql"
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
       ],
       "contextSources": [
         "sql"
@@ -705,8 +717,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2581,
-      "wallMs": 2584,
+      "latencyMs": 2381,
+      "wallMs": 2386,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -732,8 +744,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2424,
-      "wallMs": 2426,
+      "latencyMs": 2579,
+      "wallMs": 2582,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -762,8 +774,8 @@
         "영업"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 3557,
-      "wallMs": 3559,
+      "latencyMs": 3256,
+      "wallMs": 3259,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -775,7 +787,7 @@
         "sql",
         "knowledge-graph"
       ],
-      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당한다]--> Client-R",
+      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강유진\n* 안재원\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀\n출처: sql",
       "error": null
     }
   ]

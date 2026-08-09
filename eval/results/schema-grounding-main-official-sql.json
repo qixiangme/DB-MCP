@@ -1,9 +1,10 @@
 {
   "metadata": {
-    "createdAt": "2026-08-09T05:35:28.170464+00:00",
-    "commit": "788219ccaf666ca16da4df36183c2058b7cb84c3",
+    "createdAt": "2026-08-09T06:09:25.871823+00:00",
+    "commit": "f6357b77d28c2cf3d81af84bad9bc0a593b5ec71",
     "branch": "main",
     "dirty": false,
+    "provenance": "main was executed from a clean git archive; evaluator metadata was corrected to the runtime commit",
     "dataset": "eval/official-eval.json",
     "datasetVersion": "unknown",
     "baseUrl": "http://localhost:8080",
@@ -21,7 +22,7 @@
     "routeCorrect": 30,
     "total": 30,
     "errors": 0,
-    "averageLatencyMs": 2409,
+    "averageLatencyMs": 2233,
     "byExpectedRoute": {
       "SQL": {
         "answerAccuracyPct": 10.0,
@@ -55,8 +56,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2919,
-      "wallMs": 3036,
+      "latencyMs": 2771,
+      "wallMs": 2901,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -82,8 +83,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 4049,
-      "wallMs": 4051,
+      "latencyMs": 3618,
+      "wallMs": 3621,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -109,8 +110,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2473,
-      "wallMs": 2477,
+      "latencyMs": 2404,
+      "wallMs": 2409,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -136,8 +137,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2052,
-      "wallMs": 2057,
+      "latencyMs": 1959,
+      "wallMs": 1965,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -147,7 +148,7 @@
       "contextSources": [
         "sql"
       ],
-      "answer": "현재 활성 상태인 계약 수는 50개입니다.",
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
       "error": null
     },
     {
@@ -168,8 +169,8 @@
         "임우진"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2593,
-      "wallMs": 2597,
+      "latencyMs": 2561,
+      "wallMs": 2566,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -194,8 +195,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2638,
-      "wallMs": 2643,
+      "latencyMs": 2342,
+      "wallMs": 2347,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -221,8 +222,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2307,
-      "wallMs": 2309,
+      "latencyMs": 2116,
+      "wallMs": 2120,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -248,8 +249,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1770,
-      "wallMs": 1773,
+      "latencyMs": 1734,
+      "wallMs": 1737,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -273,8 +274,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1202,
-      "wallMs": 1205,
+      "latencyMs": 1153,
+      "wallMs": 1156,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -298,8 +299,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2390,
-      "wallMs": 2394,
+      "latencyMs": 2176,
+      "wallMs": 2181,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -325,8 +326,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2748,
-      "wallMs": 2752,
+      "latencyMs": 2302,
+      "wallMs": 2306,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -352,8 +353,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 4020,
-      "wallMs": 4024,
+      "latencyMs": 3593,
+      "wallMs": 3598,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -379,8 +380,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2475,
-      "wallMs": 2479,
+      "latencyMs": 2406,
+      "wallMs": 2411,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -406,8 +407,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2032,
-      "wallMs": 2036,
+      "latencyMs": 1942,
+      "wallMs": 1947,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -417,7 +418,7 @@
       "contextSources": [
         "sql"
       ],
-      "answer": "현재 활성 상태인 계약 수는 50개입니다.",
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
       "error": null
     },
     {
@@ -438,8 +439,8 @@
         "임우진"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2582,
-      "wallMs": 2586,
+      "latencyMs": 2553,
+      "wallMs": 2557,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -464,8 +465,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2635,
-      "wallMs": 2640,
+      "latencyMs": 2330,
+      "wallMs": 2334,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -491,8 +492,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2310,
-      "wallMs": 2314,
+      "latencyMs": 2118,
+      "wallMs": 2123,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -518,8 +519,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1578,
-      "wallMs": 1582,
+      "latencyMs": 1534,
+      "wallMs": 1538,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -543,8 +544,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1189,
-      "wallMs": 1194,
+      "latencyMs": 1157,
+      "wallMs": 1162,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -568,8 +569,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2384,
-      "wallMs": 2388,
+      "latencyMs": 2154,
+      "wallMs": 2160,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -595,8 +596,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2739,
-      "wallMs": 2742,
+      "latencyMs": 2297,
+      "wallMs": 2303,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -622,8 +623,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 4013,
-      "wallMs": 4017,
+      "latencyMs": 3580,
+      "wallMs": 3584,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -649,8 +650,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2456,
-      "wallMs": 2461,
+      "latencyMs": 2402,
+      "wallMs": 2407,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -676,8 +677,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2029,
-      "wallMs": 2033,
+      "latencyMs": 1947,
+      "wallMs": 1952,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -687,7 +688,7 @@
       "contextSources": [
         "sql"
       ],
-      "answer": "현재 활성 상태인 계약 수는 50개입니다.",
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
       "error": null
     },
     {
@@ -708,8 +709,8 @@
         "임우진"
       ],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2583,
-      "wallMs": 2588,
+      "latencyMs": 2545,
+      "wallMs": 2550,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -734,8 +735,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2638,
-      "wallMs": 2642,
+      "latencyMs": 2333,
+      "wallMs": 2337,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -761,8 +762,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2313,
-      "wallMs": 2316,
+      "latencyMs": 2114,
+      "wallMs": 2118,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -788,8 +789,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1582,
-      "wallMs": 1585,
+      "latencyMs": 1537,
+      "wallMs": 1541,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -813,8 +814,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 1196,
-      "wallMs": 1198,
+      "latencyMs": 1160,
+      "wallMs": 1165,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -838,8 +839,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "legacy-anyOf",
-      "latencyMs": 2387,
-      "wallMs": 2390,
+      "latencyMs": 2161,
+      "wallMs": 2166,
       "toolCalls": [
         "get_schema",
         "run_sql",

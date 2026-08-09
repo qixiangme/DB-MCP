@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "createdAt": "2026-08-09T05:52:12.585923+00:00",
-    "commit": "518628f03767bcbca8402338a461e0240c335da2",
+    "createdAt": "2026-08-09T06:07:23.922509+00:00",
+    "commit": "918ad72899acc097bae2fb9c4da6085099ba618e",
     "branch": "agent/schema-structured-nl2sql",
     "dirty": false,
     "dataset": "eval/holdout-eval.json",
@@ -21,7 +21,7 @@
     "routeCorrect": 27,
     "total": 27,
     "errors": 0,
-    "averageLatencyMs": 2895,
+    "averageLatencyMs": 2412,
     "byExpectedRoute": {
       "SQL": {
         "answerAccuracyPct": 44.4,
@@ -55,8 +55,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2654,
-      "wallMs": 2661,
+      "latencyMs": 2609,
+      "wallMs": 2615,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -84,7 +84,7 @@
         "데이터"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 1263,
+      "latencyMs": 1262,
       "wallMs": 1266,
       "toolCalls": [
         "get_schema",
@@ -111,8 +111,8 @@
         "없"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 2370,
-      "wallMs": 2372,
+      "latencyMs": 2412,
+      "wallMs": 2416,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -137,8 +137,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 1224,
-      "wallMs": 1225,
+      "latencyMs": 1221,
+      "wallMs": 1224,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -162,8 +162,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 1624,
-      "wallMs": 1626,
+      "latencyMs": 1644,
+      "wallMs": 1648,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -187,8 +187,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "numeric",
-      "latencyMs": 3701,
-      "wallMs": 3702,
+      "latencyMs": 3417,
+      "wallMs": 3421,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -214,8 +214,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 4097,
-      "wallMs": 4099,
+      "latencyMs": 3671,
+      "wallMs": 3675,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -225,7 +225,7 @@
       "contextSources": [
         "sql"
       ],
-      "answer": "on_hold 상태 프로젝트 중 예산이 가장 큰 건은 해당 프로젝트가 현재 'in_progress' 상태로, 예산이 가장 큰 프로젝트는 'Client X'입니다.",
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
       "error": null
     },
     {
@@ -243,8 +243,8 @@
         "Product-"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 1229,
-      "wallMs": 1230,
+      "latencyMs": 1208,
+      "wallMs": 1212,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -271,8 +271,8 @@
         "영업"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 8042,
-      "wallMs": 8044,
+      "latencyMs": 3895,
+      "wallMs": 3899,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -284,7 +284,7 @@
         "sql",
         "knowledge-graph"
       ],
-      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n*",
+      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 김지훈\n* 신동현\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 황민수\n\n출처: knowledge-graph",
       "error": null
     },
     {
@@ -300,8 +300,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2629,
-      "wallMs": 2631,
+      "latencyMs": 2601,
+      "wallMs": 2605,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -327,169 +327,169 @@
       "answerCorrect": true,
       "matchedKeywords": [
         "데이터"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 1264,
+      "wallMs": 1268,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "데이터 카테고리가 ‘cloud’인 제품들의 평균 가격은 217.5입니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-SQL-03",
+      "type": "unknown",
+      "question": "2026년 1분기 예상 매출이 있는 계약 건수는?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "없"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2427,
+      "wallMs": 2431,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-SQL-04",
+      "type": "unknown",
+      "question": "보안솔루션팀 직원 중 차장 직급은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 1306,
+      "wallMs": 1309,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-SQL-05",
+      "type": "unknown",
+      "question": "월 구독료가 200 이상인 제품은 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 1674,
+      "wallMs": 1676,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "월 구독료가 200 이상인 제품은 1개입니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-MIX-01",
+      "type": "unknown",
+      "question": "경기 지역 스타트업 고객사들의 총 계약 금액은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "numeric",
+      "latencyMs": 3382,
+      "wallMs": 3385,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-MIX-02",
+      "type": "unknown",
+      "question": "on_hold 상태 프로젝트 중 예산이 가장 큰 건?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 3783,
+      "wallMs": 3787,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-MIX-04",
+      "type": "unknown",
+      "question": "High 우선순위 티켓이 가장 많은 제품은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "Product-"
       ],
       "ruleUsed": "anyOf",
       "latencyMs": 1258,
-      "wallMs": 1260,
-      "toolCalls": [
-        "get_schema",
-        "run_sql"
-      ],
-      "contextSources": [
-        "sql"
-      ],
-      "answer": "데이터 카테고리가 ‘cloud’인 제품들의 평균 가격은 217.5입니다.",
-      "error": null
-    },
-    {
-      "rep": 2,
-      "id": "H-SQL-03",
-      "type": "unknown",
-      "question": "2026년 1분기 예상 매출이 있는 계약 건수는?",
-      "expectedRoute": "SQL",
-      "actualRoutes": [
-        "SQL"
-      ],
-      "routeCorrect": true,
-      "answerCorrect": true,
-      "matchedKeywords": [
-        "없"
-      ],
-      "ruleUsed": "anyOf",
-      "latencyMs": 2371,
-      "wallMs": 2373,
-      "toolCalls": [
-        "get_schema",
-        "run_sql",
-        "run_sql(retry-1)"
-      ],
-      "contextSources": [
-        "sql"
-      ],
-      "answer": "제공된 데이터에서 찾을 수 없습니다.",
-      "error": null
-    },
-    {
-      "rep": 2,
-      "id": "H-SQL-04",
-      "type": "unknown",
-      "question": "보안솔루션팀 직원 중 차장 직급은 몇 명이야?",
-      "expectedRoute": "SQL",
-      "actualRoutes": [
-        "SQL"
-      ],
-      "routeCorrect": true,
-      "answerCorrect": false,
-      "matchedKeywords": [],
-      "ruleUsed": "anyOf",
-      "latencyMs": 1228,
-      "wallMs": 1230,
-      "toolCalls": [
-        "get_schema",
-        "run_sql"
-      ],
-      "contextSources": [
-        "sql"
-      ],
-      "answer": "제공된 데이터에서 찾을 수 없습니다.",
-      "error": null
-    },
-    {
-      "rep": 2,
-      "id": "H-SQL-05",
-      "type": "unknown",
-      "question": "월 구독료가 200 이상인 제품은 몇 개야?",
-      "expectedRoute": "SQL",
-      "actualRoutes": [
-        "SQL"
-      ],
-      "routeCorrect": true,
-      "answerCorrect": false,
-      "matchedKeywords": [],
-      "ruleUsed": "anyOf",
-      "latencyMs": 1620,
-      "wallMs": 1622,
-      "toolCalls": [
-        "get_schema",
-        "run_sql"
-      ],
-      "contextSources": [
-        "sql"
-      ],
-      "answer": "월 구독료가 200 이상인 제품은 1개입니다.",
-      "error": null
-    },
-    {
-      "rep": 2,
-      "id": "H-MIX-01",
-      "type": "unknown",
-      "question": "경기 지역 스타트업 고객사들의 총 계약 금액은?",
-      "expectedRoute": "SQL",
-      "actualRoutes": [
-        "SQL"
-      ],
-      "routeCorrect": true,
-      "answerCorrect": false,
-      "matchedKeywords": [],
-      "ruleUsed": "numeric",
-      "latencyMs": 3460,
-      "wallMs": 3462,
-      "toolCalls": [
-        "get_schema",
-        "run_sql",
-        "run_sql(retry-1)",
-        "run_sql(retry-2)"
-      ],
-      "contextSources": [
-        "sql"
-      ],
-      "answer": "제공된 데이터에서 찾을 수 없습니다.",
-      "error": null
-    },
-    {
-      "rep": 2,
-      "id": "H-MIX-02",
-      "type": "unknown",
-      "question": "on_hold 상태 프로젝트 중 예산이 가장 큰 건?",
-      "expectedRoute": "SQL",
-      "actualRoutes": [
-        "SQL"
-      ],
-      "routeCorrect": true,
-      "answerCorrect": false,
-      "matchedKeywords": [],
-      "ruleUsed": "anyOf",
-      "latencyMs": 4112,
-      "wallMs": 4114,
-      "toolCalls": [
-        "get_schema",
-        "run_sql",
-        "run_sql(retry-1)",
-        "run_sql(retry-2)"
-      ],
-      "contextSources": [
-        "sql"
-      ],
-      "answer": "on_hold 상태 프로젝트 중 예산이 가장 큰 건은 해당 프로젝트가 현재 'in_progress' 상태로, 예산이 가장 큰 프로젝트는 'Client X'입니다.",
-      "error": null
-    },
-    {
-      "rep": 2,
-      "id": "H-MIX-04",
-      "type": "unknown",
-      "question": "High 우선순위 티켓이 가장 많은 제품은?",
-      "expectedRoute": "SQL",
-      "actualRoutes": [
-        "SQL"
-      ],
-      "routeCorrect": true,
-      "answerCorrect": true,
-      "matchedKeywords": [
-        "Product-"
-      ],
-      "ruleUsed": "anyOf",
-      "latencyMs": 1224,
-      "wallMs": 1226,
+      "wallMs": 1261,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -516,8 +516,8 @@
         "영업"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 8063,
-      "wallMs": 8065,
+      "latencyMs": 3872,
+      "wallMs": 3875,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -529,7 +529,7 @@
         "sql",
         "knowledge-graph"
       ],
-      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n*",
+      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 김지훈\n* 신동현\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 황민수\n\n출처: knowledge-graph",
       "error": null
     },
     {
@@ -545,8 +545,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 2620,
-      "wallMs": 2622,
+      "latencyMs": 2778,
+      "wallMs": 2782,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -574,8 +574,8 @@
         "데이터"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 1255,
-      "wallMs": 1256,
+      "latencyMs": 1299,
+      "wallMs": 1302,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -601,8 +601,8 @@
         "없"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 2362,
-      "wallMs": 2363,
+      "latencyMs": 2467,
+      "wallMs": 2470,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -627,8 +627,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 1232,
-      "wallMs": 1234,
+      "latencyMs": 1246,
+      "wallMs": 1249,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -652,8 +652,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 1623,
-      "wallMs": 1624,
+      "latencyMs": 1696,
+      "wallMs": 1698,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -677,8 +677,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "numeric",
-      "latencyMs": 3464,
-      "wallMs": 3466,
+      "latencyMs": 3572,
+      "wallMs": 3575,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -704,8 +704,8 @@
       "answerCorrect": false,
       "matchedKeywords": [],
       "ruleUsed": "anyOf",
-      "latencyMs": 4123,
-      "wallMs": 4125,
+      "latencyMs": 3736,
+      "wallMs": 3740,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -715,7 +715,7 @@
       "contextSources": [
         "sql"
       ],
-      "answer": "on_hold 상태 프로젝트 중 예산이 가장 큰 건은 해당 프로젝트가 현재 'in_progress' 상태로, 예산이 가장 큰 프로젝트는 'Client X'입니다.",
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
       "error": null
     },
     {
@@ -733,8 +733,8 @@
         "Product-"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 1224,
-      "wallMs": 1226,
+      "latencyMs": 1247,
+      "wallMs": 1251,
       "toolCalls": [
         "get_schema",
         "run_sql"
@@ -761,8 +761,8 @@
         "영업"
       ],
       "ruleUsed": "anyOf",
-      "latencyMs": 8096,
-      "wallMs": 8098,
+      "latencyMs": 4178,
+      "wallMs": 4181,
       "toolCalls": [
         "get_schema",
         "run_sql",
@@ -774,7 +774,7 @@
         "sql",
         "knowledge-graph"
       ],
-      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n*",
+      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 김지훈\n* 신동현\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 황민수\n\n출처: knowledge-graph",
       "error": null
     }
   ]
