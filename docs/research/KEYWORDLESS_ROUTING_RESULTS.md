@@ -1,0 +1,102 @@
+# 키워드 없는 라우팅 실험 결과
+
+측정일은 2026-08-04이며, 최종 구현은 `ROUTER_FALLBACK=semantic-ai`, 모델은
+`gemma3:4b`, temperature는 0입니다. PostgreSQL과 MCP를 사용하지 않는 독립 라우터
+평가기에서 실제 구현 프롬프트를 호출했습니다.
+
+## 결과
+
+| 평가셋 | 정확도 | SQL | VECTOR | GRAPH | 평균 분류 지연 |
+|---|---:|---:|---:|---:|---:|
+| 공개 키워드 제거 30문항 | **93.3% (28/30)** | 9/10 | 10/10 | 9/10 | 1,608ms |
+| 프롬프트 고정 후 보류 30문항 | **96.7% (29/30)** | 10/10 | 10/10 | 9/10 | 1,618ms |
+
+보류셋은 `check-keyword-gap.py`로 현재 `RuleBasedRouter`의 96개 결정 키워드와 교집합이
+없음을 확인했습니다. 원시 결과는 다음 파일에 있습니다.
+
+- `eval/results/keyword-gap-semantic-gemma4b.json`
+- `eval/results/keyword-gap-holdout-semantic-gemma4b.json`
+
+## 후보 비교
+
+같은 공개 30문항을 독립 평가기로 실행한 값입니다. 저장소에 이미 있던 전체 앱 기록
+(기본 33.3%, 임베딩 43.3%, 기존 AI 60.0%)과 달리 아래는 분류 호출만 격리한 수치라
+지연과 답변 정확도를 직접 비교하지 않습니다.
+
+| 모델·프롬프트 | 라우팅 적중률 |
+|---|---:|
+| gemma3:1b · 기존 3-shot | 63.3% |
+| gemma3:1b · 의미 설명 | 63.3% |
+| qwen2.5:3b · 기존 3-shot | 73.3% |
+| qwen2.5:3b · 의미 설명 | 83.3% |
+| gemma3:4b · MCP 도구 계약 | **93.3%** |
+
+긴 스키마 전체를 주입한 후보는 qwen2.5:3b에서 73.3%로 회귀했습니다. 클래스 설명을
+무조건 늘리는 대신 실제 도구가 소유한 데이터 형태와 중첩 시 우선순위만 간결하게 준 후보를
+채택했습니다.
+
+## 실패 분석과 한계
+
+- 공개 K-N6: 고객-프로젝트가 SQL의 `projects.client_id`와 그래프의 `HAS_PROJECT` 양쪽에 존재해 GRAPH로 분류했습니다.
+- 공개 K-G9: 제품 사용 중 겪은 상황이 장애 문서와 `REPORTED_ISSUE` 양쪽에 존재해 VECTOR로 분류했습니다.
+- 보류 H-G9: 고객 계정 관리 수 비교가 관계 간선 집계보다 일반 집계로 읽혀 SQL로 분류했습니다.
+
+따라서 이 결과는 100%가 아닙니다. 93.3%와 96.7%는 두 평가 파일에 대한 관측값이지 모든
+새 질문의 정확도 보장이 아닙니다. 100%를 만들기 위해 평가 문장을 프롬프트에 복사하지
+않았습니다. 다음 개선은 단일 라벨을 강제하기보다 중첩 라우트의 소유권을 데이터 계약에 더
+명시하거나, 불확실할 때 비용 한도 안에서 두 도구를 호출하고 별도의 precision 지표를 함께
+측정하는 것입니다.
+
+## 전체 답변 벤치마크
+
+Docker PostgreSQL에 Company-X SQL 데이터, 그래프 triple 354개, 문서 40개를 적재하고
+Spring AI MCP 서버와 agent-app을 실제로 연결해 같은 `gemma3:4b`로 재측정했습니다.
+답변 정확도는 기존 하네스와 동일하게 기대 키워드 중 하나가 포함됐는지로 채점했습니다.
+
+| 평가셋 | 라우팅 적중률 | 최종 답변 정확도 | SQL | VECTOR | GRAPH | 평균 지연 |
+|---|---:|---:|---:|---:|---:|---:|
+| 공식 원문 30문항 | **100%** | **66.7% (20/30)** | 70% | 50% | 80% | 8,442ms |
+| 키워드 제거 30문항 | **93.3%** | **50.0% (15/30)** | 50% | 50% | 50% | 5,503ms |
+
+기존 저장 결과인 `gemma3:1b` + Spring AI와 비교하면 공식 답변 정확도는
+26.7%에서 66.7%로, 키워드 제거셋은 23.3%에서 50.0%로 올랐습니다. 단, 모델 크기와
+문서 corpus 적재가 함께 달라졌기 때문에 이 차이를 라우터 하나의 효과로 해석할 수는 없습니다.
+
+남은 실패는 세 단계에 걸쳐 있습니다.
+
+- NL2SQL: 존재하지 않는 `categories`, `sales.status`를 생성하거나 `registered_at` 대신
+  `created_at`을 선택해 SQL 3~5문항이 실패했습니다.
+- 벡터 검색: 두 평가셋 모두 5/10으로, 순수 `nomic-embed-text`가 백업·마이그레이션·보안
+  문서 대신 회의록을 top-4에 올리는 recall 문제가 남았습니다.
+- 그래프: 단순 관계 조회는 강했지만 “가장 많은”, 전체 프로젝트 리더처럼 집계·전역 탐색이
+  필요한 문항에서 토큰 매칭과 40개 제한 때문에 실패했습니다.
+
+공식 V8은 규칙이 GRAPH+VECTOR를 병렬 호출하는 과정에서 VECTOR MCP 요청이 120초 timeout을
+내 평균 지연을 크게 높였습니다. 요청 자체는 오류 응답 없이 복구됐지만 답변은 오답이었습니다.
+원시 결과는 다음과 같습니다.
+
+- `eval/results/full-official-semantic-gemma4b-spring.json`
+- `eval/results/full-keyword-gap-semantic-gemma4b-spring.json`
+
+## 재현
+
+```bash
+ollama pull gemma3:4b
+python3 eval/check-keyword-gap.py eval/keyword-gap-holdout.json
+python3 eval/run-router-eval.py \
+  --set eval/keyword-gap-eval.json \
+  --prompt agent-app/src/main/resources/router/semantic-ai-prompt.txt \
+  --model gemma3:4b --fail-under 90 \
+  --output eval/results/reproduced-public.json
+python3 eval/run-router-eval.py \
+  --set eval/keyword-gap-holdout.json \
+  --prompt agent-app/src/main/resources/router/semantic-ai-prompt.txt \
+  --model gemma3:4b --fail-under 90 \
+  --output eval/results/reproduced-holdout.json
+
+# PostgreSQL과 MCP/agent-app 기동 및 Company-X SQL·graph 적재 후
+python3 eval/ingest-company-docs.py
+python3 eval/run-full-eval.py \
+  --set eval/keyword-gap-eval.json \
+  --output eval/results/reproduced-full-gap.json
+```
