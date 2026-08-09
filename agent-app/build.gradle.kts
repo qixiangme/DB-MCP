@@ -15,6 +15,7 @@ dependencies {
     implementation(platform("org.springframework.ai:spring-ai-bom:1.0.3"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.ai:spring-ai-starter-model-ollama")
     implementation("org.springframework.ai:spring-ai-starter-mcp-client")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
