@@ -29,6 +29,10 @@ class ContextCurator(
     @Value("\${agent.context.budget-chars:2400}") private val budgetChars: Int,
 ) {
 
+    init {
+        require(budgetChars > 0) { "agent.context.budget-chars는 0보다 커야 합니다." }
+    }
+
     fun curate(items: List<ContextItem>, routes: List<Route>): List<ContextItem> {
         if (items.isEmpty()) return emptyList()
 
@@ -44,9 +48,20 @@ class ContextCurator(
         val selected = mutableListOf<ContextItem>()
         var used = 0
         for (item in weighted) {
-            if (used + item.text.length > budget && selected.isNotEmpty()) continue
-            selected += item
-            used += item.text.length
+            val remaining = budget - used
+            if (remaining <= 0) break
+            if (item.text.length <= remaining) {
+                selected += item
+                used += item.text.length
+            } else if (selected.isEmpty()) {
+                // 최고 관련 항목 하나도 없는 것보다 경계에서 안전하게 줄인 근거가 낫다.
+                // JSON 원문을 자르는 계층이 아니라 사람이 읽는 ContextItem 경계에서만 수행한다.
+                val truncated = truncateAtBoundary(item.text, remaining)
+                if (truncated.isNotEmpty()) {
+                    selected += item.copy(text = truncated)
+                    used += truncated.length
+                }
+            }
         }
 
         // 최상위 항목은 맨 앞, 차상위 항목은 맨 뒤로 배치
@@ -55,6 +70,18 @@ class ContextCurator(
             selected.add(second)
         }
         return selected
+    }
+
+    /** 단어·줄 경계를 우선해 자르고, 반환 길이가 반드시 maxChars 이하가 되게 한다. */
+    private fun truncateAtBoundary(text: String, maxChars: Int): String {
+        if (text.length <= maxChars) return text
+        if (maxChars <= TRUNCATION_MARKER.length) return TRUNCATION_MARKER.take(maxChars)
+
+        val contentLimit = maxChars - TRUNCATION_MARKER.length
+        val prefix = text.take(contentLimit)
+        val boundary = maxOf(prefix.lastIndexOf('\n'), prefix.lastIndexOf(' '))
+        val content = if (boundary >= contentLimit / 2) prefix.take(boundary).trimEnd() else prefix
+        return content + TRUNCATION_MARKER
     }
 
     private fun weightFor(source: String, routes: List<Route>): Double = when {
@@ -66,5 +93,6 @@ class ContextCurator(
     companion object {
         /** 관련도 하한선 — 이 미만은 노이즈로 간주하고 투입하지 않는다 */
         const val MIN_SCORE = 0.25
+        private const val TRUNCATION_MARKER = "\n…(truncated)"
     }
 }
