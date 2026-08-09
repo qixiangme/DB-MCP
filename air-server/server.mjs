@@ -1,8 +1,9 @@
-// air 프레임워크로 구현한 MCP 데이터 플랫폼 서버 (Kotlin mcp-server와 동일한 도구 4종).
+// air 프레임워크로 구현한 MCP 데이터 플랫폼 서버 (Kotlin mcp-server와 동일한 실행 도구 3종).
 // MCP 표준 규격 덕분에 agent-app은 접속 URL만 바꾸면 이 서버로 그대로 붙는다
 // — "L3 프로토콜 계층의 구현체 교체 가능성" 실증.
-import { defineServer, defineTool, cachePlugin, timeoutPlugin } from '@airmcp-dev/core';
+import { defineServer, defineTool, defineResource, timeoutPlugin } from '@airmcp-dev/core';
 import pg from 'pg';
+import { pathToFileURL } from 'node:url';
 
 const pool = new pg.Pool({
   host: 'localhost',
@@ -50,13 +51,43 @@ const embed = async (text) => {
   return (await res.json()).embedding;
 };
 
+/** 스키마는 실행 Action이 아니라 NL2SQL에 제공할 Knowledge이므로 MCP Resource로 노출한다. */
+const readSchema = () =>
+  guard(async () => {
+    const { rows } = await pool.query(
+      `SELECT table_name, column_name, data_type FROM information_schema.columns
+       WHERE table_schema = 'public'
+         AND table_name NOT IN ('vector_store', 'kg_triples', 'document_chunks')
+       ORDER BY table_name, ordinal_position`,
+    );
+    const tables = {};
+    for (const r of rows) (tables[r.table_name] ??= []).push(`${r.column_name} (${r.data_type})`);
+    const valueHints = {};
+    for (const r of rows.filter((r) => r.data_type.includes('char'))) {
+      const { rows: vals } = await pool.query(
+        `SELECT DISTINCT ${r.column_name} AS v FROM ${r.table_name}
+         WHERE ${r.column_name} IS NOT NULL LIMIT ${MAX_HINT_VALUES + 1}`,
+      );
+      if (vals.length >= 1 && vals.length <= MAX_HINT_VALUES)
+        valueHints[`${r.table_name}.${r.column_name}`] = vals.map((x) => x.v);
+    }
+    return { tables, valueHints };
+  });
+
 const server = defineServer({
   name: 'riwonace-data-platform-air',
   version: '1.0.0',
   transport: { type: 'sse', port: 8082 },
   use: [
-    timeoutPlugin({ timeoutMs: 30_000 }),
-    cachePlugin({ ttlMs: 60_000, tools: ['get_schema'] }),
+    timeoutPlugin(30_000),
+  ],
+  resources: [
+    defineResource('db://schema', {
+      name: 'database-schema',
+      description: 'NL2SQL 생성에 필요한 테이블·컬럼·저카디널리티 값 힌트',
+      mimeType: 'application/json',
+      handler: readSchema,
+    }),
   ],
   tools: [
     defineTool('vector_search', {
@@ -113,37 +144,9 @@ const server = defineServer({
         }),
     }),
 
-    defineTool('get_schema', {
-      description:
-        '관계형 데이터베이스의 테이블·컬럼 스키마와 카테고리형 컬럼의 실제 값 목록을 조회한다. ' +
-        'SQL을 작성하기 전에 반드시 호출한다.',
-      params: {},
-      handler: () =>
-        guard(async () => {
-          const { rows } = await pool.query(
-            `SELECT table_name, column_name, data_type FROM information_schema.columns
-             WHERE table_schema = 'public'
-               AND table_name NOT IN ('vector_store', 'kg_triples', 'document_chunks')
-             ORDER BY table_name, ordinal_position`,
-          );
-          const tables = {};
-          for (const r of rows) (tables[r.table_name] ??= []).push(`${r.column_name} (${r.data_type})`);
-          const valueHints = {};
-          for (const r of rows.filter((r) => r.data_type.includes('char'))) {
-            const { rows: vals } = await pool.query(
-              `SELECT DISTINCT ${r.column_name} AS v FROM ${r.table_name}
-               WHERE ${r.column_name} IS NOT NULL LIMIT ${MAX_HINT_VALUES + 1}`,
-            );
-            if (vals.length >= 1 && vals.length <= MAX_HINT_VALUES)
-              valueHints[`${r.table_name}.${r.column_name}`] = vals.map((x) => x.v);
-          }
-          return { tables, valueHints };
-        }),
-    }),
-
     defineTool('run_sql', {
       description:
-        '읽기 전용 SELECT SQL 한 문장을 실행하고 결과를 JSON으로 반환한다. ' +
+        'NL2SQL 경로가 만든 읽기 전용 SELECT SQL 한 문장을 검증·실행하고 결과를 JSON으로 반환한다. ' +
         '집계·통계·목록 등 정형 데이터 질문에 사용한다. INSERT/UPDATE/DELETE는 거부된다.',
       params: { sql: 'string' },
       handler: ({ sql }) =>
@@ -200,5 +203,9 @@ const server = defineServer({
   ],
 });
 
-server.start();
-console.log('air MCP server on :8082 (tools: vector_search, run_sql, kg_search, get_schema)');
+export { server };
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  server.start();
+  console.log('air MCP server on :8082 (tools: vector_search, run_sql, kg_search; resource: db://schema)');
+}

@@ -9,9 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.stereotype.Component
 
 /**
- * MCP 표준 규격으로 노출되는 데이터 플랫폼 도구 4종.
+ * MCP 표준 규격으로 노출되는 데이터 플랫폼 실행 도구 3종.
  * 에이전트는 이 도구들만 알면 되고, DB 접속 정보·임베딩 모델 등
- * 내부 구현은 전혀 알 필요가 없다 (장애 지점 = MCP 연결 1개).
+ * 내부 구현은 알 필요가 없다. 물리 장애가 사라지는 것이 아니라 데이터 통합 경계를 MCP로 모은다.
+ * NL2SQL 스키마는 실행 동작이 아니라 Knowledge이므로 `db://schema` Resource로 분리한다.
  */
 @Component
 class RetrievalTools(
@@ -44,82 +45,8 @@ class RetrievalTools(
     }
 
     @Tool(
-        name = "get_schema",
-        description = "관계형 데이터베이스의 테이블·컬럼 스키마와 카테고리형 컬럼의 실제 값 목록을 조회한다. " +
-            "SQL을 작성하기 전에 반드시 호출한다.",
-    )
-    fun getSchema(): String = guard(MAX_SCHEMA_OUTPUT_CHARS) {
-        // kg_triples(kg_search 전용)와 임베딩 테이블은 NL2SQL 스키마에서 제외한다 —
-        // 소형 모델은 무관한 테이블이 보이면 테이블을 혼합한 SQL을 생성한다 (벤치마크로 확인)
-        val columns = jdbc.queryForList(
-            """
-            SELECT table_name, column_name, data_type
-            FROM information_schema.columns
-            WHERE table_schema = 'public'
-              AND table_name NOT IN ('vector_store', 'kg_triples', 'document_chunks')
-            ORDER BY table_name, ordinal_position
-            """.trimIndent(),
-        )
-        val tables = columns.groupBy({ it["table_name"] as String }) {
-            "${it["column_name"]} (${it["data_type"]})"
-        }
-        mapOf(
-            "tables" to tables,
-            "foreignKeys" to foreignKeys(),
-            "valueHints" to valueHints(columns),
-        )
-    }
-
-    /** 실제 DB 제약조건에서 JOIN 가능한 외래키 경로를 추출한다. */
-    private fun foreignKeys(): List<String> =
-        jdbc.queryForList(
-            """
-            SELECT tc.table_name AS source_table,
-                   kcu.column_name AS source_column,
-                   ccu.table_name AS target_table,
-                   ccu.column_name AS target_column
-            FROM information_schema.table_constraints tc
-            JOIN information_schema.key_column_usage kcu
-              ON tc.constraint_name = kcu.constraint_name
-             AND tc.constraint_schema = kcu.constraint_schema
-            JOIN information_schema.constraint_column_usage ccu
-              ON tc.constraint_name = ccu.constraint_name
-             AND tc.constraint_schema = ccu.constraint_schema
-            WHERE tc.constraint_type = 'FOREIGN KEY'
-              AND tc.table_schema = 'public'
-            ORDER BY tc.table_name, kcu.ordinal_position
-            """.trimIndent(),
-        ).map {
-            "${it["source_table"]}.${it["source_column"]} -> " +
-                "${it["target_table"]}.${it["target_column"]}"
-        }
-
-    /**
-     * 카테고리형(저카디널리티 문자열) 컬럼의 실제 값을 스키마에 동봉한다.
-     * 소형 모델은 'dept = 플랫폼팀' 같은 실제 값을 알 수 없으므로,
-     * 도메인 지식(K)을 컨텍스트로 제공하는 것이 최대 효용이라는
-     * TACC 실증(전현우 외, 2026)을 NL2SQL에 적용한 것이다.
-     */
-    private fun valueHints(columns: List<Map<String, Any>>): Map<String, List<String>> {
-        val hints = linkedMapOf<String, List<String>>()
-        columns
-            .filter { (it["data_type"] as String).contains("char") }
-            .forEach {
-                val table = it["table_name"] as String
-                val column = it["column_name"] as String
-                // 저카디널리티 컬럼만 힌트로 제공 — 값이 많으면 노이즈, 적으면 도메인 지식
-                val values = jdbc.queryForList(
-                    "SELECT DISTINCT $column FROM $table WHERE $column IS NOT NULL LIMIT ${MAX_HINT_VALUES + 1}",
-                    String::class.java,
-                )
-                if (values.size in 1..MAX_HINT_VALUES) hints["$table.$column"] = values
-            }
-        return hints
-    }
-
-    @Tool(
         name = "run_sql",
-        description = "읽기 전용 SELECT SQL 한 문장을 실행하고 결과를 JSON으로 반환한다. " +
+        description = "NL2SQL 경로가 만든 읽기 전용 SELECT SQL 한 문장을 검증·실행하고 결과를 JSON으로 반환한다. " +
             "집계·통계·목록 등 정형 데이터 질문에 사용한다. INSERT/UPDATE/DELETE는 거부된다.",
     )
     fun runSql(
@@ -190,7 +117,5 @@ class RetrievalTools(
 
     companion object {
         const val MAX_OUTPUT_CHARS = 4000
-        const val MAX_SCHEMA_OUTPUT_CHARS = 8000
-        const val MAX_HINT_VALUES = 12
     }
 }
