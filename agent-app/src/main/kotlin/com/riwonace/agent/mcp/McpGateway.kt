@@ -4,6 +4,15 @@ import io.modelcontextprotocol.client.McpSyncClient
 import io.modelcontextprotocol.spec.McpSchema
 import org.springframework.stereotype.Component
 import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
+
+/** 단일 MCP 세션에서 요청/응답 ID가 섞이지 않도록 프로토콜 호출을 직렬화한다. */
+internal class McpSessionGuard {
+    private val lock = ReentrantLock()
+
+    fun <T> execute(block: () -> T): T = lock.withLock(block)
+}
 
 /**
  * MCP 서버 도구 호출 게이트웨이.
@@ -13,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference
 class McpGateway(private val clients: List<McpSyncClient>) {
 
     private val cachedSchema = AtomicReference<String?>(null)
+    private val sessionGuard = McpSessionGuard()
 
     private val client: McpSyncClient
         get() = clients.firstOrNull()
@@ -31,12 +41,15 @@ class McpGateway(private val clients: List<McpSyncClient>) {
         cachedSchema.get() ?: callTool("get_schema", emptyMap()).also { cachedSchema.set(it) }
 
     fun listToolNames(): List<String> =
-        client.listTools().tools().map { it.name() }
+        sessionGuard.execute {
+            client.listTools().tools().map { it.name() }
+        }
 
-    private fun callTool(name: String, args: Map<String, Any>): String {
-        val result = client.callTool(McpSchema.CallToolRequest(name, args))
-        return result.content()
-            .filterIsInstance<McpSchema.TextContent>()
-            .joinToString("\n") { it.text() }
-    }
+    private fun callTool(name: String, args: Map<String, Any>): String =
+        sessionGuard.execute {
+            val result = client.callTool(McpSchema.CallToolRequest(name, args))
+            result.content()
+                .filterIsInstance<McpSchema.TextContent>()
+                .joinToString("\n") { it.text() }
+        }
 }

@@ -54,18 +54,25 @@ class AgentService(
         private const val MAX_SQL_RETRIES = 2
     }
 
+    private data class CollectedContext(
+        val items: List<ContextItem>,
+        val toolCalls: List<String>,
+    )
+
     /** 질문을 라우팅하고 근거를 수집·선별한 뒤 출처가 포함된 답변을 생성한다. */
     fun chat(question: String): AgentAnswer {
         val started = System.currentTimeMillis()
         val routes = router.route(question)
-        val toolCalls = mutableListOf<String>()
         log.info("질문 라우팅 결과: {} → {}", question, routes)
 
-        // MCP Parallel 패턴: 선택된 도구들을 병렬 호출
+        // 라우트별 준비 작업은 병렬로 실행하되, 단일 MCP 세션의 실제 프로토콜 호출은
+        // McpGateway에서 직렬화한다. 결과는 routes 순서로 합쳐 관측값을 결정적으로 만든다.
         val futures = routes.map { route ->
-            CompletableFuture.supplyAsync({ collectContext(route, question, toolCalls) }, executor)
+            CompletableFuture.supplyAsync({ collectContext(route, question) }, executor)
         }
-        val items = futures.flatMap { it.join() }
+        val collected = futures.map { it.join() }
+        val items = collected.flatMap { it.items }
+        val toolCalls = collected.flatMap { it.toolCalls }
 
         val curated = curator.curate(items, routes)
         val answer = generateAnswer(question, curated)
@@ -79,8 +86,9 @@ class AgentService(
         )
     }
 
-    private fun collectContext(route: Route, question: String, toolCalls: MutableList<String>): List<ContextItem> =
-        try {
+    private fun collectContext(route: Route, question: String): CollectedContext {
+        val toolCalls = mutableListOf<String>()
+        val items = try {
             when (route) {
                 Route.VECTOR -> {
                     toolCalls += "vector_search"
@@ -117,6 +125,8 @@ class AgentService(
             log.warn("{} 라우트 컨텍스트 수집 실패: {}", route, e.message)
             emptyList()
         }
+        return CollectedContext(items, toolCalls)
+    }
 
     /**
      * NL2SQL: MCP로 받은 스키마를 근거로 소형 LLM이 SELECT 한 문장을 생성한다.
