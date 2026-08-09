@@ -12,8 +12,10 @@ import com.riwonace.agent.sql.SchemaPromptFormatter
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.stereotype.Service
+import jakarta.annotation.PreDestroy
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /**
  * 에이전트 API의 관측 가능한 실행 결과.
@@ -48,6 +50,16 @@ class AgentService(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
     private val executor = Executors.newFixedThreadPool(4)
+
+    @PreDestroy
+    fun shutdown() {
+        log.info("AgentService 스레드 풀 종료 시작")
+        executor.shutdown()
+        if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+            log.warn("스레드 풀 정상 종료 실패, 강제 종료 시도")
+            executor.shutdownNow()
+        }
+    }
 
     companion object {
         /** Self-Corrective SQL 최대 재시도 횟수 (Self-RAG ICLR 2024 영감) */
