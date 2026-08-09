@@ -31,7 +31,7 @@
 
 | 요구사항 | 구현 |
 |---|---|
-| PostgreSQL + pgvector 벡터 DB | `pgvector/pgvector:pg16` 컨테이너, Spring AI `PgVectorStore` (HNSW, cosine) |
+| PostgreSQL + pgvector 벡터 DB | `pgvector/pgvector:pg16` 컨테이너, Spring AI `PgVectorStore` (cosine, 인덱스 없음) |
 | MCP 프로토콜 기반 도구 설계 | Spring AI MCP Server(WebMVC/SSE)로 도구 4종 노출 — 클라이언트는 표준 MCP로만 접근 |
 | 규칙 기반 라우터 (MCP Parallel) | `RuleBasedRouter`: 키워드 규칙으로 SQL/VECTOR/GRAPH 분류, 복수 매칭 시 `CompletableFuture` 병렬 호출 후 통합 |
 | NL2SQL | `get_schema`(MCP) → 소형 모델이 SELECT 생성 → `run_sql`(MCP)이 `SqlGuard`로 검증 후 실행 |
@@ -71,7 +71,7 @@ DML·DDL·주석·다중 문장·`pg_sleep` 차단, LIMIT 자동 보강. 단위 
 | Pylon-7 계층 | 구현 위치 |
 |---|---|
 | L1 데이터 저장 | PostgreSQL (vector_store, 관계형, kg_triples) |
-| L2 검색·인덱싱 | pgvector HNSW, SQL, triple 조회 |
+| L2 검색·인덱싱 | pgvector (cosine, 순차 스캔), SQL, triple 조회 |
 | L3 프로토콜 | MCP (Spring AI MCP Server/Client, SSE) |
 | L4 라우팅 | RuleBasedRouter (MCP Parallel) |
 | L5 컨텍스트 구성 | ContextCurator (TACC) |

@@ -23,30 +23,24 @@
        agent-app (Spring AI)
        라우팅 · NL2SQL · 답변 생성
               │ MCP/SSE
-       ┌──────┴────────────────────┐
-       ▼                           ▼
-mcp-server :8081             air-server :8082
-기본 Spring AI 구현           선택형 AIR 구현
-       └──────┬────────────────────┘
+              ▼
+       mcp-server :8081
+       MCP 도구 4종 제공
+              │ JDBC
               ▼
  PostgreSQL 16 + pgvector ── Ollama
  관계형·벡터·그래프 저장       로컬 추론·임베딩
 ```
 
-기본 실행 경로는 `agent-app` → `mcp-server`입니다. `air-server`는 기본 서버를 동시에
-실행하기 위한 모듈이 아니라, 같은 MCP 도구 계약을 다른 프레임워크로 구현해 서버를
-교체할 수 있음을 검증하기 위한 선택형 구현입니다.
-
 ## 기술 스택
 
 | 영역 | 기술 | 사용 목적 |
 |---|---|---|
-| 언어·런타임 | Kotlin 2.1, Java 21 | 에이전트와 기본 MCP 서버 |
+| 언어·런타임 | Kotlin 2.1, Java 17+ | 에이전트와 기본 MCP 서버 |
 | 애플리케이션 | Spring Boot 3.5, Spring AI 1.0 | Ollama, MCP 서버·클라이언트, pgvector 연동 |
 | 표준 프로토콜 | MCP, SSE | 에이전트와 데이터 도구의 구현 분리 |
 | 데이터베이스 | PostgreSQL 16, pgvector | 관계형 데이터, 문서 벡터, 지식 그래프 통합 저장 |
 | 로컬 AI | Ollama, `gemma3:1b`, `nomic-embed-text` | 답변·NL2SQL 생성과 문서 임베딩 |
-| 대체 MCP 구현 | Node.js, `@airmcp-dev/core`, `pg` | AIR 호환성 및 서버 교체 가능성 검증 |
 | 웹 클라이언트 | React 19, TypeScript 5.7, Vite 6 | 선택형 대화 UI |
 | 빌드·검증 | Gradle Kotlin DSL, npm, JUnit 5, Docker Compose | 빌드, 테스트, 로컬 인프라 실행 |
 
@@ -60,7 +54,6 @@ mcp-server :8081             air-server :8082
 |---|---:|---|
 | `agent-app` | 8080 | 질문 라우팅, NL2SQL, 컨텍스트 큐레이션, 답변 생성, HTTP API |
 | `mcp-server` | 8081 | 기본 MCP 서버. 검색·SQL·그래프·스키마 도구와 데이터 적재 제공 |
-| `air-server` | 8082 | 동일한 도구 이름과 안전 정책을 제공하는 선택형 Node.js MCP 서버 |
 | `client` | 5173 | 선택형 React 웹 클라이언트 |
 | PostgreSQL + pgvector | 5433 | 문서 벡터, 관계형 데이터, 지식 그래프 저장 |
 | Ollama | 11434 | 로컬 대화 모델과 임베딩 모델 실행 |
@@ -183,32 +176,6 @@ MCP 도구는 다음 보안 계층을 거칩니다:
    - 상위 디렉토리 탈출 방지
    - 심볼릭 링크 검사
 
-## AIR와 Spring AI 구현이 모두 있는 이유
-
-이 프로젝트의 핵심 경계는 특정 프레임워크가 아니라 MCP 도구 계약입니다.
-
-- **Spring AI `mcp-server`가 기본 구현**입니다. Gradle 멀티모듈 빌드, Spring AI MCP,
-  Ollama, pgvector가 통합되어 있고 데이터 적재와 자동화 테스트를 담당합니다.
-- **AIR `air-server`는 선택형 비교 구현**입니다. Node.js의 AIR MCP 프레임워크로 같은
-  도구 이름을 노출해, `agent-app` 코드를 바꾸지 않고 서버 URL만 교체할 수 있음을 검증합니다.
-- 두 구현을 둠으로써 프로토콜 호환성, 프레임워크 종속성, 성능과 동작 차이를 같은
-  클라이언트에서 비교할 수 있습니다.
-- AIR는 현재 Gradle 기본 빌드와 기본 실행 경로에 포함되지 않으며, 벡터 데이터 적재는
-  Spring AI 서버에서 먼저 수행해야 합니다.
-
-AIR 구현으로 전환할 때는 Spring AI 서버로 데이터를 한 번 적재한 뒤 다음과 같이 실행합니다.
-
-```bash
-npm ci --prefix air-server
-npm --prefix air-server start
-
-# 별도 터미널
-MCP_SERVER_URL=http://localhost:8082 ./gradlew :agent-app:bootRun
-```
-
-기본 Spring AI 구현으로 돌아가려면 `MCP_SERVER_URL`을 생략하거나
-`http://localhost:8081`로 설정합니다.
-
 키워드가 전혀 걸리지 않는 질문에서 90%대 라우팅을 재현한 설정은 다음과 같습니다.
 
 ```bash
@@ -221,7 +188,7 @@ Company-X 전체 스택에서는 공식 원문 답변 66.7%, 키워드 제거 �
 
 ## 빠른 시작
 
-필수 조건은 Docker 엔진과 Java 21입니다.
+필수 조건은 Docker 엔진과 Java 17+입니다.
 
 ```bash
 # 1. PostgreSQL과 Ollama 실행
