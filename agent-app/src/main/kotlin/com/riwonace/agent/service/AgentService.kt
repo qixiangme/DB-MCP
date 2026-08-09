@@ -8,6 +8,7 @@ import com.riwonace.agent.router.Route
 import com.riwonace.agent.router.RuleBasedRouter
 import com.riwonace.agent.sql.FewShotSelector
 import com.riwonace.agent.sql.SchemaLinker
+import com.riwonace.agent.sql.SchemaPromptFormatter
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.stereotype.Service
@@ -43,6 +44,7 @@ class AgentService(
     private val mapper: ObjectMapper,
     private val fewShotSelector: FewShotSelector,
     private val schemaLinker: SchemaLinker,
+    private val schemaPromptFormatter: SchemaPromptFormatter,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
     private val executor = Executors.newFixedThreadPool(4)
@@ -126,15 +128,16 @@ class AgentService(
      * 소형 모델의 테이블/컬럼 선택 오류를 방지한다.
      */
     private fun generateSql(question: String, previousAttempt: String? = null, error: String? = null): String {
-        val schema = gateway.schema()
+        val rawSchema = gateway.schema()
+        val schema = schemaPromptFormatter.format(rawSchema)
 
-        // 동적 Few-Shot 선택: 질문과 유사한 예시 3개 선택
-        val selectedExamples = fewShotSelector.selectExamples(question, topK = 3)
+        // 1B급 모델은 서로 다른 SQL 패턴을 섞는 경향이 있어 가장 가까운 예시 하나만 제공한다.
+        val selectedExamples = fewShotSelector.selectExamples(question, topK = 1)
         val examplesBlock = fewShotSelector.formatExamplesForPrompt(selectedExamples)
         log.info("Few-shot 예시 선택: {}", selectedExamples.map { it.pattern })
 
         // SchemaGraphSQL: 질문에서 스키마 값 매칭
-        val schemaHints = schemaLinker.linkEntities(schema, question)
+        val schemaHints = schemaLinker.linkEntities(rawSchema, question)
         val hintBlock = schemaLinker.formatHintsForPrompt(schemaHints)
         if (schemaHints.isNotEmpty()) {
             log.info("스키마 링킹 결과: {}", schemaHints.map { it.suggestion })
@@ -146,7 +149,9 @@ class AgentService(
         val raw = chatClient.prompt()
             .system(
                 "너는 PostgreSQL 전문가다. 주어진 스키마만 사용해서 질문에 답하는 " +
-                    "SELECT 문 한 문장만 출력한다. 설명, 마크다운, 세미콜론 없이 SQL만 출력한다." +
+                    "SELECT 문 한 문장만 출력한다. TABLE에 없는 식별자를 만들지 않고, " +
+                    "JOIN은 FOREIGN KEYS에 제시된 관계만 사용한다. " +
+                    "설명, 마크다운, 세미콜론 없이 SQL만 출력한다." +
                     if (schemaHints.isNotEmpty()) " 스키마 힌트에 표시된 테이블.컬럼과 값을 반드시 사용한다." else "",
             )
             .user(

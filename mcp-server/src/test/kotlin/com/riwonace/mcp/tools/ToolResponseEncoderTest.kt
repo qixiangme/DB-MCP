@@ -34,6 +34,16 @@ class ToolResponseEncoderTest {
     }
 
     @Test
+    fun `호출별 출력 예산을 지정하면 기본 예산 대신 해당 제한을 사용한다`() {
+        val encoder = ToolResponseEncoder(mapper, 200)
+
+        val encoded = encoder.encode(mapOf("schema" to "x".repeat(300)), outputLimit = 500)
+        val parsed = mapper.readTree(encoded)
+
+        assertEquals(300, parsed["schema"].asText().length)
+    }
+
+    @Test
     fun `예외 응답은 일반화된 메시지를 반환하고 내부 정보를 노출하지 않는다`() {
         val encoder = ToolResponseEncoder(mapper, 500)
 

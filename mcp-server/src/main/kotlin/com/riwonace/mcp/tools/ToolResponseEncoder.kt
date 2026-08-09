@@ -22,16 +22,19 @@ internal class ToolResponseEncoder(
         }
     }
 
-    fun encode(value: Any): String {
+    fun encode(value: Any, outputLimit: Int = maxOutputChars): String {
+        require(outputLimit >= MIN_OUTPUT_CHARS) {
+            "outputLimit은 구조화된 오류를 담을 수 있도록 $MIN_OUTPUT_CHARS 이상이어야 합니다."
+        }
         val json = mapper.writeValueAsString(value)
-        if (json.length <= maxOutputChars) return json
+        if (json.length <= outputLimit) return json
 
         return mapper.writeValueAsString(
             mapOf(
                 "error" to "tool_output_too_large",
                 "truncated" to true,
                 "originalChars" to json.length,
-                "maxOutputChars" to maxOutputChars,
+                "maxOutputChars" to outputLimit,
             ),
         )
     }

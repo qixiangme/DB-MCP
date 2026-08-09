@@ -1,0 +1,850 @@
+{
+  "metadata": {
+    "createdAt": "2026-08-09T06:06:12.403921+00:00",
+    "commit": "918ad72899acc097bae2fb9c4da6085099ba618e",
+    "branch": "agent/schema-structured-nl2sql",
+    "dirty": false,
+    "dataset": "eval/official-eval.json",
+    "datasetVersion": "unknown",
+    "baseUrl": "http://localhost:8080",
+    "reps": 3,
+    "model": "gemma3:1b",
+    "router": "adaptive",
+    "mcpServer": "spring-ai",
+    "routeFilter": "SQL",
+    "evaluatorVersion": "2.0"
+  },
+  "summary": {
+    "answerAccuracyPct": 40.0,
+    "routeAccuracyPct": 100.0,
+    "answerCorrect": 12,
+    "routeCorrect": 30,
+    "total": 30,
+    "errors": 0,
+    "averageLatencyMs": 1919,
+    "byExpectedRoute": {
+      "SQL": {
+        "answerAccuracyPct": 40.0,
+        "routeAccuracyPct": 100.0,
+        "count": 30
+      }
+    },
+    "byQuestionType": {
+      "unknown": {
+        "answerAccuracyPct": 40.0,
+        "routeAccuracyPct": 100.0,
+        "count": 30
+      }
+    },
+    "outcomes": {
+      "answer-only": 18,
+      "pass": 12
+    }
+  },
+  "rows": [
+    {
+      "rep": 1,
+      "id": "N1",
+      "type": "unknown",
+      "question": "서울 지역 매출 상위 5개 고객사를 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 3592,
+      "wallMs": 3702,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N2",
+      "type": "unknown",
+      "question": "2025년 3분기 총 매출액은 얼마야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "23859"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1641,
+      "wallMs": 1644,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "23859\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N3",
+      "type": "unknown",
+      "question": "보안 솔루션 카테고리 제품들의 월 평균 매출은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2671,
+      "wallMs": 2674,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N4",
+      "type": "unknown",
+      "question": "현재 활성 상태인 계약 수는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "46"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1650,
+      "wallMs": 1654,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "현재 활성 상태인 계약 수는 46개입니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N5",
+      "type": "unknown",
+      "question": "기술지원팀 직원 목록과 연봉을 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "박소연",
+        "권승호",
+        "조예진",
+        "임우진"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1946,
+      "wallMs": 1948,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "기술지원팀 직원 목록과 연봉은 다음과 같습니다.\n\n*   박소연 - 9520\n*   권승호 - 5378\n*   조예진 - 5019\n*   임우진 - 7092\n\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N6",
+      "type": "unknown",
+      "question": "가장 많은 프로젝트를 진행 중인 고객사는?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2363,
+      "wallMs": 2366,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N7",
+      "type": "unknown",
+      "question": "Critical 우선순위 티켓 중 아직 해결되지 않은 건은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1194,
+      "wallMs": 1198,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N8",
+      "type": "unknown",
+      "question": "제품별 총 계약 금액을 큰 순서로 보여줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1525,
+      "wallMs": 1530,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N9",
+      "type": "unknown",
+      "question": "2024년에 등록된 고객사는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "8개"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1498,
+      "wallMs": 1502,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "2024년에 등록된 고객사는 8개입니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N10",
+      "type": "unknown",
+      "question": "평균 연봉이 가장 높은 부서는 어디야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2189,
+      "wallMs": 2192,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "조회 결과:\nname=경영지원팀",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "N1",
+      "type": "unknown",
+      "question": "서울 지역 매출 상위 5개 고객사를 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2933,
+      "wallMs": 2939,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "N2",
+      "type": "unknown",
+      "question": "2025년 3분기 총 매출액은 얼마야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "23859"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1152,
+      "wallMs": 1157,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "23859\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "N3",
+      "type": "unknown",
+      "question": "보안 솔루션 카테고리 제품들의 월 평균 매출은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2624,
+      "wallMs": 2630,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "N4",
+      "type": "unknown",
+      "question": "현재 활성 상태인 계약 수는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "46"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1517,
+      "wallMs": 1521,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "현재 활성 상태인 계약 수는 46개입니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "N5",
+      "type": "unknown",
+      "question": "기술지원팀 직원 목록과 연봉을 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "박소연",
+        "권승호",
+        "조예진",
+        "임우진"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1902,
+      "wallMs": 1904,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "기술지원팀 직원 목록과 연봉은 다음과 같습니다.\n\n*   박소연 - 9520\n*   권승호 - 5378\n*   조예진 - 5019\n*   임우진 - 7092\n\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "N6",
+      "type": "unknown",
+      "question": "가장 많은 프로젝트를 진행 중인 고객사는?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2306,
+      "wallMs": 2312,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "N7",
+      "type": "unknown",
+      "question": "Critical 우선순위 티켓 중 아직 해결되지 않은 건은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1177,
+      "wallMs": 1182,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "N8",
+      "type": "unknown",
+      "question": "제품별 총 계약 금액을 큰 순서로 보여줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1349,
+      "wallMs": 1353,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "N9",
+      "type": "unknown",
+      "question": "2024년에 등록된 고객사는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "8개"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1480,
+      "wallMs": 1485,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "2024년에 등록된 고객사는 8개입니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "N10",
+      "type": "unknown",
+      "question": "평균 연봉이 가장 높은 부서는 어디야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2177,
+      "wallMs": 2181,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "조회 결과:\nname=경영지원팀",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "N1",
+      "type": "unknown",
+      "question": "서울 지역 매출 상위 5개 고객사를 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2952,
+      "wallMs": 2958,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "N2",
+      "type": "unknown",
+      "question": "2025년 3분기 총 매출액은 얼마야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "23859"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1165,
+      "wallMs": 1170,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "23859\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "N3",
+      "type": "unknown",
+      "question": "보안 솔루션 카테고리 제품들의 월 평균 매출은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2634,
+      "wallMs": 2639,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "N4",
+      "type": "unknown",
+      "question": "현재 활성 상태인 계약 수는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "46"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1516,
+      "wallMs": 1521,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "현재 활성 상태인 계약 수는 46개입니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "N5",
+      "type": "unknown",
+      "question": "기술지원팀 직원 목록과 연봉을 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "박소연",
+        "권승호",
+        "조예진",
+        "임우진"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1907,
+      "wallMs": 1913,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "기술지원팀 직원 목록과 연봉은 다음과 같습니다.\n\n*   박소연 - 9520\n*   권승호 - 5378\n*   조예진 - 5019\n*   임우진 - 7092\n\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "N6",
+      "type": "unknown",
+      "question": "가장 많은 프로젝트를 진행 중인 고객사는?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2326,
+      "wallMs": 2330,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "N7",
+      "type": "unknown",
+      "question": "Critical 우선순위 티켓 중 아직 해결되지 않은 건은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1186,
+      "wallMs": 1191,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "N8",
+      "type": "unknown",
+      "question": "제품별 총 계약 금액을 큰 순서로 보여줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1345,
+      "wallMs": 1351,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "N9",
+      "type": "unknown",
+      "question": "2024년에 등록된 고객사는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "8개"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1469,
+      "wallMs": 1475,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "2024년에 등록된 고객사는 8개입니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "N10",
+      "type": "unknown",
+      "question": "평균 연봉이 가장 높은 부서는 어디야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2177,
+      "wallMs": 2182,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "조회 결과:\nname=경영지원팀",
+      "error": null
+    }
+  ]
+}

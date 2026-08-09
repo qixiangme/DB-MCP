@@ -48,7 +48,7 @@ class RetrievalTools(
         description = "관계형 데이터베이스의 테이블·컬럼 스키마와 카테고리형 컬럼의 실제 값 목록을 조회한다. " +
             "SQL을 작성하기 전에 반드시 호출한다.",
     )
-    fun getSchema(): String = guard {
+    fun getSchema(): String = guard(MAX_SCHEMA_OUTPUT_CHARS) {
         // kg_triples(kg_search 전용)와 임베딩 테이블은 NL2SQL 스키마에서 제외한다 —
         // 소형 모델은 무관한 테이블이 보이면 테이블을 혼합한 SQL을 생성한다 (벤치마크로 확인)
         val columns = jdbc.queryForList(
@@ -63,8 +63,36 @@ class RetrievalTools(
         val tables = columns.groupBy({ it["table_name"] as String }) {
             "${it["column_name"]} (${it["data_type"]})"
         }
-        mapOf("tables" to tables, "valueHints" to valueHints(columns))
+        mapOf(
+            "tables" to tables,
+            "foreignKeys" to foreignKeys(),
+            "valueHints" to valueHints(columns),
+        )
     }
+
+    /** 실제 DB 제약조건에서 JOIN 가능한 외래키 경로를 추출한다. */
+    private fun foreignKeys(): List<String> =
+        jdbc.queryForList(
+            """
+            SELECT tc.table_name AS source_table,
+                   kcu.column_name AS source_column,
+                   ccu.table_name AS target_table,
+                   ccu.column_name AS target_column
+            FROM information_schema.table_constraints tc
+            JOIN information_schema.key_column_usage kcu
+              ON tc.constraint_name = kcu.constraint_name
+             AND tc.constraint_schema = kcu.constraint_schema
+            JOIN information_schema.constraint_column_usage ccu
+              ON tc.constraint_name = ccu.constraint_name
+             AND tc.constraint_schema = ccu.constraint_schema
+            WHERE tc.constraint_type = 'FOREIGN KEY'
+              AND tc.table_schema = 'public'
+            ORDER BY tc.table_name, kcu.ordinal_position
+            """.trimIndent(),
+        ).map {
+            "${it["source_table"]}.${it["source_column"]} -> " +
+                "${it["target_table"]}.${it["target_column"]}"
+        }
 
     /**
      * 카테고리형(저카디널리티 문자열) 컬럼의 실제 값을 스키마에 동봉한다.
@@ -153,15 +181,16 @@ class RetrievalTools(
      * 모든 도구의 공통 방어막: 예외를 삼켜 오류 JSON으로 바꾸고(연결 보호),
      * 출력 크기를 제한한다(MCP 스펙의 출력 sanitize 의무 + 컨텍스트 예산 보호).
      */
-    private inline fun guard(block: () -> Any): String =
+    private inline fun guard(maxOutputChars: Int = MAX_OUTPUT_CHARS, block: () -> Any): String =
         try {
-            responseEncoder.encode(block())
+            responseEncoder.encode(block(), maxOutputChars)
         } catch (e: Exception) {
             responseEncoder.encodeError(e)
         }
 
     companion object {
         const val MAX_OUTPUT_CHARS = 4000
+        const val MAX_SCHEMA_OUTPUT_CHARS = 8000
         const val MAX_HINT_VALUES = 12
     }
 }
