@@ -11,11 +11,11 @@
 ┌──▼──────────────────────────────────┐          ┌──────────────────────────────────────┐
 │  agent-app  (Spring Boot :8080)     │          │  mcp-server  (Spring Boot :8081)     │
 │                                     │   MCP    │                                      │
-│  ① RuleBasedRouter  (L4 라우팅)     │  (SSE)   │  MCP Tools — 표준 규격 단일 접점      │
+│  ① RuleBasedRouter  (L4 라우팅)     │  (SSE)   │  MCP — 표준화된 에이전트 통합 경계     │
 │     결정적 규칙으로 도구 선택,       │◀────────▶│   ├ vector_search → pgvector 유사도  │
-│     복합 질문은 병렬 호출           │  장애    │   ├ run_sql       → SqlGuard 검증    │
-│  ② NL2SQL           (L6 추론)      │  지점    │   ├ kg_search     → 온톨로지 triple  │
-│  ③ ContextCurator   (L5 구성)      │  1개     │   └ get_schema    → 스키마 조회      │
+│     복합 질문은 병렬 호출           │  통합    │   ├ run_sql       → SqlGuard 검증    │
+│  ② NL2SQL           (L6 추론)      │  경계    │   ├ kg_search     → 온톨로지 triple  │
+│  ③ ContextCurator   (L5 구성)      │  1개     │   └ db://schema   → Resource(K)      │
 │     TACC: 예산·선별·전략적 배치     │          │                                      │
 │  ④ 답변 생성        (L7 응답)      │          └──────────────┬───────────────────────┘
 └──────────┬──────────────────────────┘                        │ JDBC
@@ -31,10 +31,10 @@
 
 | 요구사항 | 구현 |
 |---|---|
-| PostgreSQL + pgvector 벡터 DB | `pgvector/pgvector:pg16` 컨테이너, Spring AI `PgVectorStore` (HNSW, cosine) |
-| MCP 프로토콜 기반 도구 설계 | Spring AI MCP Server(WebMVC/SSE)로 도구 4종 노출 — 클라이언트는 표준 MCP로만 접근 |
+| PostgreSQL + pgvector 벡터 DB | `pgvector/pgvector:pg16` 컨테이너, Spring AI `PgVectorStore` (소규모 데이터 exact cosine) |
+| MCP 프로토콜 기반 도구 설계 | 실행 Tool 3종 + 스키마 Resource 1종 노출 — 클라이언트는 표준 MCP로만 접근 |
 | 규칙 기반 라우터 (MCP Parallel) | `RuleBasedRouter`: 키워드 규칙으로 SQL/VECTOR/GRAPH 분류, 복수 매칭 시 `CompletableFuture` 병렬 호출 후 통합 |
-| NL2SQL | `get_schema`(MCP) → 소형 모델이 SELECT 생성 → `run_sql`(MCP)이 `SqlGuard`로 검증 후 실행 |
+| NL2SQL | `db://schema` Resource → 소형 모델이 SELECT 생성 → `run_sql` Tool이 `SqlGuard`로 검증 후 실행 |
 | 온톨로지 기반 지식 그래프 | `kg_triples` (subject–predicate–object), `kg_search` 도구로 조회 |
 | 온프레미스 소형 LLM 연동 | Ollama `gemma3:1b` 기본 (~815MB, CPU만으로 구동), `OLLAMA_MODEL` 환경변수 하나로 1B~7B 교체 |
 | 선택적 컨텍스트 큐레이션 (TACC) | `ContextCurator`: 과업 유형별 가중치 → 문자 예산 내 선별 → Lost-in-the-Middle 완화 배치 |
@@ -46,19 +46,24 @@
 결정적으로 선택**하므로 같은 질문에는 항상 같은 도구가 호출된다. LLM은 ① NL2SQL 변환과
 ② 최종 답변 생성에만 사용된다 — 실패해도 재현·디버깅이 쉬운 두 지점으로 격리했다.
 
-### 3.2 장애 지점 1개 (기존 RAG 3개 대비)
-기존 RAG는 임베딩 서비스·검색 인덱스·리랭커 3개의 장애 지점을 가진다.
-본 시스템에서 에이전트가 아는 외부 연결은 **MCP 연결 하나**(`McpGateway`)뿐이다.
+### 3.2 에이전트의 통합 경계 1개
+MCP가 DB·Ollama·네트워크 같은 물리적 장애 지점을 없애지는 않는다. 본 시스템에서는
+에이전트가 직접 관리하는 외부 연결을 **MCP 연결 하나**(`McpGateway`)로 제한한다.
 벡터 검색, SQL, 지식 그래프의 내부 구현·접속 정보는 모두 MCP 서버 뒤에 숨는다.
 저장소도 PostgreSQL 하나로 통합해(벡터+관계형+그래프) 운영 대상 자체를 줄였다.
 
-### 3.3 튜닝 파라미터 2개
-과제 참조 연구와 동일하게, 운영자가 조정하는 파라미터는
-**① 검색 top-k**(기본 4), **② 컨텍스트 예산**(`agent.context.budget-chars`, 기본 2,400자) 뿐이다.
-청킹·오버랩·리랭커 임계값 등은 존재하지 않는다.
+### 3.3 핵심 검색 파라미터 2개
+정확도에 직접 관여하도록 노출한 핵심 검색 파라미터는
+**① 검색 top-k**(기본 4), **② 컨텍스트 예산**(`agent.context.budget-chars`, 기본 2,400자)이다.
+Company-X 문서는 파일 하나를 문서 하나로 적재하므로 가변 청킹 크기·오버랩은 없고,
+별도 리랭커도 두지 않는다. 이는 현재 데이터셋에 대한 설계 선택이며 MCP의 자동 효과가 아니다.
+모델·포트·타임아웃·재시도·DB 풀 같은 배포와 신뢰성 설정은 별도로 존재하므로, 참조 연구의
+`9→2` 결과를 이 저장소 전체 설정 개수의 실측값으로 옮겨 주장하지 않는다.
 
-### 3.4 TACC — 컨텍스트는 많을수록 좋은 게 아니다
-전현우 외(2026)의 실증대로 소형 모델에는 선별된 컨텍스트가 유리하다. `ContextCurator`는:
+### 3.4 TACC — 컨텍스트의 한계효용은 모델·과업 의존적이다
+전현우 외(2026)에서는 Full이 빈 기준선보다 유리했고 Knowledge(K)만 유의한 주효과를 보였다.
+추가 D·G의 효용은 모델별로 달랐고 과업이 분산의 약 56%를 설명했다. 이에 따라
+`ContextCurator`는 핵심 지식을 유지하면서:
 1. 라우트별 가중치 (SQL 결과는 집계 질문에서 1.5배 등)
 2. 중복 제거 + 관련도 순 예산 내 선별
 3. Liu et al.(2024) 'Lost in the Middle' 완화 — 최상위 항목을 맨 앞, 차상위를 맨 뒤에 배치
@@ -71,7 +76,7 @@ DML·DDL·주석·다중 문장·`pg_sleep` 차단, LIMIT 자동 보강. 단위 
 | Pylon-7 계층 | 구현 위치 |
 |---|---|
 | L1 데이터 저장 | PostgreSQL (vector_store, 관계형, kg_triples) |
-| L2 검색·인덱싱 | pgvector HNSW, SQL, triple 조회 |
+| L2 검색·인덱싱 | pgvector exact cosine, SQL, triple 조회 |
 | L3 프로토콜 | MCP (Spring AI MCP Server/Client, SSE) |
 | L4 라우팅 | RuleBasedRouter (MCP Parallel) |
 | L5 컨텍스트 구성 | ContextCurator (TACC) |
@@ -151,7 +156,7 @@ DML·DDL·주석·다중 문장·`pg_sleep` 차단, LIMIT 자동 보강. 단위 
           │ 키워드 미매칭
           ▼
 ┌───────────────────┐
-│ TfIdfRouter       │──▶ TF-IDF 유사도로 분류 (기본 폴백)
+│ TfIdfRouter       │──▶ TF-IDF 유사도로 분류 (선택 설정)
 │ (32개 학습 데이터) │
 └─────────┬─────────┘
           │ 또는
@@ -163,14 +168,14 @@ DML·DDL·주석·다중 문장·`pg_sleep` 차단, LIMIT 자동 보강. 단위 
 ```
 
 환경변수 `ROUTER_FALLBACK`으로 폴백 전략 선택:
-- `tfidf` (기본): TF-IDF + k-NN 분류
+- `tfidf`: TF-IDF + k-NN 분류
 - `semantic-ai`: LLM 기반 분류 (더 정확하지만 느림)
 - `embedding`: 임베딩 유사도 분류
 
 ## 5. 요청 처리 흐름 (예: "플랫폼팀 평균 급여는?")
 
 1. `RuleBasedRouter`가 "평균", "급여" 키워드로 **SQL 라우트** 선택
-2. `McpGateway.schema()` — MCP `get_schema` 호출 (캐시됨)
+2. `McpGateway.schema()` — MCP `db://schema` Resource 읽기 (캐시됨)
 3. **SchemaLinker**가 "플랫폼팀"을 `departments.name` 값 힌트와 매칭
 4. **FewShotSelector**가 집계 패턴과 유사한 예시 3개 선택
 5. **SchemaPromptFormatter**가 스키마 + 힌트 + 예시로 프롬프트 구성
@@ -182,10 +187,10 @@ DML·DDL·주석·다중 문장·`pg_sleep` 차단, LIMIT 자동 보강. 단위 
 넘으면 일부 JSON 문자열을 그대로 자르지 않고 `tool_output_too_large`, `truncated`,
 `originalChars`, `maxOutputChars`를 포함한 구조화된 오류 객체를 반환합니다. 호출자는 이 경우
 부분 데이터를 정상 결과로 해석하지 말고 질의를 좁히거나 더 작은 `topK`로 다시 요청해야 합니다.
-5. `ContextCurator`가 예산 내 컨텍스트 구성
-6. 1B 모델이 컨텍스트 근거로 한국어 답변 생성 (+출처 표기)
+9. `ContextCurator`가 예산 내 컨텍스트 구성
+10. 1B 모델이 컨텍스트 근거로 한국어 답변 생성 (+출처 표기)
 
-## 5. 스택 선택 근거
+## 6. 스택 선택 근거
 
 - **Spring AI (vs Koog)**: MCP Server/Client, Ollama, pgvector가 모두 공식 스타터로 제공되어
   글루 코드가 최소화된다. Koog는 에이전트 DSL은 우수하나 MCP 서버 구현·pgvector 통합을

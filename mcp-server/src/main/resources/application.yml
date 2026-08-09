@@ -34,3 +34,8 @@ logging:
   level:
     com.riwonace: INFO
     io.modelcontextprotocol: INFO
+
+ingest:
+  # 개발 기본값도 Company-X 문서 폴더 하나로 제한한다.
+  # 배포 환경에서는 읽기 전용 데이터셋 마운트 경로를 명시한다.
+  allowed-root: ${INGEST_ALLOWED_ROOT:../companyx-dataset-v1.0/documents}

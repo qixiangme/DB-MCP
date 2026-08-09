@@ -170,7 +170,7 @@ latencyBudgetMs: 답변 하나에 허용할 지연 시간
 
 | 질문 유형 | 필요한 증거 | 호출 계획 |
 |---|---|---|
-| "평균 급여는?" | 숫자/집계 | get_schema -> run_sql |
+| "평균 급여는?" | 숫자/집계 | db://schema Resource -> run_sql Tool |
 | "장애 원인은?" | 문서 근거 | vector_search |
 | "A와 B 관계는?" | 관계 | kg_search |
 | "장애를 가장 많이 낸 고객의 계약 상태는?" | 집계 + 관계 + 문서 | run_sql + kg_search + vector_search |
@@ -352,4 +352,3 @@ RAG 정확도를 높였습니다.
 ```text
 MCP를 붙인 것이 아니라, MCP 계약을 기준으로 검색 파이프라인 코드를 제거했습니다.
 ```
-

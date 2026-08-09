@@ -104,7 +104,6 @@ class AgentService(
                     listOf(ContextItem("knowledge-graph", "지식 그래프 관계:\n$result", 0.9))
                 }
                 Route.SQL -> {
-                    toolCalls += "get_schema"
                     toolCalls += "run_sql"
                     var sql = generateSql(question)
                     var result = gateway.runSql(sql)
