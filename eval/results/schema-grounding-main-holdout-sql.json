@@ -1,0 +1,782 @@
+{
+  "metadata": {
+    "createdAt": "2026-08-09T05:48:25.733153+00:00",
+    "commit": "788219ccaf666ca16da4df36183c2058b7cb84c3",
+    "branch": "main",
+    "dirty": false,
+    "provenance": "main was executed from a clean git archive; evaluator cwd metadata was corrected to the runtime commit",
+    "dataset": "eval/holdout-eval.json",
+    "datasetVersion": "1.0",
+    "baseUrl": "http://localhost:8080",
+    "reps": 3,
+    "model": "gemma3:1b",
+    "router": "adaptive",
+    "mcpServer": "spring-ai",
+    "routeFilter": "SQL",
+    "evaluatorVersion": "2.0"
+  },
+  "summary": {
+    "answerAccuracyPct": 33.3,
+    "routeAccuracyPct": 100.0,
+    "answerCorrect": 9,
+    "routeCorrect": 27,
+    "total": 27,
+    "errors": 0,
+    "averageLatencyMs": 2391,
+    "byExpectedRoute": {
+      "SQL": {
+        "answerAccuracyPct": 33.3,
+        "routeAccuracyPct": 100.0,
+        "count": 27
+      }
+    },
+    "byQuestionType": {
+      "unknown": {
+        "answerAccuracyPct": 33.3,
+        "routeAccuracyPct": 100.0,
+        "count": 27
+      }
+    },
+    "outcomes": {
+      "answer-only": 18,
+      "pass": 9
+    }
+  },
+  "rows": [
+    {
+      "rep": 1,
+      "id": "H-SQL-01",
+      "type": "unknown",
+      "question": "인천 지역 고객사 중 계약 금액이 가장 큰 곳은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 4958,
+      "wallMs": 5062,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "H-SQL-02",
+      "type": "unknown",
+      "question": "데이터 카테고리 제품들의 평균 가격은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "데이터"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 1359,
+      "wallMs": 1364,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "데이터 카테고리 제품들의 평균 가격은 230.83333333333334입니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "H-SQL-03",
+      "type": "unknown",
+      "question": "2026년 1분기 예상 매출이 있는 계약 건수는?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "없"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 1350,
+      "wallMs": 1353,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "H-SQL-04",
+      "type": "unknown",
+      "question": "보안솔루션팀 직원 중 차장 직급은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2418,
+      "wallMs": 2421,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "한태호 - 1명\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "H-SQL-05",
+      "type": "unknown",
+      "question": "월 구독료가 200 이상인 제품은 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2272,
+      "wallMs": 2275,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "H-MIX-01",
+      "type": "unknown",
+      "question": "경기 지역 스타트업 고객사들의 총 계약 금액은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "numeric",
+      "latencyMs": 1360,
+      "wallMs": 1362,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "H-MIX-02",
+      "type": "unknown",
+      "question": "on_hold 상태 프로젝트 중 예산이 가장 큰 건?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2599,
+      "wallMs": 2602,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "H-MIX-04",
+      "type": "unknown",
+      "question": "High 우선순위 티켓이 가장 많은 제품은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2516,
+      "wallMs": 2519,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "H-MIX-05",
+      "type": "unknown",
+      "question": "영업팀에서 담당 고객이 3개 이상인 직원은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "영업"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 3785,
+      "wallMs": 3788,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "kg_search",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql",
+        "knowledge-graph"
+      ],
+      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당한다]--> Client-R",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-SQL-01",
+      "type": "unknown",
+      "question": "인천 지역 고객사 중 계약 금액이 가장 큰 곳은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 4160,
+      "wallMs": 4162,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-SQL-02",
+      "type": "unknown",
+      "question": "데이터 카테고리 제품들의 평균 가격은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "데이터"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 1330,
+      "wallMs": 1333,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "데이터 카테고리 제품들의 평균 가격은 230.83333333333334입니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-SQL-03",
+      "type": "unknown",
+      "question": "2026년 1분기 예상 매출이 있는 계약 건수는?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "없"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 1339,
+      "wallMs": 1341,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-SQL-04",
+      "type": "unknown",
+      "question": "보안솔루션팀 직원 중 차장 직급은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2332,
+      "wallMs": 2335,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "한태호 - 1명\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-SQL-05",
+      "type": "unknown",
+      "question": "월 구독료가 200 이상인 제품은 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2221,
+      "wallMs": 2224,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-MIX-01",
+      "type": "unknown",
+      "question": "경기 지역 스타트업 고객사들의 총 계약 금액은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "numeric",
+      "latencyMs": 1286,
+      "wallMs": 1289,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-MIX-02",
+      "type": "unknown",
+      "question": "on_hold 상태 프로젝트 중 예산이 가장 큰 건?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2535,
+      "wallMs": 2539,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-MIX-04",
+      "type": "unknown",
+      "question": "High 우선순위 티켓이 가장 많은 제품은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2451,
+      "wallMs": 2456,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "H-MIX-05",
+      "type": "unknown",
+      "question": "영업팀에서 담당 고객이 3개 이상인 직원은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "영업"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 3592,
+      "wallMs": 3596,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "kg_search",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql",
+        "knowledge-graph"
+      ],
+      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당한다]--> Client-R",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "H-SQL-01",
+      "type": "unknown",
+      "question": "인천 지역 고객사 중 계약 금액이 가장 큰 곳은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 3455,
+      "wallMs": 3459,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "H-SQL-02",
+      "type": "unknown",
+      "question": "데이터 카테고리 제품들의 평균 가격은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "데이터"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 1349,
+      "wallMs": 1354,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "데이터 카테고리 제품들의 평균 가격은 230.83333333333334입니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "H-SQL-03",
+      "type": "unknown",
+      "question": "2026년 1분기 예상 매출이 있는 계약 건수는?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "없"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 1367,
+      "wallMs": 1371,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "H-SQL-04",
+      "type": "unknown",
+      "question": "보안솔루션팀 직원 중 차장 직급은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2375,
+      "wallMs": 2378,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "한태호 - 1명\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "H-SQL-05",
+      "type": "unknown",
+      "question": "월 구독료가 200 이상인 제품은 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2220,
+      "wallMs": 2223,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "H-MIX-01",
+      "type": "unknown",
+      "question": "경기 지역 스타트업 고객사들의 총 계약 금액은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "numeric",
+      "latencyMs": 1353,
+      "wallMs": 1357,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "H-MIX-02",
+      "type": "unknown",
+      "question": "on_hold 상태 프로젝트 중 예산이 가장 큰 건?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2581,
+      "wallMs": 2584,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "H-MIX-04",
+      "type": "unknown",
+      "question": "High 우선순위 티켓이 가장 많은 제품은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "anyOf",
+      "latencyMs": 2424,
+      "wallMs": 2426,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 3,
+      "id": "H-MIX-05",
+      "type": "unknown",
+      "question": "영업팀에서 담당 고객이 3개 이상인 직원은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "영업"
+      ],
+      "ruleUsed": "anyOf",
+      "latencyMs": 3557,
+      "wallMs": 3559,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "kg_search",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql",
+        "knowledge-graph"
+      ],
+      "answer": "영업팀에서 담당 고객이 3개 이상인 직원은 다음과 같습니다.\n* 김지훈\n* 황민수\n* 강동현\n* 류혜원\n* 안재원\n* 신다은\n* 강유진\n* 신동현\n* 황준혁\n* 한도윤\n* 영업팀에서 담당한다]--> Client-R",
+      "error": null
+    }
+  ]
+}
