@@ -1,6 +1,7 @@
 package com.riwonace.agent.router
 
 import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Component
 import kotlin.math.ln
 import kotlin.math.sqrt
@@ -24,6 +25,7 @@ import kotlin.math.sqrt
  * `agent.router.fallback=tfidf`로 활성화하면 키워드 미매칭 시 이 구현체가 호출된다.
  */
 @Component("tfidfRouteFallback")
+@ConditionalOnProperty(name = ["agent.router.fallback"], havingValue = "tfidf")
 class TfIdfRouter : RouteFallback {
     private val log = LoggerFactory.getLogger(javaClass)
 
