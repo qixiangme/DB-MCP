@@ -18,7 +18,7 @@ class RuleBasedRouter(private val fallback: RouteFallback? = null) {
         "몇", "개수", "수는", "평균", "합계", "총", "최대", "최소", "가장 비싼", "가장 싼",
         "가장 많은", "가장 높은", "순위", "상위", "하위", "목록", "리스트", "재고", "급여",
         "연봉", "매출", "주문", "계약", "티켓", "우선순위", "분기", "금액", "등록된",
-        "직원", "제품", "가격", "부서별", "언제 입사", "입사일",
+        "직원", "가격", "출시 상태", "부서별", "언제 입사", "입사일",
         "count", "average", "sum", "max", "min", "how many", "list", "top",
     )
 
@@ -26,6 +26,7 @@ class RuleBasedRouter(private val fallback: RouteFallback? = null) {
         "관계", "연관", "연결", "관련이", "관련된", "의존", "누가 만들", "누가 개발",
         "무엇을 개발", "어디서 만들", "개발사", "라이선스", "무슨 사이",
         "사용 중인", "사용하는", "사용 고객", "이용 고객", "실제 사용", "실제 이용",
+        "쓰는", "이용하는", "사용자 고객",
         "소속", "담당", "팀장", "이끄", "이슈",
         "relation", "related", "depends", "who made", "who developed",
     )
@@ -33,15 +34,15 @@ class RuleBasedRouter(private val fallback: RouteFallback? = null) {
     private val vectorKeywords = listOf(
         "무엇", "뭐야", "뭔가요", "설명", "소개", "개념", "원리", "어떻게 동작", "왜",
         "장점", "단점", "차이", "정책", "가이드", "방법",
-        "장애", "사례", "내용", "취약점", "미팅", "논의", "제안서", "매뉴얼", "인증",
-        "설치", "배포", "운영", "백업", "튜닝", "API", "컨테이너", "문서",
+        "장애", "사례", "내용", "취약점", "미팅", "논의", "제안", "매뉴얼", "인증",
+        "설치", "배포", "운영", "백업", "보관", "구동", "튜닝", "api", "cpu", "hpa", "컨테이너", "문서",
         "what is", "explain", "describe", "how does", "why",
     )
 
     fun route(question: String): List<Route> {
         val q = question.lowercase()
         val routes = buildList {
-            if (sqlKeywords.any { q.contains(it) }) add(Route.SQL)
+            if (sqlKeywords.any { q.contains(it) } || PRODUCT_NUMERIC.containsMatchIn(q)) add(Route.SQL)
             if (graphKeywords.any { q.contains(it) }) add(Route.GRAPH)
             if (vectorKeywords.any { q.contains(it) }) add(Route.VECTOR)
         }
@@ -57,5 +58,6 @@ class RuleBasedRouter(private val fallback: RouteFallback? = null) {
 
     companion object {
         private val COMPOSITION_CUES = listOf("함께", "같이", "동시에", "한 번에", "구분", "그리고", " 및 ", "와 ", "과 ")
+        private val PRODUCT_NUMERIC = Regex("(?<![a-z0-9_-])\\d[\\d,]*(?:\\.\\d+)?(?:원|만원|%|인|개|건|명)?[^.?!]{0,20}(?:제품|product)")
     }
 }

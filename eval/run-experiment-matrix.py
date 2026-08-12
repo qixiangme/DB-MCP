@@ -32,7 +32,7 @@ def wait_ready(base_url: str, process: subprocess.Popen[str], timeout: int = 120
         try:
             with urllib.request.urlopen(f"{base_url}/api/tools", timeout=3):
                 return
-        except (urllib.error.URLError, TimeoutError):
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError):
             time.sleep(1)
     raise TimeoutError("agent did not become ready")
 
@@ -54,7 +54,7 @@ def wait_until_closed(base_url: str, timeout: int = 15) -> None:
     while time.monotonic() < deadline:
         try:
             urllib.request.urlopen(f"{base_url}/api/tools", timeout=1)
-        except (urllib.error.URLError, TimeoutError):
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError):
             return
         time.sleep(0.25)
     raise TimeoutError("previous agent remained reachable after shutdown")

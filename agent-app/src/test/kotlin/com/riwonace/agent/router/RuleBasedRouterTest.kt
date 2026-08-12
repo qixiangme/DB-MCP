@@ -49,6 +49,30 @@ class RuleBasedRouterTest {
     }
 
     @Test
+    fun `제품명만으로 SQL을 과잉 선택하지 않는다`() {
+        assertEquals(
+            listOf(Route.GRAPH, Route.VECTOR),
+            router.route("Product-C1 설치 방식과 이 제품을 실제 사용하는 고객사를 알려줘"),
+        )
+    }
+
+    @Test
+    fun `수치 조건 제품과 문서 및 사용 관계는 세 경로를 선택한다`() {
+        assertEquals(
+            listOf(Route.SQL, Route.GRAPH, Route.VECTOR),
+            router.route("월 120인 cloud 제품 중 CPU 62%이며 Client-A가 쓰는 것은?"),
+        )
+    }
+
+    @Test
+    fun `출시 상태와 백업은 SQL과 VECTOR를 선택한다`() {
+        assertEquals(
+            listOf(Route.SQL, Route.VECTOR),
+            router.route("출시 상태와 백업 실행 시각 및 보관일을 알려줘"),
+        )
+    }
+
+    @Test
     fun `어떤 규칙에도 안 걸리면 VECTOR가 기본값이다`() {
         assertEquals(listOf(Route.VECTOR), router.route("안녕하세요"))
     }
