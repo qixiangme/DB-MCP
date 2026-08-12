@@ -33,6 +33,22 @@ class RuleBasedRouterTest {
     }
 
     @Test
+    fun `가격과 설치를 함께 묻는 질문은 SQL과 VECTOR를 선택한다`() {
+        assertEquals(
+            listOf(Route.SQL, Route.VECTOR),
+            router.route("월 가격과 설치에 필요한 컨테이너 도구를 함께 알려줘"),
+        )
+    }
+
+    @Test
+    fun `가격과 실제 이용 고객을 함께 묻는 질문은 SQL과 GRAPH를 선택한다`() {
+        assertEquals(
+            listOf(Route.SQL, Route.GRAPH),
+            router.route("월 가격과 실제 이용 고객을 함께 알려줘"),
+        )
+    }
+
+    @Test
     fun `어떤 규칙에도 안 걸리면 VECTOR가 기본값이다`() {
         assertEquals(listOf(Route.VECTOR), router.route("안녕하세요"))
     }

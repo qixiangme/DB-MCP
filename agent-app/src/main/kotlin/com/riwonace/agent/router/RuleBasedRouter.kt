@@ -25,7 +25,8 @@ class RuleBasedRouter(private val fallback: RouteFallback? = null) {
     private val graphKeywords = listOf(
         "관계", "연관", "연결", "관련이", "관련된", "의존", "누가 만들", "누가 개발",
         "무엇을 개발", "어디서 만들", "개발사", "라이선스", "무슨 사이",
-        "사용 중인", "사용하는", "소속", "담당", "팀장", "이끄", "이슈",
+        "사용 중인", "사용하는", "사용 고객", "이용 고객", "실제 사용", "실제 이용",
+        "소속", "담당", "팀장", "이끄", "이슈",
         "relation", "related", "depends", "who made", "who developed",
     )
 
@@ -33,6 +34,7 @@ class RuleBasedRouter(private val fallback: RouteFallback? = null) {
         "무엇", "뭐야", "뭔가요", "설명", "소개", "개념", "원리", "어떻게 동작", "왜",
         "장점", "단점", "차이", "정책", "가이드", "방법",
         "장애", "사례", "내용", "취약점", "미팅", "논의", "제안서", "매뉴얼", "인증",
+        "설치", "배포", "운영", "백업", "튜닝", "API", "컨테이너", "문서",
         "what is", "explain", "describe", "how does", "why",
     )
 
