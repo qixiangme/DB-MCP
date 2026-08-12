@@ -53,6 +53,7 @@ def main() -> int:
     parser.add_argument("--dataset", required=True)
     parser.add_argument("--split", choices=("all", "dev", "holdout"), default="all")
     parser.add_argument("--reps", type=int, default=3)
+    parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--model", default="gemma3:1b")
     parser.add_argument("--base-url", default="http://localhost:8080")
     parser.add_argument("--output-dir", required=True)
@@ -92,8 +93,7 @@ def main() -> int:
             )
             try:
                 wait_ready(args.base_url, process)
-                subprocess.run(
-                    [
+                command = [
                         "python3", "eval/run-system-eval.py",
                         "--set", args.dataset,
                         "--split", args.split,
@@ -103,7 +103,11 @@ def main() -> int:
                         "--model-label", args.model,
                         "--system-mode", mode,
                         "--context-policy", policy,
-                    ],
+                    ]
+                if args.limit is not None:
+                    command.extend(["--limit", str(args.limit), "--allow-dirty"])
+                subprocess.run(
+                    command,
                     check=True,
                     env=env,
                 )

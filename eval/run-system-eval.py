@@ -52,6 +52,7 @@ def main() -> int:
     parser.add_argument("--timeout", type=int, default=300)
     parser.add_argument("--seed", type=int, default=20260813)
     parser.add_argument("--split", choices=("all", "dev", "holdout"), default="all")
+    parser.add_argument("--limit", type=int, default=None, help="exploratory smoke only; final reports omit this")
     parser.add_argument("--output", required=True)
     parser.add_argument("--model-label", required=True)
     parser.add_argument("--system-mode", choices=("NO_TOOLS", "VANILLA_MCP", "OURS"), required=True)
@@ -70,6 +71,10 @@ def main() -> int:
         questions = [item for item in questions if item.get("split") == args.split]
         if not questions:
             raise SystemExit(f"dataset has no questions for split={args.split}")
+    if args.limit is not None:
+        if args.limit < 1:
+            raise SystemExit("--limit must be at least 1")
+        questions = questions[:args.limit]
     if args.reps < 1:
         raise SystemExit("--reps must be at least 1")
 
@@ -140,6 +145,7 @@ def main() -> int:
         "reps": args.reps,
         "seed": args.seed,
         "split": args.split,
+        "limit": args.limit,
         "model": args.model_label,
         "systemMode": args.system_mode,
         "contextPolicy": args.context_policy,
