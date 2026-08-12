@@ -132,7 +132,13 @@ powershell -File eval\run-eval.ps1 -Label official -Reps 1 -SetFile official-eva
 powershell -File eval\run-eval.ps1 -Label official-air -Reps 1 -SetFile official-eval.json
 # 키워드 미매칭 갭 — 에이전트를 ROUTER_FALLBACK=embedding 또는 ai 로 기동 후
 powershell -File eval\run-eval.ps1 -Label gap-embedding-air -Reps 1 -SetFile keyword-gap-eval.json
+# 구형 평면 배열 결과를 구조화 스키마로 정규화
+python3 eval/normalize_legacy_results.py --in-file eval/results/baseline.json --out-file eval/results/baseline-fixed.json --dataset eval/eval-set.json --label baseline-fixed
 ```
+
+`eval/run-full-eval.py`는 새 측정값을 처음부터 `metadata`/`summary`/`rows` 구조로 저장합니다.
+예전 `baseline.json`, `after.json` 같은 평면 배열 결과는 `normalize_legacy_results.py` 또는
+`eval/rescore.ps1`를 통해 같은 스키마로 다시 저장해 비교합니다.
 
 ## 7. 의미 기반 폴백 — 90%대 재현
 

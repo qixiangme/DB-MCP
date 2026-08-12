@@ -291,6 +291,14 @@ curl -s http://localhost:8080/api/tools
 curl -s -X POST http://localhost:8081/admin/ingest
 ```
 
+응답에는 답변과 함께 라우팅 결과(`routes`), 호출된 MCP 도구(`toolCalls`),
+사용한 컨텍스트 출처(`contextSources`), 지연 시간(`latencyMs`)이 포함되어
+시스템의 판단 과정을 투명하게 확인할 수 있습니다.
+
+구형 벤치마크 결과가 평면 배열 포맷이면 `python3 eval/normalize_legacy_results.py` 또는
+`powershell -File eval\rescore.ps1`로 `metadata`/`summary`/`rows` 구조의 결과 파일로
+정규화한 뒤 비교합니다.
+
 ## 테스트
 
 ```bash
