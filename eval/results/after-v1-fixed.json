@@ -1,266 +1,518 @@
-﻿[
-    {
-        "rep":  1,
-        "id":  "V1",
-        "question":  "MCP가 뭐야?",
-        "expectedRoute":  "VECTOR",
-        "actualRoutes":  "VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  27865,
-        "answer":  "MCP는 리원에이스의 도구 선택 규칙 기반 라우터입니다. LLM 함수 호출이 아니라 규칙에 따라 라우팅하며, 집계·수치 질문은 run_sql, 개념·설명 질문은 vector\\_search, 개체 간 관계 질문은 kg\\_search로 결정적으로 라우팅합니다.\n\n출처: mcp-overview.md"
+{
+  "metadata": {
+    "createdAt": "2026-08-12T19:05:30.497066+00:00",
+    "commit": "a5bbaf5bfbcf4ddeb5f3545a7f4037fe410d476e",
+    "branch": "benchmark/result-schema-parity",
+    "dirty": true,
+    "dataset": "eval/eval-set.json",
+    "sourceFile": "eval/results/after.json",
+    "sourceFormat": "legacy-flat-rows",
+    "label": "after-v1-fixed"
+  },
+  "summary": {
+    "answerAccuracyPct": 62.5,
+    "routeAccuracyPct": 75.0,
+    "answerCorrect": 15,
+    "routeCorrect": 18,
+    "total": 24,
+    "errors": 0,
+    "averageLatencyMs": 21019,
+    "byExpectedRoute": {
+      "SQL": {
+        "answerAccuracyPct": 40.0,
+        "routeAccuracyPct": 60.0,
+        "count": 10
+      },
+      "VECTOR": {
+        "answerAccuracyPct": 100.0,
+        "routeAccuracyPct": 100.0,
+        "count": 8
+      },
+      "GRAPH": {
+        "answerAccuracyPct": 50.0,
+        "routeAccuracyPct": 66.7,
+        "count": 6
+      }
     },
-    {
-        "rep":  1,
-        "id":  "V2",
-        "question":  "TACC가 뭔지 설명해줘",
-        "expectedRoute":  "VECTOR",
-        "actualRoutes":  "VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  true,
-        "latencyMs":  18828,
-        "answer":  "TACC는 선별적 컨텍스트 큐레이션(Selective Context Curation)이라는 설계 원칙을 의미합니다. 모델 특성과 과업 유형에 따라 컨텍스트를 선택적으로 구성하여, 과도한 컨텍스트로 인해 정확도가 하락하는 것을 방지하기 위한 전략입니다."
-    },
-    {
-        "rep":  1,
-        "id":  "V3",
-        "question":  "pgvector의 장점을 설명해줘",
-        "expectedRoute":  "VECTOR",
-        "actualRoutes":  "VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  22686,
-        "answer":  "pgvector는 LLM의 함수 호출이 아니라 규칙 기반 라우터가 수행합니다. 집계·수치 질문은 run_sql, 개념·설명 질문은 vector\\_search, 개체 간 관계 질문은 kg\\_search로 결정적으로 라우팅되며, 복합 질문은 여러 도구를 병렬 호출(MCP Parallel 패턴)한 뒤 결과를 통합합니다. 이는 소형 모델의 불안정한 도구 선택 능력에 의존하지 않기 위한 설계입니다."
-    },
-    {
-        "rep":  1,
-        "id":  "V4",
-        "question":  "Lost in the Middle 문제가 뭐야?",
-        "expectedRoute":  "VECTOR",
-        "actualRoutes":  "VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  true,
-        "latencyMs":  16908,
-        "answer":  "Lost in the middle 문제는 언어 모델이 긴 컨텍스트의 중간에 위치한 정보를 잘 활용하지 못한다는 연구 결과에 따라, 검색된 문서를 가장 관련도 높은 문서를 맨 앞과 맨 뒤에 배치하는 전략이 효과적이다."
-    },
-    {
-        "rep":  1,
-        "id":  "S1",
-        "question":  "플랫폼팀 직원의 평균 급여는 얼마야?",
-        "expectedRoute":  "SQL",
-        "actualRoutes":  "SQL",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  26100,
-        "answer":  "제공된 데이터에서 찾을 수 없습니다."
-    },
-    {
-        "rep":  1,
-        "id":  "S2",
-        "question":  "직원은 총 몇 명이야?",
-        "expectedRoute":  "SQL",
-        "actualRoutes":  "SQL",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  12024,
-        "answer":  "직원은 총 2명입니다.\n출처: sql"
-    },
-    {
-        "rep":  1,
-        "id":  "S3",
-        "question":  "가장 비싼 제품은 뭐야?",
-        "expectedRoute":  "SQL",
-        "actualRoutes":  "SQL+VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  19129,
-        "answer":  "제공된 데이터에서 찾을 수 없습니다."
-    },
-    {
-        "rep":  1,
-        "id":  "S4",
-        "question":  "AI연구소 직원은 몇 명이야?",
-        "expectedRoute":  "SQL",
-        "actualRoutes":  "SQL",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  19868,
-        "answer":  "제공된 데이터에서 찾을 수 없습니다."
-    },
-    {
-        "rep":  1,
-        "id":  "S5",
-        "question":  "재고가 가장 많은 제품은 뭐야?",
-        "expectedRoute":  "SQL",
-        "actualRoutes":  "SQL+VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  18415,
-        "answer":  "제공된 데이터에서 찾을 수 없습니다."
-    },
-    {
-        "rep":  1,
-        "id":  "G1",
-        "question":  "air는 누가 개발했어?",
-        "expectedRoute":  "GRAPH",
-        "actualRoutes":  "GRAPH",
-        "routeCorrect":  true,
-        "answerCorrect":  true,
-        "latencyMs":  4125,
-        "answer":  "리원에이스가 air를 개발했습니다.\n출처: knowledge-graph"
-    },
-    {
-        "rep":  1,
-        "id":  "G2",
-        "question":  "MCP 개발사는 어디야?",
-        "expectedRoute":  "GRAPH",
-        "actualRoutes":  "GRAPH",
-        "routeCorrect":  true,
-        "answerCorrect":  true,
-        "latencyMs":  4192,
-        "answer":  "MCP 개발사는 Anthropic입니다.\n출처: knowledge-graph"
-    },
-    {
-        "rep":  1,
-        "id":  "G3",
-        "question":  "air의 라이선스는 뭐야?",
-        "expectedRoute":  "GRAPH",
-        "actualRoutes":  "GRAPH+VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  true,
-        "latencyMs":  12761,
-        "answer":  "air는 Apache-2.0 라이선스를 사용합니다.\n"
-    },
-    {
-        "rep":  2,
-        "id":  "V1",
-        "question":  "MCP가 뭐야?",
-        "expectedRoute":  "VECTOR",
-        "actualRoutes":  "VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  14846,
-        "answer":  "MCP는 리원에이스의 도구 선택 규칙 기반 라우터입니다. LLM 함수 호출이 아닌 규칙 기반으로 라우팅하며, 집계·수치 질문은 run_sql, 개념·설명 질문은 vector\\_search, 개체 간 관계 질문은 kg\\_search로 결정적으로 라우팅합니다.\n\n출처: mcp-overview.md"
-    },
-    {
-        "rep":  2,
-        "id":  "V2",
-        "question":  "TACC가 뭔지 설명해줘",
-        "expectedRoute":  "VECTOR",
-        "actualRoutes":  "VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  true,
-        "latencyMs":  15765,
-        "answer":  "TACC는 선별적 컨텍스트 큐레이션이라는 설계 원칙을 의미합니다. 모델 특성과 과업 유형에 따라 컨텍스트를 선택적으로 구성하여, 과도한 컨텍스트는 오히려 정확도를 떨어뜨리는 것을 방지하는 데 목적이 있습니다."
-    },
-    {
-        "rep":  2,
-        "id":  "V3",
-        "question":  "pgvector의 장점을 설명해줘",
-        "expectedRoute":  "VECTOR",
-        "actualRoutes":  "VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  27167,
-        "answer":  "pgvector는 LLM의 함수 호출이 아니라 규칙 기반 라우터가 수행하며, 집계·수치 질문은 run_sql, 개념·설명 질문은 vector_search, 개체 간 관계 질문은 kg_search로 결정적으로 라우팅됩니다. 복합 질문은 여러 도구를 병렬 호출(MCP Parallel 패턴)한 뒤 결과를 통합합니다. 이는 소형 모델의 불안정한 도구 선택 능력에 의존하지 않기 위한 설계입니다.\n\n출처: routing-policy.md"
-    },
-    {
-        "rep":  2,
-        "id":  "V4",
-        "question":  "Lost in the Middle 문제가 뭐야?",
-        "expectedRoute":  "VECTOR",
-        "actualRoutes":  "VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  true,
-        "latencyMs":  18342,
-        "answer":  "Lost in the middle 문제는 언어 모델이 긴 컨텍스트의 중간에 위치한 정보를 잘 활용하지 못한다는 연구 결과입니다. 따라서 검색된 문서를 가장 관련도 높은 문서를 맨 앞과 맨 뒤에 배치하는 전략이 효과적이라고 합니다."
-    },
-    {
-        "rep":  2,
-        "id":  "S1",
-        "question":  "플랫폼팀 직원의 평균 급여는 얼마야?",
-        "expectedRoute":  "SQL",
-        "actualRoutes":  "SQL",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  29003,
-        "answer":  "제공된 데이터에서 찾을 수 없습니다."
-    },
-    {
-        "rep":  2,
-        "id":  "S2",
-        "question":  "직원은 총 몇 명이야?",
-        "expectedRoute":  "SQL",
-        "actualRoutes":  "SQL",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  14026,
-        "answer":  "직원은 총 2명입니다."
-    },
-    {
-        "rep":  2,
-        "id":  "S3",
-        "question":  "가장 비싼 제품은 뭐야?",
-        "expectedRoute":  "SQL",
-        "actualRoutes":  "SQL+VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  18676,
-        "answer":  "제공된 데이터에서 찾을 수 없습니다."
-    },
-    {
-        "rep":  2,
-        "id":  "S4",
-        "question":  "AI연구소 직원은 몇 명이야?",
-        "expectedRoute":  "SQL",
-        "actualRoutes":  "SQL",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  19642,
-        "answer":  "제공된 데이터에서 찾을 수 없습니다."
-    },
-    {
-        "rep":  2,
-        "id":  "S5",
-        "question":  "재고가 가장 많은 제품은 뭐야?",
-        "expectedRoute":  "SQL",
-        "actualRoutes":  "SQL+VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  20063,
-        "answer":  "제공된 데이터에서 찾을 수 없습니다."
-    },
-    {
-        "rep":  2,
-        "id":  "G1",
-        "question":  "air는 누가 개발했어?",
-        "expectedRoute":  "GRAPH",
-        "actualRoutes":  "GRAPH",
-        "routeCorrect":  true,
-        "answerCorrect":  true,
-        "latencyMs":  4287,
-        "answer":  "리원에이스가 air를 개발했습니다.\n출처: knowledge-graph"
-    },
-    {
-        "rep":  2,
-        "id":  "G2",
-        "question":  "MCP 개발사는 어디야?",
-        "expectedRoute":  "GRAPH",
-        "actualRoutes":  "GRAPH",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  3438,
-        "answer":  "제공된 데이터에서 찾을 수 없습니다."
-    },
-    {
-        "rep":  2,
-        "id":  "G3",
-        "question":  "air의 라이선스는 뭐야?",
-        "expectedRoute":  "GRAPH",
-        "actualRoutes":  "GRAPH+VECTOR",
-        "routeCorrect":  true,
-        "answerCorrect":  false,
-        "latencyMs":  131897,
-        "answer":  "제공된 데이터에서 찾을 수 없습니다."
+    "outcomes": {
+      "answer-only": 6,
+      "pass": 12,
+      "route-and-answer": 3,
+      "route-only": 3
     }
-]
+  },
+  "rows": [
+    {
+      "rep": 1,
+      "id": "V1",
+      "question": "MCP가 뭐야?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "표준",
+        "프로토콜",
+        "Anthropic"
+      ],
+      "latencyMs": 24908,
+      "wallMs": 24908,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "MCP는 Anthropic이 개발한 개방형 표준으로, AI 모델과 외부 데이터 소스·도구를 연결하는 규격화된 프로토콜입니다. USB-C처럼 하나의 표준 커넥터 역할을 하며, 서버가 노출한 도구(Tool)·리소스(Resource)·프롬프트(Prompt)를 어떤 MCP 클라이언트든 동일하게 사용할 수 있도록 합니다.\n\n[출처: mcp-overview.md]",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V2",
+      "question": "TACC가 뭔지 설명해줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "컨텍스트",
+        "선별"
+      ],
+      "latencyMs": 26103,
+      "wallMs": 26103,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "TACC는 선별적 컨텍스트 큐레이션 원칙입니다. MCP(선별적 컨텍스트 큐레이션)는 모델 특성과 과업 유형에 따라 컨텍스트를 선택적으로 구성해야 한다는 것입니다. 기존 RAG 파이프라인은 9개의 튜닝 파라미터와 3개의 장애 지점을 관리해야 했지만, TACC 기반 파이프라인은 튜닝 없이도 높은 정확도를 달성할 수 있게 만들었습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V3",
+      "question": "pgvector의 장점을 설명해줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "PostgreSQL",
+        "벡터"
+      ],
+      "latencyMs": 21380,
+      "wallMs": 21380,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "pgvector는 PostgreSQL에 벡터 자료형과 유사도 검색을 추가하는 오픈소스 확장으로, 기존 PostgreSQL 운영 역량으로 벡터 검색 서비스를 제공하여 장애 지점과 운영 부담을 줄일 수 있습니다. HNSW와 IVFFlat 인덱스를 지원하며, 코사인 거리, 내적, L2 거리를 활용한 연산자를 제공합니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V4",
+      "question": "Lost in the Middle 문제가 뭐야?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "중간",
+        "컨텍스트"
+      ],
+      "latencyMs": 18382,
+      "wallMs": 18382,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "Lost in the middle 문제는 언어모델이 긴 컨텍스트에서 중간에 위치한 정보를 잘 활용하지 못한다는 연구 결과입니다. 따라서 검색된 문서를 가장 관련도 높은 문서를 맨 앞과 맨 뒤에 배치하는 전략이 효과적이라고 합니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "S1",
+      "question": "플랫폼팀 직원의 평균 급여는 얼마야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "6500"
+      ],
+      "latencyMs": 16366,
+      "wallMs": 16366,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "플랫폼팀 직원의 평균 급여는 6500.00입니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "S2",
+      "question": "직원은 총 몇 명이야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 13430,
+      "wallMs": 13430,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "S3",
+      "question": "가장 비싼 제품은 뭐야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL+VECTOR"
+      ],
+      "routeCorrect": false,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 20071,
+      "wallMs": 20071,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "S4",
+      "question": "AI연구소 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 11631,
+      "wallMs": 11631,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "S5",
+      "question": "재고가 가장 많은 제품은 뭐야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL+VECTOR"
+      ],
+      "routeCorrect": false,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "Kubernetes"
+      ],
+      "latencyMs": 22049,
+      "wallMs": 22049,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "SQL: SELECT name FROM products ORDER BY stock DESC LIMIT 1\n조회 결과: {\"executedSql\":\"SELECT name FROM productsORDERBYstockDESCLIMIT1\",\"rows\":[\n\"Kubernetes 운영 지원\"]}",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G1",
+      "question": "air는 누가 개발했어?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "리원에이스"
+      ],
+      "latencyMs": 5670,
+      "wallMs": 5670,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "리원에이스가 air를 개발했습니다.\n출처: knowledge-graph",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G2",
+      "question": "MCP 개발사는 어디야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 4967,
+      "wallMs": 4967,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G3",
+      "question": "air의 라이선스는 뭐야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH+VECTOR"
+      ],
+      "routeCorrect": false,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "Apache"
+      ],
+      "latencyMs": 124900,
+      "wallMs": 124900,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "리원에이스의 라이선스는 Apache-2.0입니다.\n출처: knowledge-graph",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "V1",
+      "question": "MCP가 뭐야?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "표준",
+        "프로토콜",
+        "Anthropic"
+      ],
+      "latencyMs": 18066,
+      "wallMs": 18066,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "MCP는 Anthropic이 개발한 개방형 표준으로, AI 모델과 외부 데이터 소스·도구를 연결하는 프로토콜입니다. USB-C처럼 하나의 표준 커넥터 역할을 하며, 서버가 노출한 도구(Tool)·리소스(Resource)·프롬프트(Prompt)를 어떤 MCP 클라이언트든 동일하게 사용할 수 있도록 합니다.\n\n[출처: mcp-overview.md]",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "V2",
+      "question": "TACC가 뭔지 설명해줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "컨텍스트",
+        "선별"
+      ],
+      "latencyMs": 22057,
+      "wallMs": 22057,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "TACC는 선별적 컨텍스트 큐레이션 원칙입니다. MCP 컨텍스트를 무조건 많이 제공하는 것이 아니라, 모델 특성과 과업 유형에 따라 선별적으로 구성해야 한다는 것입니다. 전현우·김태성·강현(2026)의 실험에서 소형 언어모델은 컨텍스트가 과도하면 오히려 정확도가 하락하는 것을 실증했습니다. 핵심 전략은 과업 유형별 컨텍스트 예산 할당, 관련도 기반 선별, 그리고 중요한 정보를 프롬프트의 처음과 끝에 배치하는 것입니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "V3",
+      "question": "pgvector의 장점을 설명해줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "PostgreSQL",
+        "벡터"
+      ],
+      "latencyMs": 26544,
+      "wallMs": 26544,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "pgvector는 PostgreSQL에 벡터 자료형과 유사도 검색을 추가하는 오픈소스 확장으로, HNSW와 IVFFlat 인덱스를 지원하며 코사인 거리, 내적, L2 거리를 제공합니다. 기존 PostgreSQL 운영 역량으로 벡터 검색 서비스를 제공하여 장애 지점 및 운영 부담을 줄일 수 있습니다.\n\n**pgvector의 주요 장점:**\n\n*   **기존 PostgreSQL 활용:** 별도의 벡터 전용 DB 없이 기존 PostgreSQL 운영 역량을 활용할 수 있어 장애 지점과 운영 부담을 줄입니다.\n*   **벡터 검색 서비스 제공:**  벡터 자료형과 유사도 검색을 통해 효율적인 벡터 검색 서비스를 제공합니다.\n*   **다양한 연산자 지원:** 코사인 거리, 내적, L2 거리를 지원하여 다양한 분석 및 검색이 가능합니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "V4",
+      "question": "Lost in the Middle 문제가 뭐야?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "중간",
+        "컨텍스트"
+      ],
+      "latencyMs": 14890,
+      "wallMs": 14890,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "Lost in the middle 문제는 언어모델이 긴 컨텍스트에서 중간에 위치한 정보를 잘 활용하지 못한다는 연구 결과입니다. 따라서 검색된 문서를 가장 관련도 높은 문서를 맨 앞과 맨 뒤에 배치하는 전략이 효과적이라는 것을 보여줍니다.\n\n출처: lost-in-the-middle.md",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "S1",
+      "question": "플랫폼팀 직원의 평균 급여는 얼마야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "6500"
+      ],
+      "latencyMs": 13117,
+      "wallMs": 13117,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "플랫폼팀 직원의 평균 급여는 6500.00입니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "S2",
+      "question": "직원은 총 몇 명이야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 11104,
+      "wallMs": 11104,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "S3",
+      "question": "가장 비싼 제품은 뭐야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL+VECTOR"
+      ],
+      "routeCorrect": false,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 20006,
+      "wallMs": 20006,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "S4",
+      "question": "AI연구소 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 13072,
+      "wallMs": 13072,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "S5",
+      "question": "재고가 가장 많은 제품은 뭐야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL+VECTOR"
+      ],
+      "routeCorrect": false,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "Kubernetes"
+      ],
+      "latencyMs": 21791,
+      "wallMs": 21791,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "SQL: SELECT name FROM products ORDER BY stock DESC LIMIT 1\n조회 결과: {\"executedSql\":\"SELECT name FROM products ORDER BY stock DESC LIMIT 1\",\"rows\":[{\"name\": \"Kubernetes 운영 지원\"}]}",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "G1",
+      "question": "air는 누가 개발했어?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "리원에이스"
+      ],
+      "latencyMs": 7161,
+      "wallMs": 7161,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "리원에이스는 apache-2.0 라이선스를 사용하여 air를 개발했습니다.\n출처: knowledge-graph",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "G2",
+      "question": "MCP 개발사는 어디야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 4520,
+      "wallMs": 4520,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 2,
+      "id": "G3",
+      "question": "air의 라이선스는 뭐야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH+VECTOR"
+      ],
+      "routeCorrect": false,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "latencyMs": 22263,
+      "wallMs": 22263,
+      "toolCalls": [],
+      "contextSources": [],
+      "answer": "리원에이스가 개발한 오픈소스 MCP 서버 프레임워크입니다. MCP SDK를 직접 사용할 때의 보일러플레이트를 대폭 줄여주며, 보안·캐싱·재시도 등 운영에 필요한 기능을 플러그인으로 제공합니다.\n\n출처: air-framework.md",
+      "error": null
+    }
+  ]
+}
