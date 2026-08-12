@@ -9,9 +9,10 @@ import subprocess
 import time
 import urllib.error
 import urllib.request
-from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
+
+from result_report import build_report
 
 
 def git_value(*args: str) -> str:
@@ -84,38 +85,8 @@ def main() -> int:
                 flush=True,
             )
 
-    total = len(rows)
-    answer_correct = sum(bool(row["answerCorrect"]) for row in rows)
-    route_correct = sum(bool(row["routeCorrect"]) for row in rows)
-    valid_latencies = [int(row["latencyMs"]) for row in rows if row["error"] is None]
-    by_route = {}
-    for route in ("SQL", "VECTOR", "GRAPH"):
-        selected = [row for row in rows if row["expectedRoute"] == route]
-        by_route[route] = {
-            "answerAccuracyPct": round(100 * sum(bool(row["answerCorrect"]) for row in selected) / len(selected), 1),
-            "routeAccuracyPct": round(100 * sum(bool(row["routeCorrect"]) for row in selected) / len(selected), 1),
-            "count": len(selected),
-        }
-    failure_types = Counter(
-        "request-error" if row["error"] else
-        "route-and-answer" if not row["routeCorrect"] and not row["answerCorrect"] else
-        "route-only" if not row["routeCorrect"] else
-        "answer-only" if not row["answerCorrect"] else "pass"
-        for row in rows
-    )
-    summary = {
-        "answerAccuracyPct": round(100 * answer_correct / total, 1),
-        "routeAccuracyPct": round(100 * route_correct / total, 1),
-        "answerCorrect": answer_correct,
-        "routeCorrect": route_correct,
-        "total": total,
-        "errors": sum(row["error"] is not None for row in rows),
-        "averageLatencyMs": round(sum(valid_latencies) / len(valid_latencies)) if valid_latencies else None,
-        "byExpectedRoute": by_route,
-        "outcomes": dict(sorted(failure_types.items())),
-    }
-    report = {
-        "metadata": {
+    report = build_report(
+        {
             "createdAt": datetime.now(timezone.utc).isoformat(),
             "commit": git_value("rev-parse", "HEAD"),
             "branch": git_value("branch", "--show-current"),
@@ -127,9 +98,9 @@ def main() -> int:
             "router": args.router_label,
             "mcpServer": args.mcp_label,
         },
-        "summary": summary,
-        "rows": rows,
-    }
+        rows,
+    )
+    summary = report["summary"]
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
