@@ -48,6 +48,18 @@ def stop(process: subprocess.Popen[str]) -> None:
         process.wait(timeout=5)
 
 
+def wait_until_closed(base_url: str, timeout: int = 15) -> None:
+    """Prevent a just-stopped variant from satisfying the next variant's readiness probe."""
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        try:
+            urllib.request.urlopen(f"{base_url}/api/tools", timeout=1)
+        except (urllib.error.URLError, TimeoutError):
+            return
+        time.sleep(0.25)
+    raise TimeoutError("previous agent remained reachable after shutdown")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--dataset", required=True)
@@ -69,6 +81,7 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
     reports: dict[str, str] = {}
     for variant in chosen:
+        wait_until_closed(args.base_url)
         mode, policy = VARIANTS[variant]
         env = os.environ.copy()
         env.update({

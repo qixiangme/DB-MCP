@@ -5,8 +5,10 @@ import com.riwonace.agent.context.ContextCurator
 import com.riwonace.agent.context.ContextItem
 import com.riwonace.agent.mcp.DataToolGateway
 import com.riwonace.agent.router.Route
+import com.riwonace.agent.router.RouteQuestionProjector
 import com.riwonace.agent.router.RuleBasedRouter
 import com.riwonace.agent.sql.FewShotSelector
+import com.riwonace.agent.sql.PostgresSqlNormalizer
 import com.riwonace.agent.sql.SchemaLinker
 import com.riwonace.agent.sql.SchemaPromptFormatter
 import org.slf4j.LoggerFactory
@@ -59,6 +61,8 @@ class AgentService(
     private val fewShotSelector: FewShotSelector,
     private val schemaLinker: SchemaLinker,
     private val schemaPromptFormatter: SchemaPromptFormatter,
+    private val routeQuestionProjector: RouteQuestionProjector,
+    private val postgresSqlNormalizer: PostgresSqlNormalizer,
     @Value("\${agent.evaluation.mode:OURS}") modeName: String,
     @Value("\${agent.evaluation.include-evidence:false}") private val includeEvidence: Boolean,
 ) {
@@ -119,7 +123,11 @@ class AgentService(
         val toolCalls = collected.flatMap { it.toolCalls }
 
         val curated = curator.curate(question, items, routes)
-        val answer = generateAnswer(question, curated)
+        val answer = if (routes.size > 1) {
+            generateComposedAnswer(question, curated, routes)
+        } else {
+            generateAnswer(question, curated)
+        }
         val failedRoutes = routes.zip(collected).filter { it.second.failed }.map { it.first }
         val contextChars = curated.sumOf { it.text.length }
         val responseMode = when {
@@ -198,10 +206,12 @@ class AgentService(
     private fun generateSql(question: String, previousAttempt: String? = null, error: String? = null): String {
         val rawSchema = gateway.schema()
         val schema = schemaPromptFormatter.format(rawSchema)
+        val sqlQuestion = routeQuestionProjector.project(question, Route.SQL)
+        if (sqlQuestion != question) log.info("SQL 하위 과업 분리: {} → {}", question, sqlQuestion)
 
         // 1B급 모델은 서로 다른 SQL 패턴을 섞는 경향이 있어 가장 가까운 예시 하나만 제공한다.
         val selectedExamples = if (evaluationMode == EvaluationMode.OURS) {
-            fewShotSelector.selectExamples(question, topK = 1)
+            fewShotSelector.selectExamples(sqlQuestion, topK = 1)
         } else {
             emptyList()
         }
@@ -210,7 +220,7 @@ class AgentService(
 
         // SchemaGraphSQL: 질문에서 스키마 값 매칭
         val schemaHints = if (evaluationMode == EvaluationMode.OURS) {
-            schemaLinker.linkEntities(rawSchema, question)
+            schemaLinker.linkEntities(rawSchema, sqlQuestion)
         } else {
             emptyList()
         }
@@ -236,15 +246,15 @@ class AgentService(
                 "스키마:\n$schema$hintBlock\n\n" +
                     "$examplesBlock\n\n" +
                     retryBlock +
-                    "질문: $question\nSQL:",
+                    "질문: $sqlQuestion\nSQL:",
             )
             .call()
             .content()
             .orEmpty()
-        val sql = raw
+        val sql = postgresSqlNormalizer.normalize(raw
             .replace(Regex("```(sql)?", RegexOption.IGNORE_CASE), "")
             .trim()
-            .removeSuffix(";")
+            .removeSuffix(";"))
         log.info("NL2SQL 생성 결과: {}", sql)
         return sql
     }
@@ -347,17 +357,57 @@ class AgentService(
 
         return chatClient.prompt()
             .system(
-                "너는 리원에이스의 데이터 플랫폼 AI 비서다. " +
-                    "반드시 아래 제공된 컨텍스트에 근거해서만 한국어로 답하고, " +
-                    "질문의 각 요구사항을 독립적으로 확인해 근거가 있는 항목은 반드시 답한다. " +
-                    "일부 항목의 근거가 없더라도 전체 답변을 포기하지 말고 그 항목만 찾을 수 없다고 표시한다. " +
-                    "컨텍스트에 전혀 근거가 없을 때만 '제공된 데이터에서 찾을 수 없습니다'라고 답한다. " +
-                    "답변 끝에 사용한 출처를 표기한다.",
+                "너는 제공된 근거에서 값을 추출하는 데이터 비서다. " +
+                    "질문의 요구사항마다 근거에 적힌 값이나 사실을 짧은 한국어 문장으로 답한다. " +
+                    "한 요구의 근거가 없더라도 다른 요구의 확인된 답은 빠뜨리지 않는다. " +
+                    "근거에 없는 사실은 추측하지 않고 해당 항목만 정보 부족으로 표시한다. " +
+                    "마지막에 실제 사용한 [출처] 이름을 적는다.",
             )
-            .user("컨텍스트:\n$contextBlock\n\n질문: $question")
+            .user("근거:\n$contextBlock\n\n위 근거에서 다음 질문의 항목별 답을 추출하라.\n질문: $question\n답:")
             .call()
             .content()
             .orEmpty()
+    }
+
+    /**
+     * 작은 모델이 서로 다른 데이터 형태의 요구 중 하나를 누락하지 않도록 도구 경계별로 답을 병렬 생성한다.
+     * 각 호출에는 해당 도구 근거만 노출하므로 한 경로의 잡음이나 실패가 다른 경로의 확인된 답을 지우지 않는다.
+     */
+    private fun generateComposedAnswer(
+        question: String,
+        context: List<ContextItem>,
+        routes: List<Route>,
+    ): String {
+        val futures = routes.mapNotNull { route ->
+            val routeContext = context.filter { routeForSource(it.source) == route }
+            if (routeContext.isEmpty()) null else route to CompletableFuture.supplyAsync(
+                { generateRouteAnswer(question, route, routeContext) },
+                executor,
+            )
+        }
+        if (futures.isEmpty()) return generateAnswer(question, context)
+        return futures.joinToString("\n") { (route, future) -> "- ${route.name}: ${future.join().trim()}" }
+    }
+
+    private fun generateRouteAnswer(question: String, route: Route, context: List<ContextItem>): String {
+        val contextBlock = context.joinToString("\n\n") { "[출처: ${it.source}]\n${it.text}" }
+        val routeQuestion = routeQuestionProjector.project(question, route)
+        return chatClient.prompt()
+            .system(
+                "너는 ${route.name} 근거에서 확인 가능한 질문 항목만 추출하는 데이터 비서다. " +
+                    "제공된 근거로 답할 수 있는 값이나 사실만 짧게 답하고 다른 데이터 도구가 담당할 항목은 생략한다. " +
+                    "근거에 없는 사실은 추측하지 않는다. 마지막에 실제 사용한 [출처] 이름을 적는다.",
+            )
+            .user("근거:\n$contextBlock\n\n질문: $routeQuestion\n${route.name} 근거로 확인되는 답:")
+            .call()
+            .content()
+            .orEmpty()
+    }
+
+    private fun routeForSource(source: String): Route = when (source) {
+        "sql" -> Route.SQL
+        "knowledge-graph" -> Route.GRAPH
+        else -> Route.VECTOR
     }
 
     /** 동일 MCP 계약만 제공하고 별도 규칙·예시 없이 모델이 필요한 경로 집합을 선택하는 기준선. */

@@ -29,6 +29,15 @@ class ClaimSupportTest(unittest.TestCase):
         result = evaluate_claim_support("총 8명", "몇 명?", None)
         self.assertEqual(result["status"], "UNASSESSED")
 
+    def test_selected_source_identifier_supports_citation(self) -> None:
+        result = evaluate_claim_support(
+            "Docker가 필요합니다. [DOC-011.md]",
+            "설치 도구를 알려줘",
+            [{"source": "DOC-011.md", "text": "Docker가 필요합니다."}],
+        )
+        self.assertEqual(result["status"], "SUPPORTED")
+        self.assertEqual(result["supported"], ["DOC-011"])
+
 
 if __name__ == "__main__":
     unittest.main()

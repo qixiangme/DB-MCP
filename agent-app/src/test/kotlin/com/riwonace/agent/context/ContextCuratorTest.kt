@@ -124,6 +124,22 @@ class ContextCuratorTest {
     }
 
     @Test
+    fun `COVERAGE 복합 질문은 경로별 최고 효용 근거 하나로 잡음을 제한한다`() {
+        val coverage = ContextCurator(1000, "COVERAGE")
+        val selected = coverage.curate(
+            "Product-C1 가격과 설치 도구",
+            listOf(
+                ContextItem("sql", "Product-C1 price_monthly=350", 1.0),
+                ContextItem("DOC-install", "Product-C1 설치에는 Docker가 필요하다", 0.9),
+                ContextItem("DOC-proposal", "Product-C1 제안 비용은 8000이다", 0.8),
+            ),
+            listOf(Route.SQL, Route.VECTOR),
+        )
+
+        assertEquals(listOf("sql", "DOC-install"), selected.map { it.source })
+    }
+
+    @Test
     fun `알 수 없는 평가 정책은 시작 시 거부한다`() {
         kotlin.test.assertFailsWith<IllegalArgumentException> { ContextCurator(300, "invented") }
     }

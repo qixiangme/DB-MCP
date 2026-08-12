@@ -122,6 +122,7 @@ def main() -> int:
                 "contextChars": response.get("contextChars", 0),
                 "estimatedContextTokens": response.get("estimatedContextTokens", 0),
                 "claimSupport": claim_support,
+                "selectedEvidence": response.get("selectedEvidence"),
                 "answer": answer,
                 "error": error,
             }

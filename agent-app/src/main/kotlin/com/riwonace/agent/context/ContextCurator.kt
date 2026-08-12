@@ -68,6 +68,8 @@ class ContextCurator(
     /**
      * 별도 모델과 튜닝 계수 없이 marginal evidence utility를 계산한다.
      * 각 항은 [0,1] 범위이며 검증되지 않은 confidence나 answerability 점수는 사용하지 않는다.
+     * 복합 질문에서는 경로마다 가장 효용이 큰 근거 하나를 먼저 선택해 한 도구의 유사 문서가
+     * 다른 도구 근거의 예산을 잠식하거나 소형 모델을 교란하지 않게 한다.
      */
     private fun coverage(
         question: String,
@@ -80,9 +82,15 @@ class ContextCurator(
         var used = 0
         val questionTerms = terms(question)
         val coveredTerms = mutableSetOf<String>()
+        val representedRoutes = mutableSetOf<Route>()
 
         while (remaining.isNotEmpty() && used < budget) {
-            val available = remaining.filter { it.text.length <= budget - used || selected.isEmpty() }
+            val available = remaining.filter { item ->
+                val fits = item.text.length <= budget - used || selected.isEmpty()
+                val candidateRoute = routeForSource(item.source)
+                val respectsCompositionalQuota = routes.size == 1 || candidateRoute !in representedRoutes
+                fits && respectsCompositionalQuota
+            }
             if (available.isEmpty()) break
             val next = available.maxByOrNull { item ->
                 val itemTerms = terms(item.text)
@@ -97,6 +105,7 @@ class ContextCurator(
                 selected += fitted
                 used += fitted.text.length
                 coveredTerms += terms(fitted.text).intersect(questionTerms)
+                representedRoutes += routeForSource(fitted.source)
             }
             remaining.remove(next)
         }
@@ -152,10 +161,23 @@ class ContextCurator(
         else -> 0.0
     }
 
+    private fun routeForSource(source: String): Route = when (source) {
+        "sql" -> Route.SQL
+        "knowledge-graph" -> Route.GRAPH
+        else -> Route.VECTOR
+    }
+
     private fun terms(text: String): Set<String> = TERM_REGEX.findAll(text.lowercase())
-        .map { it.value }
+        .map { normalizeTerm(it.value) }
+        .filter { it.length >= 2 }
         .filterNot { it in STOP_TERMS }
         .toSet()
+
+    /** 가벼운 조사 정규화로 `Product-C1의`와 `Product-C1`, `설치에`와 `설치`를 같은 근거로 본다. */
+    private fun normalizeTerm(term: String): String {
+        val suffix = KOREAN_PARTICLES.firstOrNull { term.length > it.length + 1 && term.endsWith(it) }
+        return if (suffix == null) term else term.dropLast(suffix.length)
+    }
 
     private fun jaccard(left: Set<String>, right: Set<String>): Double {
         if (left.isEmpty() && right.isEmpty()) return 0.0
@@ -167,5 +189,6 @@ class ContextCurator(
         private const val TRUNCATION_MARKER = "\n…(truncated)"
         private val TERM_REGEX = Regex("[가-힣a-z0-9][가-힣a-z0-9_-]{1,}")
         private val STOP_TERMS = setOf("알려줘", "어떻게", "무엇", "관련", "대한", "있는", "중에서")
+        private val KOREAN_PARTICLES = listOf("으로", "에서", "에게", "까지", "부터", "처럼", "보다", "의", "에", "은", "는", "이", "가", "을", "를", "과", "와", "도")
     }
 }

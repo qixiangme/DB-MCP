@@ -42,7 +42,9 @@ def evaluate_claim_support(
         }
 
     evidence_text = "\n".join(
-        str(item.get("text", "")) for item in selected_evidence if isinstance(item, dict)
+        f"{item.get('source', '')}\n{item.get('text', '')}"
+        for item in selected_evidence
+        if isinstance(item, dict)
     )
     evidence_tokens = {_normalize(token) for token in extract_verifiable_tokens(evidence_text)}
     question_tokens = {_normalize(token) for token in extract_verifiable_tokens(question)}
