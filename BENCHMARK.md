@@ -1,7 +1,8 @@
 # 벤치마크 보고서 — 수치로 증명하기
 
 > 측정 환경: Windows 11 노트북(GPU 없음, CPU 추론) · Ollama gemma3:1b(815MB, temperature 0)
-> · nomic-embed-text · PostgreSQL 16 + pgvector(도커) · 채점 = 정답 키워드 포함 여부(자동)
+> · nomic-embed-text · PostgreSQL 16 + pgvector(도커) · 채점 = 문항별 `keywords` 또는
+> `answerRule(anyOf/allOf/minMatches)` 자동 판정
 > 하네스: `eval/run-eval.ps1` (질문 → /api/chat → 답변 정확도·라우팅 적중률·지연시간 기록)
 
 ## 1. 1차: 시드 데이터 12문항 — 개선 전/후

@@ -13,6 +13,8 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
+from answer_rules import grade_answer
+
 
 def git_value(*args: str) -> str:
     try:
@@ -58,8 +60,7 @@ def main() -> int:
 
             answer = str(response.get("answer", ""))
             routes = [str(route) for route in response.get("routes", [])]
-            expected_keywords = [str(keyword) for keyword in item.get("keywords", [])]
-            matched = [keyword for keyword in expected_keywords if keyword.casefold() in answer.casefold()]
+            grading = grade_answer(answer, item)
             row = {
                 "rep": rep,
                 "id": item["id"],
@@ -67,8 +68,7 @@ def main() -> int:
                 "expectedRoute": item["expectedRoute"],
                 "actualRoutes": routes,
                 "routeCorrect": item["expectedRoute"] in routes,
-                "answerCorrect": bool(matched),
-                "matchedKeywords": matched,
+                **grading,
                 "latencyMs": response.get("latencyMs", elapsed),
                 "wallMs": elapsed,
                 "toolCalls": response.get("toolCalls", []),
