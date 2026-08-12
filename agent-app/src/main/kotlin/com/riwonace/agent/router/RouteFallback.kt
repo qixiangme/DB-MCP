@@ -5,5 +5,5 @@ package com.riwonace.agent.router
  * `agent.router.fallback` 값으로 구현체 하나만 활성화된다 (기본은 없음 → VECTOR 기본값 유지).
  */
 fun interface RouteFallback {
-    fun classify(question: String): Route
+    fun classify(question: String): List<Route>
 }

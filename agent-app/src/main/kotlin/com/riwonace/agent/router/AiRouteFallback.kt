@@ -16,7 +16,7 @@ class AiRouteFallback(private val chatClient: ChatClient) : RouteFallback {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    override fun classify(question: String): Route {
+    override fun classify(question: String): List<Route> {
         val raw = try {
             chatClient.prompt()
                 .system(
@@ -41,6 +41,6 @@ class AiRouteFallback(private val chatClient: ChatClient) : RouteFallback {
 
         val resolved = Route.entries.firstOrNull { raw.uppercase().contains(it.name) }
         if (resolved == null) log.warn("AI 라우팅 폴백 출력 파싱 실패, VECTOR로 대체: {}", raw.take(100))
-        return resolved ?: Route.VECTOR
+        return listOf(resolved ?: Route.VECTOR)
     }
 }

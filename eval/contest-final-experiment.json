@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0",
+  "commitPolicy": "run-system-eval refuses dirty tracked worktrees and records the exact HEAD SHA",
+  "model": "gemma3:1b",
+  "embeddingModel": "nomic-embed-text",
+  "databaseSeed": "companyx-dataset-v1.0",
+  "mcpServer": "spring-ai",
+  "temperature": 0.0,
+  "contextWindow": 4096,
+  "repetitions": 3,
+  "shuffleSeed": 20260813,
+  "contextBudgetChars": 2400,
+  "vectorTopK": 4,
+  "primaryComparison": ["VANILLA_MCP/ALL_WITH_HARD_CAP", "OURS/selected-policy"],
+  "negativeControl": "NO_TOOLS",
+  "taccCandidates": ["ALL_WITH_HARD_CAP", "RELEVANCE", "CURRENT", "COVERAGE"],
+  "acceptance": {
+    "overallAndRouteAccuracyRegression": 0,
+    "minimumCompositionalCorrectGain": 1,
+    "minimumContextTokenReductionPctIfAccuracyTied": 20,
+    "maximumP95LatencyRegressionPct": 10,
+    "maximumUnsupportedClaimRegression": 0
+  }
+}

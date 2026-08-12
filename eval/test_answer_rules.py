@@ -39,6 +39,19 @@ class AnswerRuleTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             rule_for_question({"answerRule": {"anyOf": ["A"], "minMatches": 2}})
 
+    def test_every_any_of_group_requires_one_match(self) -> None:
+        question = {
+            "answerRule": {
+                "anyOfGroups": [["350", "삼백오십"], ["Docker", "Helm"]],
+            }
+        }
+        self.assertTrue(grade_answer("월 350원이며 Docker로 설치합니다.", question)["answerCorrect"])
+        self.assertFalse(grade_answer("월 350원입니다.", question)["answerCorrect"])
+
+    def test_empty_any_of_group_is_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            rule_for_question({"answerRule": {"anyOfGroups": [[]]}})
+
     def test_summary_matches_expected_shape(self) -> None:
         rows = [
             {"expectedRoute": "SQL", "answerCorrect": True, "routeCorrect": True, "error": None, "latencyMs": 10},

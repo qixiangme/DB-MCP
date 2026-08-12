@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 
 from normalize_legacy_results import normalize_rows
-from result_report import build_report, repair_mojibake
+from result_report import build_report, percentile, repair_mojibake
 
 
 class ResultReportTest(unittest.TestCase):
@@ -49,6 +49,27 @@ class ResultReportTest(unittest.TestCase):
         self.assertEqual(report["summary"]["outcomes"]["pass"], 1)
         self.assertEqual(report["summary"]["outcomes"]["route-and-answer"], 1)
         self.assertEqual(report["summary"]["outcomes"]["answer-only"], 1)
+
+    def test_percentiles_use_documented_nearest_rank(self) -> None:
+        values = [10, 20, 30, 40, 100]
+        self.assertEqual(percentile(values, 0.50), 30)
+        self.assertEqual(percentile(values, 0.95), 100)
+
+    def test_report_includes_latency_context_and_degraded_modes(self) -> None:
+        report = build_report(
+            {},
+            [{
+                "expectedRoute": "SQL", "routeCorrect": True, "answerCorrect": True,
+                "latencyMs": 25, "wallMs": 30, "contextChars": 400,
+                "estimatedContextTokens": 100, "responseMode": "DEGRADED",
+                "failedRoutes": ["VECTOR"], "error": None,
+            }],
+        )
+        summary = report["summary"]
+        self.assertEqual(summary["latencyMs"]["p95"], 25)
+        self.assertEqual(summary["contextChars"]["mean"], 400)
+        self.assertEqual(summary["responseModes"], {"DEGRADED": 1})
+        self.assertEqual(summary["failedRoutes"], {"VECTOR": 1})
 
 
 if __name__ == "__main__":

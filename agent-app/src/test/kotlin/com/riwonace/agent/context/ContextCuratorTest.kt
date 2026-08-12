@@ -90,4 +90,41 @@ class ContextCuratorTest {
         )
         assertEquals(1, curator.curate(items, listOf(Route.VECTOR)).size)
     }
+
+    @Test
+    fun `ALL 정책은 점수 하한과 중복 제거 없이 검색 순서를 보존한다`() {
+        val all = ContextCurator(300, "ALL_WITH_HARD_CAP")
+        val duplicate = "같은 문서"
+        val selected = all.curate(
+            "질문",
+            listOf(
+                ContextItem("first", duplicate, 0.1),
+                ContextItem("second", duplicate, 0.1),
+            ),
+            listOf(Route.VECTOR),
+        )
+
+        assertEquals(listOf("first", "second"), selected.map { it.source })
+    }
+
+    @Test
+    fun `COVERAGE 정책은 질문 엔티티를 새로 포함하는 근거를 중복 근거보다 우선한다`() {
+        val coverage = ContextCurator(500, "COVERAGE")
+        val selected = coverage.curate(
+            "Product-C1 재시작 절차와 담당 팀",
+            listOf(
+                ContextItem("doc-a", "Product-C1 재시작 절차는 rollout restart다", 0.9),
+                ContextItem("doc-duplicate", "Product-C1 재시작 절차는 rollout restart다", 0.89),
+                ContextItem("knowledge-graph", "Product-C1 담당 팀은 플랫폼팀이다", 0.8),
+            ),
+            listOf(Route.VECTOR, Route.GRAPH),
+        )
+
+        assertEquals(listOf("doc-a", "knowledge-graph"), selected.map { it.source })
+    }
+
+    @Test
+    fun `알 수 없는 평가 정책은 시작 시 거부한다`() {
+        kotlin.test.assertFailsWith<IllegalArgumentException> { ContextCurator(300, "invented") }
+    }
 }

@@ -3,7 +3,7 @@ package com.riwonace.agent.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.riwonace.agent.context.ContextCurator
 import com.riwonace.agent.context.ContextItem
-import com.riwonace.agent.mcp.McpGateway
+import com.riwonace.agent.mcp.DataToolGateway
 import com.riwonace.agent.router.Route
 import com.riwonace.agent.router.RuleBasedRouter
 import com.riwonace.agent.sql.FewShotSelector
@@ -11,6 +11,7 @@ import com.riwonace.agent.sql.SchemaLinker
 import com.riwonace.agent.sql.SchemaPromptFormatter
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import jakarta.annotation.PreDestroy
 import java.util.concurrent.CompletableFuture
@@ -30,8 +31,19 @@ data class AgentAnswer(
     val routes: List<Route>,
     val toolCalls: List<String>,
     val contextSources: List<String>,
+    val failedRoutes: List<Route>,
+    val responseMode: ResponseMode,
+    val contextChars: Int,
+    val estimatedContextTokens: Int,
+    val evaluationMode: EvaluationMode,
+    val selectedEvidence: List<EvidenceTrace>?,
     val latencyMs: Long,
 )
+
+enum class ResponseMode { NORMAL, DEGRADED, FAILED }
+enum class EvaluationMode { NO_TOOLS, VANILLA_MCP, OURS }
+
+data class EvidenceTrace(val source: String, val text: String, val score: Double)
 
 /**
  * 에이전트 오케스트레이터: 라우팅 → MCP 도구 병렬 호출 → TACC 큐레이션 → 답변 생성.
@@ -40,16 +52,19 @@ data class AgentAnswer(
 @Service
 class AgentService(
     private val router: RuleBasedRouter,
-    private val gateway: McpGateway,
+    private val gateway: DataToolGateway,
     private val curator: ContextCurator,
     private val chatClient: ChatClient,
     private val mapper: ObjectMapper,
     private val fewShotSelector: FewShotSelector,
     private val schemaLinker: SchemaLinker,
     private val schemaPromptFormatter: SchemaPromptFormatter,
+    @Value("\${agent.evaluation.mode:OURS}") modeName: String,
+    @Value("\${agent.evaluation.include-evidence:false}") private val includeEvidence: Boolean,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
     private val executor = Executors.newFixedThreadPool(4)
+    private val evaluationMode = EvaluationMode.valueOf(modeName.trim().uppercase())
 
     @PreDestroy
     fun shutdown() {
@@ -69,12 +84,29 @@ class AgentService(
     private data class CollectedContext(
         val items: List<ContextItem>,
         val toolCalls: List<String>,
+        val failed: Boolean,
     )
 
     /** 질문을 라우팅하고 근거를 수집·선별한 뒤 출처가 포함된 답변을 생성한다. */
     fun chat(question: String): AgentAnswer {
         val started = System.currentTimeMillis()
-        val routes = router.route(question)
+        if (evaluationMode == EvaluationMode.NO_TOOLS) {
+            return AgentAnswer(
+                answer = generateUngroundedAnswer(question),
+                routes = emptyList(),
+                toolCalls = emptyList(),
+                contextSources = emptyList(),
+                failedRoutes = emptyList(),
+                responseMode = ResponseMode.NORMAL,
+                contextChars = 0,
+                estimatedContextTokens = 0,
+                evaluationMode = evaluationMode,
+                selectedEvidence = emptyList<EvidenceTrace>().takeIf { includeEvidence },
+                latencyMs = System.currentTimeMillis() - started,
+            )
+        }
+
+        val routes = if (evaluationMode == EvaluationMode.VANILLA_MCP) planVanillaRoutes(question) else router.route(question)
         log.info("질문 라우팅 결과: {} → {}", question, routes)
 
         // 라우트별 준비 작업은 병렬로 실행하되, 단일 MCP 세션의 실제 프로토콜 호출은
@@ -86,21 +118,36 @@ class AgentService(
         val items = collected.flatMap { it.items }
         val toolCalls = collected.flatMap { it.toolCalls }
 
-        val curated = curator.curate(items, routes)
+        val curated = curator.curate(question, items, routes)
         val answer = generateAnswer(question, curated)
+        val failedRoutes = routes.zip(collected).filter { it.second.failed }.map { it.first }
+        val contextChars = curated.sumOf { it.text.length }
+        val responseMode = when {
+            failedRoutes.isEmpty() -> ResponseMode.NORMAL
+            failedRoutes.size < routes.size -> ResponseMode.DEGRADED
+            else -> ResponseMode.FAILED
+        }
 
         return AgentAnswer(
             answer = answer,
             routes = routes,
             toolCalls = toolCalls,
             contextSources = curated.map { it.source },
+            failedRoutes = failedRoutes,
+            responseMode = responseMode,
+            contextChars = contextChars,
+            estimatedContextTokens = (contextChars + 3) / 4,
+            evaluationMode = evaluationMode,
+            selectedEvidence = curated.map { EvidenceTrace(it.source, it.text, it.score) }
+                .takeIf { includeEvidence },
             latencyMs = System.currentTimeMillis() - started,
         )
     }
 
     private fun collectContext(route: Route, question: String): CollectedContext {
         val toolCalls = mutableListOf<String>()
-        val items = try {
+        return try {
+            val items =
             when (route) {
                 Route.VECTOR -> {
                     toolCalls += "vector_search"
@@ -119,7 +166,7 @@ class AgentService(
 
                     // Self-Corrective SQL: 2단계 검증과 최대 2회 자가수정
                     // 논문 참고: Self-RAG (ICLR 2024) - 생성 결과를 자가 비평하고 필요시 재시도
-                    while (retryCount < MAX_SQL_RETRIES) {
+                    while (evaluationMode == EvaluationMode.OURS && retryCount < MAX_SQL_RETRIES) {
                         val feedback = analyzeSqlResult(result, question)
                         if (feedback == null) break
 
@@ -132,11 +179,11 @@ class AgentService(
                     listOf(ContextItem("sql", "실행한 SQL: $sql\n조회 결과:\n${humanizeSqlResult(result)}", 1.0))
                 }
             }
+            CollectedContext(items, toolCalls, failed = false)
         } catch (e: Exception) {
             log.warn("{} 라우트 컨텍스트 수집 실패: {}", route, e.message)
-            emptyList()
+            CollectedContext(emptyList(), toolCalls, failed = true)
         }
-        return CollectedContext(items, toolCalls)
     }
 
     /**
@@ -153,12 +200,20 @@ class AgentService(
         val schema = schemaPromptFormatter.format(rawSchema)
 
         // 1B급 모델은 서로 다른 SQL 패턴을 섞는 경향이 있어 가장 가까운 예시 하나만 제공한다.
-        val selectedExamples = fewShotSelector.selectExamples(question, topK = 1)
+        val selectedExamples = if (evaluationMode == EvaluationMode.OURS) {
+            fewShotSelector.selectExamples(question, topK = 1)
+        } else {
+            emptyList()
+        }
         val examplesBlock = fewShotSelector.formatExamplesForPrompt(selectedExamples)
         log.info("Few-shot 예시 선택: {}", selectedExamples.map { it.pattern })
 
         // SchemaGraphSQL: 질문에서 스키마 값 매칭
-        val schemaHints = schemaLinker.linkEntities(rawSchema, question)
+        val schemaHints = if (evaluationMode == EvaluationMode.OURS) {
+            schemaLinker.linkEntities(rawSchema, question)
+        } else {
+            emptyList()
+        }
         val hintBlock = schemaLinker.formatHintsForPrompt(schemaHints)
         if (schemaHints.isNotEmpty()) {
             log.info("스키마 링킹 결과: {}", schemaHints.map { it.suggestion })
@@ -300,4 +355,32 @@ class AgentService(
             .content()
             .orEmpty()
     }
+
+    /** 동일 MCP 계약만 제공하고 별도 규칙·예시 없이 모델이 필요한 경로 집합을 선택하는 기준선. */
+    private fun planVanillaRoutes(question: String): List<Route> {
+        val raw = chatClient.prompt()
+            .system(
+                "질문에 답하는 데 필요한 데이터 도구를 고른다. " +
+                    "SQL은 정형 데이터 계산, VECTOR는 문서 의미 검색, GRAPH는 개체 관계 조회다. " +
+                    "필요한 라벨을 쉼표로 구분해 SQL,VECTOR,GRAPH 중 하나 이상만 출력한다.",
+            )
+            .user("질문: $question\n도구:")
+            .call()
+            .content()
+            .orEmpty()
+        val parsed = Route.entries.filter { route ->
+            Regex("(^|[^A-Z])${route.name}([^A-Z]|$)").containsMatchIn(raw.trim().uppercase())
+        }
+        return parsed.ifEmpty { listOf(Route.VECTOR) }
+    }
+
+    private fun generateUngroundedAnswer(question: String): String = chatClient.prompt()
+        .system(
+            "외부 도구나 비공개 데이터가 없는 로컬 언어모델 기준선이다. " +
+                "확실히 모르는 회사 내부 사실은 모른다고 답하고 지어내지 않는다.",
+        )
+        .user(question)
+        .call()
+        .content()
+        .orEmpty()
 }

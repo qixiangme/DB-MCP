@@ -10,73 +10,128 @@ data class ContextItem(
     val score: Double,
 )
 
+/** 평가 전용 정책. 기본 CURRENT 외 값은 ablation 실행에서만 사용한다. */
+enum class ContextPolicy {
+    ALL_WITH_HARD_CAP,
+    RELEVANCE,
+    CURRENT,
+    COVERAGE,
+}
+
 /**
- * TACC(선별적 컨텍스트 큐레이션) 구현.
+ * 제한된 컨텍스트 예산에서 근거를 선택한다.
  *
- * 전현우 외(2026)는 전체 컨텍스트가 빈 기준선보다 유리하되, 추가 구성요소의 한계효용이
- * 모델과 과업에 따라 달라짐을 보였다. 특히 Knowledge(K)만 유의한 주효과를 보였으므로,
- * 이 구현은 "무조건 적게"가 아니라 관련 있는 근거를 예산 안에서 우선 제공한다.
- *
- * 1) 관련도 하한선 미달 항목은 예산이 남아도 버리고
- * 2) 과업 유형(라우트)에 따라 예산과 소스별 가중치를 다르게 주며
- * 3) 최상위 항목을 맨 앞, 차상위를 맨 뒤에 배치한다 (Liu et al., 2024의
- *    'Lost in the Middle' 완화). recency 단독 배치(최상위를 맨 뒤)도
- *    벤치마크로 A/B 검증했으나 gemma3:1b는 첫 항목 우선 사용 경향이
- *    강해 오히려 하락 — 실측 근거로 기각했다.
+ * 참조 연구의 결론을 "적을수록 좋다"로 과장하지 않는다. Knowledge를 유지하되
+ * 관련도·과업·중복·질문 엔티티 coverage를 명시적으로 비교한다. 운영 기본값은 기존 동작을
+ * 보존하는 CURRENT이며 나머지 정책은 동일 조건 ablation을 위한 평가 옵션이다.
  */
 @Component
 class ContextCurator(
     @Value("\${agent.context.budget-chars:2400}") private val budgetChars: Int,
+    @Value("\${agent.evaluation.context-policy:CURRENT}") policyName: String = "CURRENT",
 ) {
+    private val policy = ContextPolicy.valueOf(policyName.trim().uppercase())
 
     init {
         require(budgetChars > 0) { "agent.context.budget-chars는 0보다 커야 합니다." }
     }
 
-    fun curate(items: List<ContextItem>, routes: List<Route>): List<ContextItem> {
-        if (items.isEmpty()) return emptyList()
+    fun curate(items: List<ContextItem>, routes: List<Route>): List<ContextItem> =
+        curate(question = "", items = items, routes = routes)
 
-        // 과업 인지 예산: SQL 단독 라우트는 조회 결과가 결정적이라 절반 예산으로 충분
+    fun curate(question: String, items: List<ContextItem>, routes: List<Route>): List<ContextItem> {
+        if (items.isEmpty()) return emptyList()
         val budget = if (routes == listOf(Route.SQL)) budgetChars / 2 else budgetChars
 
-        val weighted = items
-            .filter { it.score >= MIN_SCORE }
-            .distinctBy { it.text.take(80) }
-            .map { it.copy(score = it.score * weightFor(it.source, routes)) }
-            .sortedByDescending { it.score }
+        return when (policy) {
+            ContextPolicy.ALL_WITH_HARD_CAP -> fitInBudget(items, budget)
+            ContextPolicy.RELEVANCE -> fitInBudget(
+                eligible(items).sortedByDescending { it.score },
+                budget,
+            )
+            ContextPolicy.CURRENT -> current(items, routes, budget)
+            ContextPolicy.COVERAGE -> coverage(question, items, routes, budget)
+        }
+    }
 
+    private fun current(items: List<ContextItem>, routes: List<Route>, budget: Int): List<ContextItem> {
+        val ranked = eligible(items)
+            .map { it.copy(score = it.score * routeWeight(it.source, routes)) }
+            .sortedByDescending { it.score }
+        val selected = fitInBudget(ranked, budget).toMutableList()
+
+        // 기존 A/B에서 gemma3:1b에 유리했던 배치를 보존한다.
+        if (selected.size >= 3) selected.add(selected.removeAt(1))
+        return selected
+    }
+
+    /**
+     * 별도 모델과 튜닝 계수 없이 marginal evidence utility를 계산한다.
+     * 각 항은 [0,1] 범위이며 검증되지 않은 confidence나 answerability 점수는 사용하지 않는다.
+     */
+    private fun coverage(
+        question: String,
+        items: List<ContextItem>,
+        routes: List<Route>,
+        budget: Int,
+    ): List<ContextItem> {
+        val remaining = eligible(items).toMutableList()
         val selected = mutableListOf<ContextItem>()
         var used = 0
-        for (item in weighted) {
+        val questionTerms = terms(question)
+        val coveredTerms = mutableSetOf<String>()
+
+        while (remaining.isNotEmpty() && used < budget) {
+            val available = remaining.filter { it.text.length <= budget - used || selected.isEmpty() }
+            if (available.isEmpty()) break
+            val next = available.maxByOrNull { item ->
+                val itemTerms = terms(item.text)
+                val questionCoverage = if (questionTerms.isEmpty()) 0.0 else
+                    itemTerms.intersect(questionTerms).minus(coveredTerms).size.toDouble() / questionTerms.size
+                val redundancy = selected.maxOfOrNull { jaccard(itemTerms, terms(it.text)) } ?: 0.0
+                item.score.coerceIn(0.0, 1.0) + routeMatch(item.source, routes) + questionCoverage - redundancy
+            } ?: break
+
+            val fitted = fitOne(next, budget - used)
+            if (fitted != null) {
+                selected += fitted
+                used += fitted.text.length
+                coveredTerms += terms(fitted.text).intersect(questionTerms)
+            }
+            remaining.remove(next)
+        }
+        return selected
+    }
+
+    private fun eligible(items: List<ContextItem>): List<ContextItem> =
+        items.filter { it.score >= MIN_SCORE }.distinctBy { it.text.take(80) }
+
+    private fun fitInBudget(items: List<ContextItem>, budget: Int): List<ContextItem> {
+        val selected = mutableListOf<ContextItem>()
+        var used = 0
+        for (item in items) {
             val remaining = budget - used
             if (remaining <= 0) break
             if (item.text.length <= remaining) {
                 selected += item
                 used += item.text.length
             } else if (selected.isEmpty()) {
-                // 최고 관련 항목 하나도 없는 것보다 경계에서 안전하게 줄인 근거가 낫다.
-                // JSON 원문을 자르는 계층이 아니라 사람이 읽는 ContextItem 경계에서만 수행한다.
-                val truncated = truncateAtBoundary(item.text, remaining)
-                if (truncated.isNotEmpty()) {
-                    selected += item.copy(text = truncated)
-                    used += truncated.length
-                }
+                fitOne(item, remaining)?.let(selected::add)
             }
-        }
-
-        // 최상위 항목은 맨 앞, 차상위 항목은 맨 뒤로 배치
-        if (selected.size >= 3) {
-            val second = selected.removeAt(1)
-            selected.add(second)
         }
         return selected
     }
 
-    /** 단어·줄 경계를 우선해 자르고, 반환 길이가 반드시 maxChars 이하가 되게 한다. */
+    private fun fitOne(item: ContextItem, remaining: Int): ContextItem? {
+        if (remaining <= 0) return null
+        if (item.text.length <= remaining) return item
+        val truncated = truncateAtBoundary(item.text, remaining)
+        return truncated.takeIf { it.isNotEmpty() }?.let { item.copy(text = it) }
+    }
+
     private fun truncateAtBoundary(text: String, maxChars: Int): String {
         if (text.length <= maxChars) return text
         if (maxChars <= TRUNCATION_MARKER.length) return TRUNCATION_MARKER.take(maxChars)
-
         val contentLimit = maxChars - TRUNCATION_MARKER.length
         val prefix = text.take(contentLimit)
         val boundary = maxOf(prefix.lastIndexOf('\n'), prefix.lastIndexOf(' '))
@@ -84,15 +139,33 @@ class ContextCurator(
         return content + TRUNCATION_MARKER
     }
 
-    private fun weightFor(source: String, routes: List<Route>): Double = when {
+    private fun routeWeight(source: String, routes: List<Route>): Double = when {
         source == "sql" && Route.SQL in routes -> 1.5
         source == "knowledge-graph" && Route.GRAPH in routes -> 1.3
         else -> 1.0
     }
 
+    private fun routeMatch(source: String, routes: List<Route>): Double = when {
+        source == "sql" && Route.SQL in routes -> 1.0
+        source == "knowledge-graph" && Route.GRAPH in routes -> 1.0
+        source !in setOf("sql", "knowledge-graph") && Route.VECTOR in routes -> 1.0
+        else -> 0.0
+    }
+
+    private fun terms(text: String): Set<String> = TERM_REGEX.findAll(text.lowercase())
+        .map { it.value }
+        .filterNot { it in STOP_TERMS }
+        .toSet()
+
+    private fun jaccard(left: Set<String>, right: Set<String>): Double {
+        if (left.isEmpty() && right.isEmpty()) return 0.0
+        return left.intersect(right).size.toDouble() / left.union(right).size
+    }
+
     companion object {
-        /** 관련도 하한선 — 이 미만은 노이즈로 간주하고 투입하지 않는다 */
         const val MIN_SCORE = 0.25
         private const val TRUNCATION_MARKER = "\n…(truncated)"
+        private val TERM_REGEX = Regex("[가-힣a-z0-9][가-힣a-z0-9_-]{1,}")
+        private val STOP_TERMS = setOf("알려줘", "어떻게", "무엇", "관련", "대한", "있는", "중에서")
     }
 }

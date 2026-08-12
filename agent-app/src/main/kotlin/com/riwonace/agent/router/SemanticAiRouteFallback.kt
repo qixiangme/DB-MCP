@@ -20,7 +20,7 @@ class SemanticAiRouteFallback(private val chatClient: ChatClient) : RouteFallbac
     private val template = ClassPathResource("router/semantic-ai-prompt.txt")
         .inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
 
-    override fun classify(question: String): Route {
+    override fun classify(question: String): List<Route> {
         val raw = try {
             chatClient.prompt()
                 .user(template.replace("{{question}}", question))
@@ -32,13 +32,17 @@ class SemanticAiRouteFallback(private val chatClient: ChatClient) : RouteFallbac
             ""
         }
 
-        val resolved = parseExactRoute(raw)
+        val resolved = parseExactRoutes(raw)
         if (resolved == null) {
             log.warn("의미 라우팅 출력 파싱 실패, VECTOR로 대체: {}", raw.take(100))
         }
-        return resolved ?: Route.VECTOR
+        return resolved ?: listOf(Route.VECTOR)
     }
 }
 
-internal fun parseExactRoute(raw: String): Route? =
-    Route.entries.firstOrNull { it.name == raw.trim().uppercase() }
+internal fun parseExactRoutes(raw: String): List<Route>? {
+    val labels = raw.trim().uppercase().split(',').map(String::trim)
+    if (labels.isEmpty() || labels.any(String::isEmpty)) return null
+    val routes = labels.map { label -> Route.entries.firstOrNull { it.name == label } ?: return null }
+    return routes.distinct().takeIf { it.isNotEmpty() }
+}

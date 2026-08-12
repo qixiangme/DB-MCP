@@ -43,7 +43,17 @@ class RuleBasedRouter(private val fallback: RouteFallback? = null) {
             if (graphKeywords.any { q.contains(it) }) add(Route.GRAPH)
             if (vectorKeywords.any { q.contains(it) }) add(Route.VECTOR)
         }
-        if (routes.isNotEmpty()) return routes
-        return listOf(fallback?.classify(question) ?: Route.VECTOR)
+        if (routes.isEmpty()) return fallback?.classify(question) ?: listOf(Route.VECTOR)
+
+        // 결정 규칙 하나만 잡혔더라도 질문이 여러 요구를 접속하면 의미 분류로 누락 경로만 보강한다.
+        // 이미 두 경로 이상이 명확하면 추가 LLM 호출 없이 결정 결과를 유지한다.
+        if (routes.size == 1 && fallback != null && COMPOSITION_CUES.any(q::contains)) {
+            return (routes + fallback.classify(question)).distinct()
+        }
+        return routes
+    }
+
+    companion object {
+        private val COMPOSITION_CUES = listOf("함께", "같이", "동시에", "한 번에", "구분", "그리고", " 및 ", "와 ", "과 ")
     }
 }

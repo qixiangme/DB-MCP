@@ -39,15 +39,24 @@ class RuleBasedRouterTest {
 
     @Test
     fun `fallback이 있으면 키워드 미매칭 시 위임한다`() {
-        val withFallback = RuleBasedRouter(fallback = RouteFallback { Route.GRAPH })
+        val withFallback = RuleBasedRouter(fallback = RouteFallback { listOf(Route.GRAPH) })
         assertEquals(listOf(Route.GRAPH), withFallback.route("키워드가 하나도 안 걸리는 질문"))
     }
 
     @Test
     fun `키워드가 하나라도 걸리면 fallback은 호출되지 않는다`() {
         var called = false
-        val withFallback = RuleBasedRouter(fallback = RouteFallback { called = true; Route.GRAPH })
+        val withFallback = RuleBasedRouter(fallback = RouteFallback { called = true; listOf(Route.GRAPH) })
         withFallback.route("가장 비싼 제품이 뭐야?")
         assertEquals(false, called)
+    }
+
+    @Test
+    fun `복합 접속 표현에서 단일 규칙 결과를 의미 폴백의 다중 경로로 보강한다`() {
+        val withFallback = RuleBasedRouter(fallback = RouteFallback { listOf(Route.SQL, Route.GRAPH) })
+        assertEquals(
+            listOf(Route.SQL, Route.GRAPH),
+            withFallback.route("월 가격과 실제 이용 고객을 함께 알려줘"),
+        )
     }
 }

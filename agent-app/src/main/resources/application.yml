@@ -38,6 +38,15 @@ spring:
 agent:
   context:
     budget-chars: 2400
+  evaluation:
+    # 제출용 ablation에서만 변경한다. 운영 기본값은 OURS/CURRENT이며 evidence 본문은 비공개다.
+    mode: ${EVALUATION_MODE:OURS}
+    context-policy: ${CONTEXT_POLICY:CURRENT}
+    include-evidence: ${EVALUATION_INCLUDE_EVIDENCE:false}
+    fault:
+      enabled: ${EVALUATION_FAULT_ENABLED:false}
+      routes: ${EVALUATION_FAULT_ROUTES:}
+      mode: ${EVALUATION_FAULT_MODE:EXCEPTION}
   router:
     # 키워드 미매칭 시 폴백 전략: 빈 값(기본)=VECTOR, tfidf=로컬 k-NN,
     # embedding=코사인, ai=기존 3-shot 분류,

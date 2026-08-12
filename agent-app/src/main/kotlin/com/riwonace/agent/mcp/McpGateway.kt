@@ -20,7 +20,7 @@ internal class McpSessionGuard {
  * DB·벡터·그래프별 접속 세부사항은 서버 뒤에 두고, 답변 생성용 Ollama 연결과는 구분한다.
  */
 @Component
-class McpGateway(private val clients: List<McpSyncClient>) {
+class McpGateway(private val clients: List<McpSyncClient>) : DataToolGateway {
 
     private val cachedSchema = AtomicReference<String?>(null)
     private val sessionGuard = McpSessionGuard()
@@ -29,16 +29,16 @@ class McpGateway(private val clients: List<McpSyncClient>) {
         get() = clients.firstOrNull()
             ?: error("MCP 서버에 연결되어 있지 않습니다. mcp-server(8081)가 기동 중인지 확인하세요.")
 
-    fun vectorSearch(query: String, topK: Int = 4): String =
+    override fun vectorSearch(query: String, topK: Int): String =
         callTool("vector_search", mapOf("query" to query, "topK" to topK))
 
-    fun runSql(sql: String): String =
+    override fun runSql(sql: String): String =
         callTool("run_sql", mapOf("sql" to sql))
 
-    fun kgSearch(query: String): String =
+    override fun kgSearch(query: String): String =
         callTool("kg_search", mapOf("query" to query))
 
-    fun schema(): String =
+    override fun schema(): String =
         cachedSchema.get() ?: readTextResource(SCHEMA_URI).also { cachedSchema.set(it) }
 
     fun listToolNames(): List<String> =
