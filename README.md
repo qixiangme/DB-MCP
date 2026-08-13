@@ -51,8 +51,8 @@ mcp-server :8081             air-server :8082
 | 빌드·검증 | Gradle Kotlin DSL, npm, JUnit 5, Docker Compose | 빌드, 테스트, 로컬 인프라 실행 |
 
 저사양 PC의 기본 모델 용량은 약 1.1GB입니다. 환경에 따라
-`OLLAMA_MODEL=qwen2.5:3b`처럼 모델만 교체할 수 있습니다. 자세한 선택 기준은
-[경량·안정성 원칙](./LIGHT-AND-STABLE.md)을 참고하세요.
+`OLLAMA_MODEL=qwen2.5:3b`처럼 모델만 교체할 수 있습니다. 설계 원칙은
+[ARCHITECTURE.md](./ARCHITECTURE.md)를 참고하세요.
 
 ## 모듈
 
@@ -288,7 +288,7 @@ npm run build
 | 문서 | 내용 |
 |---|---|
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | 전체 구조, 요청 처리 흐름, 주요 설계 결정 |
-| [LIGHT-AND-STABLE.md](./LIGHT-AND-STABLE.md) | 소형 모델 선택과 경량·안정성 원칙 |
+| [BENCHMARK.md](./BENCHMARK.md) | 벤치마크 결과 및 재현 방법 |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | 기여자가 먼저 확인할 핵심 규칙 |
 | [이슈와 PR 운영 절차](./docs/contributing/WORKFLOW.md) | 작업 유형, 브랜치, 리뷰 게이트, PR 절차 |
 | [벤치마크 무결성 정책](./docs/contributing/BENCHMARK_POLICY.md) | 데이터 누수 방지, 재현 조건, 최소 통과 기준 |
