@@ -20,7 +20,11 @@ class RouteQuestionProjector {
         if (selected.isEmpty() || selected.size == fragments.size) return question
 
         val projected = selected.joinToString(" 그리고 ")
-        val anchors = ENTITY_ANCHOR.findAll(question).map { it.value }.distinct().toList()
+        val anchors = ENTITY_ANCHOR.findAll(question)
+            .map { it.value }
+            .filter { route != Route.VECTOR || it.startsWith("Product-", ignoreCase = true) }
+            .distinct()
+            .toList()
         val missingAnchors = anchors.filterNot { projected.contains(it, ignoreCase = true) }
         return (missingAnchors + projected)
             .joinToString(" ")
@@ -36,7 +40,7 @@ class RouteQuestionProjector {
 
     companion object {
         private val BOUNDARY = Regex(
-            "\\s*(?:,|그리고|함께|같이|동시에|구분하고|나눠\\s*말하고|한\\s*번에|\\s및\\s|(?<=[가-힣A-Za-z0-9])(?:과|와)\\s+)\\s*",
+            "\\s*(?:,(?=\\s)|그리고|함께|같이|동시에|구분하고|나눠\\s*말하고|한\\s*번에|(?:하며|이며|하고|쓰고|늘어나며)\\s+|\\s및\\s|(?<=[가-힣A-Za-z0-9])(?:과|와)\\s+)\\s*",
         )
         private val ENTITY_ANCHOR = Regex(
             "(?i)(?:Product|Client)-[A-Z0-9]+|[가-힣A-Za-z0-9]+(?:팀|부|부서)",
@@ -44,16 +48,16 @@ class RouteQuestionProjector {
         private val CUES = mapOf(
             Route.SQL to listOf(
                 "가격", "금액", "매출", "급여", "연봉", "평균", "합계", "총 ", "건", "개수",
-                "계약", "출시 상태", "상태", "순위", "상위", "하위", "재고", "직원", "제품",
+                "계약", "출시 상태", "상태", "순위", "상위", "하위", "재고", "직원", "월 ",
                 "price", "amount", "sales", "salary", "average", "sum", "count", "status",
             ),
             Route.VECTOR to listOf(
-                "설치", "배포", "백업", "보관", "구동", "인증", "api", "cpu", "hpa", "제안",
+                "설치", "배포", "백업", "보관", "구동", "인증", "bearer", "api", "cpu", "hpa", "제안",
                 "문서", "매뉴얼", "장애", "원인", "조치", "절차", "방법", "도구", "대상 고객",
                 "install", "deploy", "backup", "guide", "manual", "incident",
             ),
             Route.GRAPH to listOf(
-                "사용 고객", "이용 고객", "사용하는 고객", "쓰는 고객", "실제 사용", "실제 이용",
+                "사용 고객", "이용 고객", "사용하는 고객", "쓰는 고객", "사용하는", "이용하는", "쓰는", "실제 사용", "실제 이용",
                 "현재 사용", "현재 이용", "담당 직원", "담당자", "팀장", "이끄는 사람", "누구",
                 "관계", "소속", "개발사", "라이선스", "using client", "owner", "relation",
             ),

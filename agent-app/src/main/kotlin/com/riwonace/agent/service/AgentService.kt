@@ -161,12 +161,14 @@ class AgentService(
             when (route) {
                 Route.VECTOR -> {
                     toolCalls += "vector_search"
-                    parseVectorResult(gateway.vectorSearch(question))
+                    val routeQuestion = routeQuestionProjector.project(question, Route.VECTOR)
+                    parseVectorResult(gateway.vectorSearch(routeQuestion))
                 }
                 Route.GRAPH -> {
                     toolCalls += "kg_search"
-                    val result = gateway.kgSearch(question)
-                    listOf(ContextItem("knowledge-graph", "지식 그래프 관계:\n$result", 0.9))
+                    val routeQuestion = routeQuestionProjector.project(question, Route.GRAPH)
+                    val result = gateway.kgSearch(routeQuestion)
+                    listOf(ContextItem("knowledge-graph", "지식 그래프 관계:\n${humanizeGraphResult(result)}", 0.9))
                 }
                 Route.SQL -> {
                     toolCalls += "run_sql"
@@ -356,6 +358,17 @@ class AgentService(
         } catch (e: Exception) {
             log.warn("vector_search 결과 파싱 실패: {}", e.message)
             listOf(ContextItem("document", json, 0.5))
+        }
+
+    private fun humanizeGraphResult(json: String): String =
+        try {
+            val relations: List<String> = mapper.readValue(
+                json,
+                mapper.typeFactory.constructCollectionType(List::class.java, String::class.java),
+            )
+            relations.joinToString("\n")
+        } catch (e: Exception) {
+            json
         }
 
     private fun generateAnswer(question: String, context: List<ContextItem>): String {

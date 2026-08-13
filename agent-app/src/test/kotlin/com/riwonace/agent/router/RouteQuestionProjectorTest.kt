@@ -22,7 +22,15 @@ class RouteQuestionProjectorTest {
 
     @Test
     fun `분해 근거가 없으면 원문을 보존한다`() {
-        val question = "월 120인 cloud 제품 중 CPU 62%에서 늘어나며 Client-A가 쓰는 것은 무엇이야?"
+        val question = "단서가 전혀 없는 모호한 요청"
         assertEquals(question, projector.project(question, Route.SQL))
+    }
+
+    @Test
+    fun `서술형 접속어로 이어진 모호한 질문도 경로별로 분해한다`() {
+        val question = "Bearer 인증을 쓰고 활성 계약 금액이 22,000이며 Client-Y가 이용하는 data 제품은 무엇이야?"
+        assertEquals("Bearer 인증을 알려줘", projector.project(question, Route.VECTOR))
+        assertEquals("Client-Y 활성 계약 금액이 22,000 알려줘", projector.project(question, Route.SQL))
+        assertEquals("Client-Y가 이용하는 data 제품은 무엇이야 알려줘", projector.project(question, Route.GRAPH))
     }
 }

@@ -67,11 +67,15 @@ class RetrievalTools(
     fun kgSearch(
         @ToolParam(description = "관계를 조회할 자연어 질의 또는 엔티티 이름") query: String,
     ): String = guard {
-        val tokens = query.split(Regex("[\\s,.?!'\"()]+"))
+        val rawTokens = query.split(Regex("[\\s,.?!'\"()]+"))
             .map { it.trim() }
             .filter { it.length >= 2 }
             .distinct()
-            .take(8)
+        val entityTokens = rawTokens.filter { token ->
+            '-' in token || token.endsWith("팀") || token.endsWith("부") || token.endsWith("부서") ||
+                token.endsWith("사업부") || token.any(Char::isUpperCase)
+        }
+        val tokens = (entityTokens.ifEmpty { rawTokens.filterNot { it in GRAPH_STOP_TOKENS } }).take(4)
         if (tokens.isEmpty()) return@guard emptyList<Any>()
 
         // 양방향 포함 매칭: 엔티티가 토큰에 포함되는 경우("air는" ⊃ "air")도 잡아
@@ -84,11 +88,12 @@ class RetrievalTools(
             "SELECT subject, predicate, object FROM kg_triples WHERE $where LIMIT 30",
             *params,
         )
-        // 2홉 확장: 직접 매칭된 개체의 이웃 관계까지 포함
+        // 2홉은 질문이 명시적으로 간접/연쇄 관계를 요구할 때만 확장한다.
         // (예: "Product-D1 관련 프로젝트" → 사용 고객 → 그 고객의 프로젝트)
         val entities = direct.flatMap { listOf(it["subject"] as String, it["object"] as String) }.distinct()
+        val requiresExpansion = listOf("2홉", "간접", "연쇄", "거쳐", "연결된 프로젝트").any(query::contains)
         val neighbors =
-            if (entities.isEmpty()) emptyList()
+            if (entities.isEmpty() || !requiresExpansion) emptyList()
             else {
                 val inClause = entities.joinToString(",") { "?" }
                 jdbc.queryForList(
@@ -117,5 +122,8 @@ class RetrievalTools(
 
     companion object {
         const val MAX_OUTPUT_CHARS = 4000
+        private val GRAPH_STOP_TOKENS = setOf(
+            "누구", "무엇", "알려줘", "확인해줘", "현재", "실제", "하나", "이상", "제품", "고객사", "직원",
+        )
     }
 }
