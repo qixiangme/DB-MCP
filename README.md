@@ -41,7 +41,7 @@ mcp-server :8081             air-server :8082
 
 | 영역 | 기술 | 사용 목적 |
 |---|---|---|
-| 언어·런타임 | Kotlin 2.1, Java 21 | 에이전트와 기본 MCP 서버 |
+| 언어·런타임 | Kotlin 2.1, Java 17+ | 에이전트와 기본 MCP 서버 |
 | 애플리케이션 | Spring Boot 3.5, Spring AI 1.0 | Ollama, MCP 서버·클라이언트, pgvector 연동 |
 | 표준 프로토콜 | MCP, SSE | 에이전트와 데이터 도구의 구현 분리 |
 | 데이터베이스 | PostgreSQL 16, pgvector | 관계형 데이터, 문서 벡터, 지식 그래프 통합 저장 |
@@ -221,7 +221,7 @@ Company-X 전체 스택에서는 공식 원문 답변 66.7%, 키워드 제거 �
 
 ## 빠른 시작
 
-필수 조건은 Docker 엔진과 Java 21입니다.
+필수 조건은 Docker 엔진과 Java 17+입니다.
 
 ```bash
 # 1. PostgreSQL과 Ollama 실행
