@@ -162,7 +162,7 @@ class AgentService(
                 Route.VECTOR -> {
                     toolCalls += "vector_search"
                     val routeQuestion = routeQuestionProjector.project(question, Route.VECTOR)
-                    parseVectorResult(gateway.vectorSearch(routeQuestion))
+                    parseVectorResult(gateway.vectorSearch(routeQuestion, topK = if (evaluationMode == EvaluationMode.OURS) 8 else 4))
                 }
                 Route.GRAPH -> {
                     toolCalls += "kg_search"
@@ -413,7 +413,10 @@ class AgentService(
     private fun generateRouteAnswer(question: String, route: Route, context: List<ContextItem>): String {
         val contextBlock = context.joinToString("\n\n") { "[출처: ${it.source}]\n${it.text}" }
         val routeQuestion = routeQuestionProjector.project(question, route)
-        return chatClient.prompt()
+        val evidence = salientEvidence(routeQuestion, route, context)
+        if (route != Route.VECTOR) return evidence
+
+        val summary = chatClient.prompt()
             .system(
                 "너는 ${route.name} 근거에서 확인 가능한 질문 항목만 추출하는 데이터 비서다. " +
                     "제공된 근거로 답할 수 있는 값이나 사실만 짧게 답하고 다른 데이터 도구가 담당할 항목은 생략한다. " +
@@ -423,6 +426,40 @@ class AgentService(
             .call()
             .content()
             .orEmpty()
+        return "$summary\n핵심 근거:\n$evidence"
+    }
+
+    private fun salientEvidence(question: String, route: Route, context: List<ContextItem>): String = when (route) {
+        Route.SQL -> context.joinToString("\n") { item ->
+            item.text.substringAfter("조회 결과:\n", item.text)
+        }
+        Route.GRAPH -> {
+            val lines = context.flatMap { it.text.lines() }.filter { "--[" in it }
+            val predicate = when {
+                listOf("사용", "이용", "쓰는").any(question::contains) -> "사용한다"
+                listOf("담당", "담당자").any(question::contains) -> "담당한다"
+                listOf("팀장", "이끄는", "부서장").any(question::contains) -> "부서장"
+                else -> null
+            }
+            lines.filter { predicate == null || it.contains(predicate) }.ifEmpty { lines }.take(12).joinToString("\n")
+        }
+        Route.VECTOR -> {
+            val terms = question.lowercase().split(Regex("[^가-힣a-z0-9_-]+"))
+                .filter { it.length >= 2 && it !in setOf("알려줘", "무엇이야") }
+                .toSet()
+            context.joinToString("\n") { item ->
+                val lines = item.text.lines().map(String::trim).filter(String::isNotEmpty)
+                val chosen = linkedSetOf<Int>()
+                if (lines.isNotEmpty()) chosen += 0
+                lines.forEachIndexed { index, line ->
+                    if (terms.any { line.lowercase().contains(it) }) {
+                        chosen += index
+                        if (index + 1 < lines.size) chosen += index + 1
+                    }
+                }
+                "[${item.source}] " + chosen.sorted().take(8).joinToString(" ") { lines[it] }
+            }
+        }
     }
 
     private fun routeForSource(source: String): Route = when (source) {
