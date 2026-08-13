@@ -33,9 +33,13 @@ class RetrievalTools(
     ): String = guard {
         val k = (topK ?: 4).coerceIn(1, 10)
         val docs = vectorStore.similaritySearch(
-            SearchRequest.builder().query(query).topK((k * 2).coerceAtMost(10)).build(),
+            SearchRequest.builder().query(query).topK((k * 5).coerceAtMost(20)).build(),
         ) ?: emptyList()
-        docs.sortedByDescending { hybridRetrievalScore(query, it.text.orEmpty(), it.score ?: 0.0) }.take(k).map {
+        docs.sortedWith(
+            compareByDescending<org.springframework.ai.document.Document> {
+                lexicalCoverage(query, it.text.orEmpty())
+            }.thenByDescending { it.score ?: 0.0 },
+        ).take(k).map {
             mapOf(
                 "source" to (it.metadata["source"] ?: "unknown"),
                 "score" to it.score,
@@ -128,12 +132,11 @@ class RetrievalTools(
     }
 }
 
-/** 벡터 후보를 늘린 뒤 질문 어휘 coverage로 재정렬한다. 별도 튜닝 계수는 두지 않는다. */
-internal fun hybridRetrievalScore(query: String, text: String, vectorScore: Double): Double {
+/** 벡터 후보군 안에서 질문 어휘 coverage를 우선하고, 동률일 때 벡터 점수를 사용한다. */
+internal fun lexicalCoverage(query: String, text: String): Double {
     val queryTerms = retrievalTerms(query)
     val textTerms = retrievalTerms(text)
-    val coverage = if (queryTerms.isEmpty()) 0.0 else queryTerms.intersect(textTerms).size.toDouble() / queryTerms.size
-    return vectorScore.coerceIn(0.0, 1.0) + coverage
+    return if (queryTerms.isEmpty()) 0.0 else queryTerms.intersect(textTerms).size.toDouble() / queryTerms.size
 }
 
 private fun retrievalTerms(text: String): Set<String> = Regex("[가-힣a-z0-9][가-힣a-z0-9_-]{1,}")
