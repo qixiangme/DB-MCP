@@ -69,6 +69,9 @@ def summarize_rows(rows: Iterable[dict[str, object]]) -> dict[str, object]:
     total = len(row_list)
     answer_correct = sum(bool(row.get("answerCorrect")) for row in row_list)
     route_correct = sum(bool(row.get("routeCorrect")) for row in row_list)
+    route_recall_correct = sum(
+        bool(row.get("routeRecallCorrect", row.get("routeCorrect"))) for row in row_list
+    )
     valid_latencies = [int(row["latencyMs"]) for row in row_list if row.get("error") is None]
     wall_latencies = [int(row["wallMs"]) for row in row_list if row.get("error") is None and row.get("wallMs") is not None]
     context_chars = [int(row.get("contextChars", 0)) for row in row_list if row.get("error") is None]
@@ -83,14 +86,23 @@ def summarize_rows(rows: Iterable[dict[str, object]]) -> dict[str, object]:
             by_route[route] = {
                 "answerAccuracyPct": round(100 * sum(bool(row.get("answerCorrect")) for row in selected) / len(selected), 1),
                 "routeAccuracyPct": round(100 * sum(bool(row.get("routeCorrect")) for row in selected) / len(selected), 1),
+                "routeRecallAccuracyPct": round(
+                    100 * sum(
+                        bool(row.get("routeRecallCorrect", row.get("routeCorrect")))
+                        for row in selected
+                    ) / len(selected),
+                    1,
+                ),
                 "count": len(selected),
             }
     outcomes = Counter(classify_outcome(row) for row in row_list)
     return {
         "answerAccuracyPct": round(100 * answer_correct / total, 1) if total else 0.0,
         "routeAccuracyPct": round(100 * route_correct / total, 1) if total else 0.0,
+        "routeRecallAccuracyPct": round(100 * route_recall_correct / total, 1) if total else 0.0,
         "answerCorrect": answer_correct,
         "routeCorrect": route_correct,
+        "routeRecallCorrect": route_recall_correct,
         "total": total,
         "errors": sum(row.get("error") is not None for row in row_list),
         "averageLatencyMs": round(sum(valid_latencies) / len(valid_latencies)) if valid_latencies else None,

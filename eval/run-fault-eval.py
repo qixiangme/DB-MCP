@@ -51,6 +51,18 @@ def stop(process: subprocess.Popen[str]) -> None:
         process.wait(timeout=5)
 
 
+def wait_until_closed(base_url: str, timeout: int = 15) -> None:
+    """Do not let the previous scenario satisfy the next readiness probe."""
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        try:
+            request_json(f"{base_url}/api/tools", timeout=1)
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError):
+            return
+        time.sleep(0.25)
+    raise TimeoutError("previous agent remained reachable after shutdown")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--scenarios", default="eval/fault-scenarios-v1.json")
@@ -66,6 +78,7 @@ def main() -> int:
     }
     rows: list[dict[str, object]] = []
     for scenario in scenarios:
+        wait_until_closed(args.base_url)
         env = os.environ.copy()
         env.update({
             "OLLAMA_MODEL": args.model,

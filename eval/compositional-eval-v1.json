@@ -1,6 +1,15 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Company-X의 정형·문서·그래프 근거를 둘 이상 결합해야 하는 30문항. dev 20문항과 정책 동결 후에만 보는 holdout 10문항으로 구성한다.",
+  "provenance": {
+    "sourceDataset": "companyx-dataset-v1.0",
+    "publishedArchiveSha256": "3008476738d992857d738337b4882772e88288f7b314da235d6a5d120827d772",
+    "sqlDataSha256": "3ebebfd5279970050b7a1f5850a6456c77074cd57ae108791a2ad517187d4d67",
+    "graphEdgesSha256": "076a3e8fd576767e0881b038c98e744c5091f68efd646752d6c4cf03de12d247",
+    "documentManifestSha256": "f3b6a9ea0b2d18ec02dff64ce527a81662914a12d172b6194eac6a7377637254",
+    "groundTruthMethod": "SQL은 공개 INSERT를 직접 집계하고, VECTOR는 원문 문서, GRAPH는 edges.json과 적재 결과를 대조했다.",
+    "changeFrom1.0.0": "C-SV-03의 Product-C1 전체 매출 정답을 공개 SQL 합계 40,259로 바로잡았다."
+  },
   "questions": [
     {"id":"C-SV-01","split":"dev","type":"SQL_VECTOR","question":"Product-C1의 월 가격과 설치에 필요한 컨테이너 도구를 함께 알려줘.","expectedRoutes":["SQL","VECTOR"],"answerRule":{"anyOfGroups":[["350"],["Docker","Helm"]]}},
     {"id":"C-SV-02","split":"dev","type":"SQL_VECTOR","question":"Product-S1의 활성 계약 수와 자동 백업 시간·보관 기간을 같이 설명해줘.","expectedRoutes":["SQL","VECTOR"],"answerRule":{"anyOfGroups":[["6"],["2:00","2시"],["26일","26 일"]]}},

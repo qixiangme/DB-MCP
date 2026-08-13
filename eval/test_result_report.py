@@ -55,6 +55,23 @@ class ResultReportTest(unittest.TestCase):
         self.assertEqual(percentile(values, 0.50), 30)
         self.assertEqual(percentile(values, 0.95), 100)
 
+    def test_report_separates_exact_route_match_from_expected_route_recall(self) -> None:
+        report = build_report(
+            {},
+            [{
+                "expectedRoutes": ["GRAPH"],
+                "routeCorrect": False,
+                "routeRecallCorrect": True,
+                "answerCorrect": True,
+                "latencyMs": 10,
+                "error": None,
+            }],
+        )
+        summary = report["summary"]
+        self.assertEqual(summary["routeAccuracyPct"], 0.0)
+        self.assertEqual(summary["routeRecallAccuracyPct"], 100.0)
+        self.assertEqual(summary["byExpectedRoute"]["GRAPH"]["routeRecallAccuracyPct"], 100.0)
+
     def test_report_includes_latency_context_and_degraded_modes(self) -> None:
         report = build_report(
             {},
