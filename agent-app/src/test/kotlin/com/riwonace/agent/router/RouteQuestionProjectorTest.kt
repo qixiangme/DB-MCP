@@ -30,7 +30,7 @@ class RouteQuestionProjectorTest {
     fun `서술형 접속어로 이어진 모호한 질문도 경로별로 분해한다`() {
         val question = "Bearer 인증을 쓰고 활성 계약 금액이 22,000이며 Client-Y가 이용하는 data 제품은 무엇이야?"
         assertEquals("Bearer 인증을 알려줘", projector.project(question, Route.VECTOR))
-        assertEquals("Client-Y 활성 계약 금액이 22,000 알려줘", projector.project(question, Route.SQL))
+        assertEquals("Client-Y data 활성 계약 금액이 22,000 알려줘", projector.project(question, Route.SQL))
         assertEquals("Client-Y가 이용하는 data 제품은 무엇이야 알려줘", projector.project(question, Route.GRAPH))
     }
 }

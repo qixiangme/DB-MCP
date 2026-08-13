@@ -20,11 +20,12 @@ class RouteQuestionProjector {
         if (selected.isEmpty() || selected.size == fragments.size) return question
 
         val projected = selected.joinToString(" 그리고 ")
-        val anchors = ENTITY_ANCHOR.findAll(question)
+        val entityAnchors = ENTITY_ANCHOR.findAll(question)
             .map { it.value }
             .filter { route != Route.VECTOR || it.startsWith("Product-", ignoreCase = true) }
-            .distinct()
             .toList()
+        val categoryAnchors = if (route == Route.SQL) CATEGORY.findAll(question).map { it.value }.toList() else emptyList()
+        val anchors = (entityAnchors + categoryAnchors).distinct()
         val missingAnchors = anchors.filterNot { projected.contains(it, ignoreCase = true) }
         return (missingAnchors + projected)
             .joinToString(" ")
@@ -45,6 +46,7 @@ class RouteQuestionProjector {
         private val ENTITY_ANCHOR = Regex(
             "(?i)(?:Product|Client)-[A-Z0-9]+|[가-힣A-Za-z0-9]+(?:팀|부|부서)",
         )
+        private val CATEGORY = Regex("(?i)(?:cloud|data|security|consulting)")
         private val CUES = mapOf(
             Route.SQL to listOf(
                 "가격", "금액", "매출", "급여", "연봉", "평균", "합계", "총 ", "건", "개수",

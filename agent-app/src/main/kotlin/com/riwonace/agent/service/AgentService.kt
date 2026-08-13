@@ -162,7 +162,7 @@ class AgentService(
                 Route.VECTOR -> {
                     toolCalls += "vector_search"
                     val routeQuestion = routeQuestionProjector.project(question, Route.VECTOR)
-                    parseVectorResult(gateway.vectorSearch(routeQuestion, topK = if (evaluationMode == EvaluationMode.OURS) 8 else 4))
+                    parseVectorResult(gateway.vectorSearch(routeQuestion, topK = if (evaluationMode == EvaluationMode.OURS) 5 else 4))
                 }
                 Route.GRAPH -> {
                     toolCalls += "kg_search"
