@@ -1,0 +1,6 @@
+{
+  "reports": {
+    "OURS_CURRENT": "eval/results/final-tacc-dev-889d03c/ours_current.json",
+    "OURS_COVERAGE": "eval/results/final-tacc-dev-889d03c/ours_coverage.json"
+  }
+}

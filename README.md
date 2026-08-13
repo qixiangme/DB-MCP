@@ -320,6 +320,9 @@ npm run build
 |---|---|
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | 전체 구조, 요청 처리 흐름, 주요 설계 결정 |
 | [지정과제 정합성](./docs/CONTEST_ALIGNMENT.md) | 도구 3종, K/A 분리, MCP 복잡도 절감 범위, TACC 적용 근거 |
+| [제출 후보 벤치마크](./docs/research/CONTEST_FINAL_BENCHMARK.md) | 복합 질문·TACC·AIR/Spring·장애 주입 3회 결과와 채택 판정 |
+| [AIR 적용 리뷰](./docs/research/AIR_FRAMEWORK_FEEDBACK.md) | AIR의 장점, 운영 보강점과 Spring AI 유지 근거 |
+| [레드팀 보안 검토](./docs/security/RED_TEAM_REVIEW_2026-08-13.md) | 런타임 공격면과 Spring AI/AIR 통합 보안 판정 |
 | [LIGHT-AND-STABLE.md](./LIGHT-AND-STABLE.md) | 소형 모델 선택과 경량·안정성 원칙 |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | 기여자가 먼저 확인할 핵심 규칙 |
 | [이슈와 PR 운영 절차](./docs/contributing/WORKFLOW.md) | 작업 유형, 브랜치, 리뷰 게이트, PR 절차 |

@@ -1,5 +1,9 @@
 # 벤치마크 보고서 — 수치로 증명하기
 
+> 최신 제출 후보의 3회 반복 복합 질문·TACC·AIR/Spring·장애 주입 판정은
+> [제출 후보 벤치마크 판정](./docs/research/CONTEST_FINAL_BENCHMARK.md)을 먼저 보세요.
+> 과거 실험은 가설과 실패 이력을 보존하기 위해 아래에 유지합니다.
+
 > 측정 환경: Windows 11 노트북(GPU 없음, CPU 추론) · Ollama gemma3:1b(815MB, temperature 0)
 > · nomic-embed-text · PostgreSQL 16 + pgvector(도커) · 채점 = 문항별 `keywords` 또는
 > `answerRule(anyOf/allOf/minMatches)` 자동 판정

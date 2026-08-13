@@ -35,7 +35,7 @@ def wait_ready(base_url: str, process: subprocess.Popen[str], timeout: int = 90)
         try:
             request_json(f"{base_url}/api/tools", timeout=3)
             return
-        except (urllib.error.URLError, TimeoutError):
+        except (urllib.error.URLError, TimeoutError, ConnectionError, OSError):
             time.sleep(1)
     raise TimeoutError("agent did not become ready")
 
