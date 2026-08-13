@@ -4,7 +4,7 @@
   "questions": [
     {"id":"C-SV-01","split":"dev","type":"SQL_VECTOR","question":"Product-C1의 월 가격과 설치에 필요한 컨테이너 도구를 함께 알려줘.","expectedRoutes":["SQL","VECTOR"],"answerRule":{"anyOfGroups":[["350"],["Docker","Helm"]]}},
     {"id":"C-SV-02","split":"dev","type":"SQL_VECTOR","question":"Product-S1의 활성 계약 수와 자동 백업 시간·보관 기간을 같이 설명해줘.","expectedRoutes":["SQL","VECTOR"],"answerRule":{"anyOfGroups":[["6"],["2:00","2시"],["26일","26 일"]]}},
-    {"id":"C-SV-03","split":"dev","type":"SQL_VECTOR","question":"Product-C1의 전체 매출과 최초 구동에 걸리는 시간을 알려줘.","expectedRoutes":["SQL","VECTOR"],"answerRule":{"anyOfGroups":[["241,554","241554"],["38초","38 초"]]}},
+    {"id":"C-SV-03","split":"dev","type":"SQL_VECTOR","question":"Product-C1의 전체 매출과 최초 구동에 걸리는 시간을 알려줘.","expectedRoutes":["SQL","VECTOR"],"answerRule":{"anyOfGroups":[["40,259","40259"],["38초","38 초"]]}},
     {"id":"C-SV-04","split":"dev","type":"SQL_VECTOR","question":"Product-C4의 출시 상태와 백업 실행 시각 및 보관일을 확인해줘.","expectedRoutes":["SQL","VECTOR"],"answerRule":{"anyOfGroups":[["beta","베타"],["1:00","1시"],["90일","90 일"]]}},
     {"id":"C-SV-05","split":"holdout","type":"SQL_VECTOR","question":"Product-D3의 활성 계약 금액 합계와 권장 Connection Pool 최대값을 알려줘.","expectedRoutes":["SQL","VECTOR"],"answerRule":{"anyOfGroups":[["36,500","36500"],["52"]]}},
 

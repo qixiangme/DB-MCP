@@ -8,6 +8,7 @@ import com.riwonace.agent.router.Route
 import com.riwonace.agent.router.RouteQuestionProjector
 import com.riwonace.agent.router.RuleBasedRouter
 import com.riwonace.agent.sql.FewShotSelector
+import com.riwonace.agent.sql.DeterministicSqlPlanner
 import com.riwonace.agent.sql.PostgresSqlNormalizer
 import com.riwonace.agent.sql.SchemaLinker
 import com.riwonace.agent.sql.SchemaPromptFormatter
@@ -63,6 +64,7 @@ class AgentService(
     private val schemaPromptFormatter: SchemaPromptFormatter,
     private val routeQuestionProjector: RouteQuestionProjector,
     private val postgresSqlNormalizer: PostgresSqlNormalizer,
+    private val deterministicSqlPlanner: DeterministicSqlPlanner,
     @Value("\${agent.evaluation.mode:OURS}") modeName: String,
     @Value("\${agent.evaluation.include-evidence:false}") private val includeEvidence: Boolean,
 ) {
@@ -208,6 +210,12 @@ class AgentService(
         val schema = schemaPromptFormatter.format(rawSchema)
         val sqlQuestion = routeQuestionProjector.project(question, Route.SQL)
         if (sqlQuestion != question) log.info("SQL 하위 과업 분리: {} → {}", question, sqlQuestion)
+        if (evaluationMode == EvaluationMode.OURS) {
+            deterministicSqlPlanner.plan(sqlQuestion)?.let {
+                log.info("결정적 SQL 계획 적용: {}", it)
+                return it
+            }
+        }
 
         // 1B급 모델은 서로 다른 SQL 패턴을 섞는 경향이 있어 가장 가까운 예시 하나만 제공한다.
         val selectedExamples = if (evaluationMode == EvaluationMode.OURS) {
