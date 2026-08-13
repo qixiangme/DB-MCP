@@ -33,9 +33,9 @@ class RetrievalTools(
     ): String = guard {
         val k = (topK ?: 4).coerceIn(1, 10)
         val docs = vectorStore.similaritySearch(
-            SearchRequest.builder().query(query).topK(k).build(),
+            SearchRequest.builder().query(query).topK((k * 2).coerceAtMost(10)).build(),
         ) ?: emptyList()
-        docs.map {
+        docs.sortedByDescending { hybridRetrievalScore(query, it.text.orEmpty(), it.score ?: 0.0) }.take(k).map {
             mapOf(
                 "source" to (it.metadata["source"] ?: "unknown"),
                 "score" to it.score,
@@ -127,3 +127,22 @@ class RetrievalTools(
         )
     }
 }
+
+/** 벡터 후보를 늘린 뒤 질문 어휘 coverage로 재정렬한다. 별도 튜닝 계수는 두지 않는다. */
+internal fun hybridRetrievalScore(query: String, text: String, vectorScore: Double): Double {
+    val queryTerms = retrievalTerms(query)
+    val textTerms = retrievalTerms(text)
+    val coverage = if (queryTerms.isEmpty()) 0.0 else queryTerms.intersect(textTerms).size.toDouble() / queryTerms.size
+    return vectorScore.coerceIn(0.0, 1.0) + coverage
+}
+
+private fun retrievalTerms(text: String): Set<String> = Regex("[가-힣a-z0-9][가-힣a-z0-9_-]{1,}")
+    .findAll(text.lowercase())
+    .map { match ->
+        val term = match.value
+        val suffix = listOf("으로", "에서", "에게", "까지", "부터", "의", "에", "은", "는", "이", "가", "을", "를", "과", "와", "도")
+            .firstOrNull { term.length > it.length + 1 && term.endsWith(it) }
+        if (suffix == null) term else term.dropLast(suffix.length)
+    }
+    .filter { it.length >= 2 }
+    .toSet()

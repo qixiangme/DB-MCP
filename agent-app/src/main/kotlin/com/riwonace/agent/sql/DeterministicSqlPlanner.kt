@@ -46,17 +46,17 @@ class DeterministicSqlPlanner {
         val category = CATEGORY.find(q)?.value
         if (category != null) {
             ACTIVE_AMOUNT.find(question)?.groupValues?.get(1)?.toIntValue()?.takeIf { isActiveContractAmount(q) }?.let { amount ->
-                return "SELECT p.name FROM contracts c JOIN products p ON c.product_id = p.id " +
+                return "SELECT p.name, sum(c.amount) AS total_amount FROM contracts c JOIN products p ON c.product_id = p.id " +
                     "WHERE c.status = 'active' AND p.category = ${quote(category)} " +
                     "GROUP BY p.id, p.name HAVING sum(c.amount) = $amount"
             }
             ACTIVE_COUNT.find(question)?.groupValues?.get(1)?.toIntValue()?.takeIf { isActiveContractCount(q) }?.let { count ->
-                return "SELECT p.name FROM contracts c JOIN products p ON c.product_id = p.id " +
+                return "SELECT p.name, count(*) AS active_count FROM contracts c JOIN products p ON c.product_id = p.id " +
                     "WHERE c.status = 'active' AND p.category = ${quote(category)} " +
                     "GROUP BY p.id, p.name HAVING count(*) = $count"
             }
             MONTHLY_PRICE.find(question)?.groupValues?.get(1)?.toIntValue()?.let { price ->
-                return "SELECT name FROM products WHERE category = ${quote(category)} AND price_monthly = $price"
+                return "SELECT name, price_monthly FROM products WHERE category = ${quote(category)} AND price_monthly = $price"
             }
         }
         return null
