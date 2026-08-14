@@ -1,6 +1,13 @@
 package com.riwonace.agent.core
 
+import com.riwonace.agent.planner.CompositeQueryPlan
+import com.riwonace.agent.planner.EvidencePlan
+import com.riwonace.agent.planner.GraphQueryPlan
+import com.riwonace.agent.planner.SqlQueryPlan
+import com.riwonace.agent.planner.UnifiedQueryPlan
+import com.riwonace.agent.planner.UnifiedQueryPlanner
 import com.riwonace.agent.router.Route
+import com.riwonace.agent.sql.RelationalQueryPlanner
 import org.slf4j.LoggerFactory
 import org.springframework.ai.chat.client.ChatClient
 import org.springframework.stereotype.Component
@@ -17,6 +24,8 @@ import org.springframework.stereotype.Component
 @Component
 class QueryProfiler(
     private val chatClient: ChatClient,
+    private val relationalQueryPlanner: RelationalQueryPlanner,
+    private val unifiedQueryPlanner: UnifiedQueryPlanner,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -41,7 +50,11 @@ class QueryProfiler(
         val complexity = estimateComplexity(question, intent)
         val uncertainty = estimateUncertainty(question, intent)
         val requiredEvidence = inferRequiredEvidence(intent, question)
-        val suggestedRoutes = inferRoutes(intent, requiredEvidence)
+
+        // UnifiedQueryPlanner를 통한 통합 라우팅 결정
+        val unifiedPlan = unifiedQueryPlanner.plan(question)
+        val suggestedRoutes = deriveRoutesFromUnifiedPlan(unifiedPlan)
+
         val isMultiHop = intent == QueryIntent.MULTI_HOP || question.contains("그리고") || question.contains("후에")
         val hasDependency = detectDependency(question)
 
@@ -224,6 +237,18 @@ class QueryProfiler(
                 EvidenceType.DOCUMENT -> Route.VECTOR
                 EvidenceType.GRAPH_RELATION -> Route.GRAPH
             }
+        }
+    }
+
+    /**
+     * UnifiedQueryPlan에서 실행 라우트 도출
+     */
+    private fun deriveRoutesFromUnifiedPlan(plan: UnifiedQueryPlan): List<Route> {
+        return when (plan) {
+            is SqlQueryPlan -> listOf(Route.SQL)
+            is GraphQueryPlan -> listOf(Route.GRAPH)
+            is EvidencePlan -> listOf(Route.VECTOR)
+            is CompositeQueryPlan -> plan.plans.flatMap { deriveRoutesFromUnifiedPlan(it) }.distinct()
         }
     }
 

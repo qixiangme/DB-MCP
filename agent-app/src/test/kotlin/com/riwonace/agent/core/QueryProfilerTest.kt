@@ -1,6 +1,8 @@
 package com.riwonace.agent.core
 
+import com.riwonace.agent.planner.UnifiedQueryPlanner
 import com.riwonace.agent.router.Route
+import com.riwonace.agent.sql.RelationalQueryPlanner
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
 import org.springframework.ai.chat.client.ChatClient
@@ -10,7 +12,7 @@ import kotlin.test.assertTrue
 class QueryProfilerTest {
 
     private val chatClient = mock(ChatClient::class.java)
-    private val profiler = QueryProfiler(chatClient)
+    private val profiler = QueryProfiler(chatClient, RelationalQueryPlanner(), UnifiedQueryPlanner())
 
     @Test
     fun `단순 사실 질문은 FACTUAL 또는 AGGREGATION으로 분류된다`() {
@@ -59,7 +61,8 @@ class QueryProfilerTest {
 
     @Test
     fun `관계 질문은 RELATION으로 분류되고 그래프 검색이 필요하다`() {
-        val profile = profiler.profile("이 프로젝트를 누가 개발했어?")
+        // UnifiedQueryPlanner는 명시적 엔티티(Client-X, Product-X, 부서)가 있어야 GRAPH 라우팅
+        val profile = profiler.profile("Client-A를 담당하는 엔지니어는 누구야?")
 
         assertEquals(QueryIntent.RELATION, profile.intent)
         assertTrue(profile.requiredEvidence.contains(EvidenceType.GRAPH_RELATION))
