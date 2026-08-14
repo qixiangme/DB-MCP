@@ -308,5 +308,4 @@ npm run build
 
 기여를 시작하기 전에 [CONTRIBUTING.md](./CONTRIBUTING.md)를 읽어 주세요. 이슈 등록,
 브랜치 작성, 테스트와 벤치마크, PR 템플릿, Draft·Ready·Close 판정 기준을 한곳에
-정리했습니다. 보안 취약점은 공개 이슈 대신
-[비공개 보안 제보](https://github.com/qixiangme/DB-MCP/security/advisories/new)를 이용해 주세요.
+정리했습니다. 보안 취약점은 공개 이슈 대신 ichangmin380@gmail.com 으로 제보 부탁드립니다
