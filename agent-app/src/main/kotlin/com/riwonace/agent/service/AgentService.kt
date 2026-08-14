@@ -1,6 +1,7 @@
 package com.riwonace.agent.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.riwonace.agent.answer.StructuredEvidenceFormatter
 import com.riwonace.agent.context.ContextCurator
 import com.riwonace.agent.context.ContextItem
 import com.riwonace.agent.mcp.DataToolGateway
@@ -65,6 +66,7 @@ class AgentService(
     private val routeQuestionProjector: RouteQuestionProjector,
     private val postgresSqlNormalizer: PostgresSqlNormalizer,
     private val deterministicSqlPlanner: DeterministicSqlPlanner,
+    private val structuredEvidenceFormatter: StructuredEvidenceFormatter,
     @Value("\${agent.evaluation.mode:OURS}") modeName: String,
     @Value("\${agent.evaluation.include-evidence:false}") private val includeEvidence: Boolean,
 ) {
@@ -447,9 +449,9 @@ class AgentService(
     }
 
     private fun salientEvidence(question: String, route: Route, context: List<ContextItem>): String = when (route) {
-        Route.SQL -> context.joinToString("\n") { item ->
+        Route.SQL -> structuredEvidenceFormatter.formatSql(question, context.joinToString("\n") { item ->
             item.text.substringAfter("조회 결과:\n", item.text)
-        }
+        })
         Route.GRAPH -> {
             val lines = context.flatMap { it.text.lines() }.filter { "--[" in it }
             val predicate = when {
