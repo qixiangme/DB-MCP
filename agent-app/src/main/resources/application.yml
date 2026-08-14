@@ -36,6 +36,9 @@ spring:
               url: ${MCP_SERVER_URL:http://localhost:8081}
 
 agent:
+  # Architecture v2 활성화 (true=새 파이프라인, false=기존 호환)
+  v2:
+    enabled: ${AGENT_V2_ENABLED:true}
   context:
     budget-chars: 2400
   router:
@@ -43,6 +46,17 @@ agent:
     # embedding=코사인, ai=기존 3-shot 분류,
     # semantic-ai=데이터 형태·연산 경계를 명시한 의미 분류
     fallback: ${ROUTER_FALLBACK:}
+  # Adaptive Model Escalation 설정
+  escalation:
+    enabled: ${MODEL_ESCALATION_ENABLED:true}
+    models:
+      small: ${MODEL_SMALL:gemma3:1b}
+      medium: ${MODEL_MEDIUM:qwen2.5:3b}
+      large: ${MODEL_LARGE:qwen2.5:7b}
+  # Answerability Gate 설정
+  answerability:
+    coverage-threshold: ${COVERAGE_THRESHOLD:0.7}
+    use-llm: ${ANSWERABILITY_USE_LLM:false}
 
 logging:
   level:
