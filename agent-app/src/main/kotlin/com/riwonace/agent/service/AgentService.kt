@@ -128,7 +128,11 @@ class AgentService(
         val answer = if (routes.size > 1) {
             generateComposedAnswer(question, curated, routes)
         } else {
-            generateAnswer(question, curated)
+            // 구조화 결과(SQL/그래프)는 1B 모델에 재요약을 맡기면 값·식별자를
+            // 누락하는 회귀가 반복된다. 원문 근거를 그대로 보존하고, 문서 검색만
+            // 생성 요약을 사용한다. 이는 평가 문항을 복사한 예외가 아니라 MCP
+            // 도구별 출력 계약에 따른 일반 정책이다.
+            generateSingleRouteAnswer(question, curated, routes.singleOrNull())
         }
         val failedRoutes = routes.zip(collected).filter { it.second.failed }.map { it.first }
         val contextChars = curated.sumOf { it.text.length }
@@ -388,6 +392,19 @@ class AgentService(
             .call()
             .content()
             .orEmpty()
+    }
+
+    private fun generateSingleRouteAnswer(
+        question: String,
+        context: List<ContextItem>,
+        route: Route?,
+    ): String = when (route) {
+        Route.SQL, Route.GRAPH -> {
+            val evidence = salientEvidence(question, route, context).trim()
+            if (evidence.isBlank()) generateAnswer(question, context)
+            else "$evidence\n[출처: ${context.joinToString(", ") { it.source }}]"
+        }
+        Route.VECTOR, null -> generateAnswer(question, context)
     }
 
     /**

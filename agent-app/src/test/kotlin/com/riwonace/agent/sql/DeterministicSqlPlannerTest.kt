@@ -44,4 +44,13 @@ class DeterministicSqlPlannerTest {
     fun `고신뢰 패턴 밖 질문은 LLM 폴백을 위해 null을 반환한다`() {
         assertNull(planner.plan("최근 복잡한 프로젝트 상태를 분석해줘"))
     }
+
+    @Test
+    fun `일반 집계 질문은 스키마 기반 SELECT로 컴파일한다`() {
+        assertContains(planner.plan("서울 지역 매출 상위 5개 고객사를 알려줘")!!, "ORDER BY total_sales DESC")
+        assertContains(planner.plan("2025년 3분기 총 매출액은 얼마야?")!!, "quarter = '2025-Q3'")
+        assertContains(planner.plan("보안 솔루션 카테고리 제품들의 월 평균 매출은?")!!, "p.category = 'security'")
+        assertContains(planner.plan("현재 활성 상태인 계약 수는 몇 개야?")!!, "status = 'active'")
+        assertContains(planner.plan("평균 연봉이 가장 높은 부서는 어디야?")!!, "ORDER BY average_salary DESC")
+    }
 }
