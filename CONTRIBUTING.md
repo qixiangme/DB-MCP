@@ -52,6 +52,7 @@ bash ./gradlew test
 # 웹 클라이언트 빌드
 cd client
 npm ci
+npm audit --audit-level=high
 npm run build
 ```
 
