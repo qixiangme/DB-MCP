@@ -45,11 +45,6 @@ mcp-server :8081             air-server :8082
 EvidenceOptimizer / ContextCurator → AnswerabilityGate → Ollama`입니다. 단순 질문은
 결정적 경로를 유지하고 복합·실패 가능성이 높은 질문만 실행 계획과 복구 정책을 사용합니다.
 
-지연시간 최적화 후보와 채택·보류 근거는
-[로컬 MCP 지연시간 최적화 검토 결과](./docs/research/LATENCY_OPTIMIZATION_RESULTS.md)에
-정리했습니다. 모델 상주, 워밍업, 스키마 캐시, 독립 라우트 병렬화는 기본 경로에 반영되어
-있으며, MCP 전송 교체는 정확도·p95 개선을 재현하기 전까지 기본값으로 바꾸지 않습니다.
-
 ## 기술 스택
 
 | 영역 | 기술 | 사용 목적 |
