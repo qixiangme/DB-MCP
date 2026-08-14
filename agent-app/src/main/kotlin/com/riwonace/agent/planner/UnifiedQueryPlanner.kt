@@ -199,7 +199,13 @@ class UnifiedQueryPlanner {
 
     private fun isComparisonQuery(q: String): Boolean {
         val comparisonKeywords = listOf(
-            "비교", "보다 높은", "보다 낮은", "이상", "이하", "초과", "미만"
+            "비교", "보다 높은", "보다 낮은", "이상", "이하", "초과", "미만",
+            // 비교 패턴 확장
+            "가장 비싼", "가장 싼", "가장 오래", "가장 최근",
+            "더 높", "더 낮", "더 많", "더 적",
+            "차이", "중 어디", "중 누가",
+            // 시계열/트렌드 패턴
+            "추이", "변화", "증가", "감소", "분기별", "월별", "연도별"
         )
         return comparisonKeywords.any { it in q }
     }
