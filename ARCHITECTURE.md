@@ -3,6 +3,23 @@
 > 과제: MCP 기반 지능형 데이터 플랫폼 클러스터 (리원에이스 지정과제)
 > 목표: **복잡하고 비싼 세팅 없이, 표준 규격(MCP)만으로, 가벼운 로컬 모델로도 안정적으로 정답을 찾아내는 시스템**
 
+현재 기본 오케스트레이션은 Architecture v2입니다. 아래의 기존 계층 설명은 MCP 도구
+계약과 데이터 경계를 설명하고, 실제 요청 제어 흐름은 다음 순서를 기준으로 읽습니다.
+
+```text
+QueryProfiler
+  → ExecutionPlanner (독립 작업 병렬화 / 의존 작업 순서화)
+  → MCP Gateway (vector_search / run_sql / kg_search / get_schema)
+  → EvidenceOptimizer + ContextCurator
+  → AnswerabilityGate
+  → Ollama 답변 생성
+```
+
+단순 질문은 결정적 라우팅과 기존 경로를 사용하고, 복합·불확실·실패 가능성이 높은
+질문만 모델 에스컬레이션과 복구 정책을 추가합니다. 이 조건부 실행은 v2 기능을 모든
+요청의 고정 지연으로 만들지 않기 위한 설계입니다. 각 구성요소의 책임과 실행 예시는
+[`docs/architecture/READER_GUIDE.md`](docs/architecture/READER_GUIDE.md)에 정리했습니다.
+
 ## 1. 전체 구조
 
 ```

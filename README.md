@@ -14,6 +14,10 @@
 답변에는 선택한 라우트, 호출한 MCP 도구, 컨텍스트 출처, 지연 시간을 함께 제공하므로
 어떤 데이터로 답했는지 확인할 수 있습니다.
 
+처음 읽는다면 [시스템 읽기 안내](./docs/architecture/READER_GUIDE.md)에서 요청 흐름과
+각 모듈의 책임을 먼저 확인하세요. 구현 세부사항은 [아키텍처 설계서](./ARCHITECTURE.md),
+재현 가능한 수치는 [최종 벤치마크](./docs/research/CONTEST_FINAL_BENCHMARK.md)에 정리했습니다.
+
 ## 전체 구조
 
 ```text
@@ -21,7 +25,7 @@
               │ HTTP :8080
               ▼
        agent-app (Spring AI)
-       라우팅 · NL2SQL · 답변 생성
+       프로파일링 · 실행계획 · 라우팅 · NL2SQL · 답변 생성
               │ MCP/SSE
        ┌──────┴────────────────────┐
        ▼                           ▼
@@ -36,6 +40,15 @@ mcp-server :8081             air-server :8082
 기본 실행 경로는 `agent-app` → `mcp-server`입니다. `air-server`는 기본 서버를 동시에
 실행하기 위한 모듈이 아니라, 같은 MCP 도구 계약을 다른 프레임워크로 구현해 서버를
 교체할 수 있음을 검증하기 위한 선택형 구현입니다.
+
+현재 에이전트의 핵심 흐름은 `QueryProfiler → ExecutionPlanner → MCP Gateway →
+EvidenceOptimizer / ContextCurator → AnswerabilityGate → Ollama`입니다. 단순 질문은
+결정적 경로를 유지하고 복합·실패 가능성이 높은 질문만 실행 계획과 복구 정책을 사용합니다.
+
+지연시간 최적화 후보와 채택·보류 근거는
+[로컬 MCP 지연시간 최적화 검토 결과](./docs/research/LATENCY_OPTIMIZATION_RESULTS.md)에
+정리했습니다. 모델 상주, 워밍업, 스키마 캐시, 독립 라우트 병렬화는 기본 경로에 반영되어
+있으며, MCP 전송 교체는 정확도·p95 개선을 재현하기 전까지 기본값으로 바꾸지 않습니다.
 
 ## 기술 스택
 
@@ -58,7 +71,7 @@ mcp-server :8081             air-server :8082
 
 | 모듈 | 포트 | 역할 |
 |---|---:|---|
-| `agent-app` | 8080 | 질문 라우팅, NL2SQL, 컨텍스트 큐레이션, 답변 생성, HTTP API |
+| `agent-app` | 8080 | 질문 프로파일링·실행계획, 라우팅, NL2SQL, 근거 검증, 답변 생성, HTTP API |
 | `mcp-server` | 8081 | 기본 MCP 서버. 검색·SQL·그래프·스키마 도구와 데이터 적재 제공 |
 | `air-server` | 8082 | 동일한 도구 이름과 안전 정책을 제공하는 선택형 Node.js MCP 서버 |
 | `client` | 5173 | 선택형 React 웹 클라이언트 |
