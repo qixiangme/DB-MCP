@@ -1,8 +1,8 @@
 package com.riwonace.agent.core
 
 import com.riwonace.agent.router.Route
+import com.riwonace.agent.router.RuleBasedRouter
 import org.slf4j.LoggerFactory
-import org.springframework.ai.chat.client.ChatClient
 import org.springframework.stereotype.Component
 
 /**
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component
  */
 @Component
 class QueryProfiler(
-    private val chatClient: ChatClient,
+    private val router: RuleBasedRouter,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -41,7 +41,9 @@ class QueryProfiler(
         val complexity = estimateComplexity(question, intent)
         val uncertainty = estimateUncertainty(question, intent)
         val requiredEvidence = inferRequiredEvidence(intent, question)
-        val suggestedRoutes = inferRoutes(intent, requiredEvidence)
+        // 라우트 선택은 공식·키워드 갭 평가로 검증된 결정적 라우터를 단일 진실 공급원으로 둔다.
+        // 프로파일러는 복잡도·불확실성·증거 요구량을 계산하고 실행 라우트를 중복 추론하지 않는다.
+        val suggestedRoutes = router.route(question)
         val isMultiHop = intent == QueryIntent.MULTI_HOP || question.contains("그리고") || question.contains("후에")
         val hasDependency = detectDependency(question)
 
@@ -212,19 +214,6 @@ class QueryProfiler(
         }
 
         return evidence
-    }
-
-    /**
-     * 증거 유형에서 라우트 추론
-     */
-    private fun inferRoutes(intent: QueryIntent, evidence: Set<EvidenceType>): List<Route> {
-        return evidence.map { type ->
-            when (type) {
-                EvidenceType.STRUCTURED_DATA -> Route.SQL
-                EvidenceType.DOCUMENT -> Route.VECTOR
-                EvidenceType.GRAPH_RELATION -> Route.GRAPH
-            }
-        }
     }
 
     /**
