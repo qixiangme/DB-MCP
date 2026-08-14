@@ -1,0 +1,923 @@
+{
+  "metadata": {
+    "createdAt": "2026-08-14T08:40:26.818502+00:00",
+    "commit": "40b13e6d1ea2c00d7bbc485875d0ee849d3ff408",
+    "branch": "feat/architecture-v2",
+    "dirty": true,
+    "dataset": "eval/official-eval.json",
+    "datasetVersion": "unknown",
+    "baseUrl": "http://localhost:8080",
+    "reps": 1,
+    "model": "qwen2.5:3b",
+    "router": "adaptive",
+    "mcpServer": "spring-ai",
+    "routeFilter": null,
+    "evaluatorVersion": "2.0"
+  },
+  "summary": {
+    "answerAccuracyPct": 36.7,
+    "routeAccuracyPct": 100.0,
+    "answerCorrect": 11,
+    "routeCorrect": 30,
+    "total": 30,
+    "errors": 0,
+    "averageLatencyMs": 3000,
+    "byExpectedRoute": {
+      "SQL": {
+        "answerAccuracyPct": 40.0,
+        "routeAccuracyPct": 100.0,
+        "count": 10
+      },
+      "VECTOR": {
+        "answerAccuracyPct": 20.0,
+        "routeAccuracyPct": 100.0,
+        "count": 10
+      },
+      "GRAPH": {
+        "answerAccuracyPct": 50.0,
+        "routeAccuracyPct": 100.0,
+        "count": 10
+      }
+    },
+    "byQuestionType": {
+      "unknown": {
+        "answerAccuracyPct": 36.7,
+        "routeAccuracyPct": 100.0,
+        "count": 30
+      }
+    },
+    "outcomes": {
+      "answer-only": 19,
+      "pass": 11
+    }
+  },
+  "rows": [
+    {
+      "rep": 1,
+      "id": "N1",
+      "type": "unknown",
+      "question": "서울 지역 매출 상위 5개 고객사를 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 4798,
+      "wallMs": 4804,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N2",
+      "type": "unknown",
+      "question": "2025년 3분기 총 매출액은 얼마야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "23859"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2586,
+      "wallMs": 2589,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "23859\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N3",
+      "type": "unknown",
+      "question": "보안 솔루션 카테고리 제품들의 월 평균 매출은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 4809,
+      "wallMs": 4813,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)",
+        "vector_search(additional)",
+        "vector_search(additional)"
+      ],
+      "contextSources": [
+        "sql",
+        "routing-policy.md",
+        "DOC-030.md",
+        "tacc.md"
+      ],
+      "answer": "보안 솔루션 카테고리에 속한 제품들의 월 평균 매출을 알려주세요.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N4",
+      "type": "unknown",
+      "question": "현재 활성 상태인 계약 수는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "46"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1864,
+      "wallMs": 1869,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "현재 활성 상태인 계약 수는 46개입니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N5",
+      "type": "unknown",
+      "question": "기술지원팀 직원 목록과 연봉을 알려줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "박소연",
+        "권승호",
+        "조예진",
+        "임우진"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 3292,
+      "wallMs": 3294,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "기술지원팀 직원 목록과 연봉은 다음과 같습니다.\n\n*   박소연 - 9520\n*   권승호 - 5378\n*   조예진 - 5019\n*   임우진 - 7092\n\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N6",
+      "type": "unknown",
+      "question": "가장 많은 프로젝트를 진행 중인 고객사는?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2856,
+      "wallMs": 2859,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [],
+      "answer": "죄송합니다. '가장 많은 프로젝트를 진행 중인 고객사는?'에 대해 충분한 정보를 찾지 못했습니다. 질문을 더 구체적으로 해주시거나 다른 방식으로 질문해 주세요.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N7",
+      "type": "unknown",
+      "question": "Critical 우선순위 티켓 중 아직 해결되지 않은 건은?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2186,
+      "wallMs": 2188,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N8",
+      "type": "unknown",
+      "question": "제품별 총 계약 금액을 큰 순서로 보여줘",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 3102,
+      "wallMs": 3105,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N9",
+      "type": "unknown",
+      "question": "2024년에 등록된 고객사는 몇 개야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "8개"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 3330,
+      "wallMs": 3333,
+      "toolCalls": [
+        "get_schema",
+        "run_sql"
+      ],
+      "contextSources": [
+        "sql"
+      ],
+      "answer": "2024년에 등록된 고객사는 8개입니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "N10",
+      "type": "unknown",
+      "question": "평균 연봉이 가장 높은 부서는 어디야?",
+      "expectedRoute": "SQL",
+      "actualRoutes": [
+        "SQL"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2480,
+      "wallMs": 2483,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "run_sql(retry-1)"
+      ],
+      "contextSources": [],
+      "answer": "죄송합니다. '평균 연봉이 가장 높은 부서는 어디야?'에 대해 충분한 정보를 찾지 못했습니다. 질문을 더 구체적으로 해주시거나 다른 방식으로 질문해 주세요.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V1",
+      "type": "unknown",
+      "question": "최근 서버 장애 사례와 원인을 알려줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1383,
+      "wallMs": 1384,
+      "toolCalls": [
+        "vector_search"
+      ],
+      "contextSources": [
+        "DOC-021.md",
+        "DOC-030.md",
+        "DOC-028.md",
+        "DOC-023.md"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V2",
+      "type": "unknown",
+      "question": "Product-C1 설치 방법이 궁금해",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2112,
+      "wallMs": 2115,
+      "toolCalls": [
+        "vector_search"
+      ],
+      "contextSources": [
+        "DOC-011.md",
+        "DOC-032.md",
+        "DOC-031.md",
+        "DOC-001.md"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V3",
+      "type": "unknown",
+      "question": "Kubernetes 관련 장애 대응 방법은?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2175,
+      "wallMs": 2178,
+      "toolCalls": [
+        "vector_search",
+        "vector_search(additional)",
+        "vector_search(additional)"
+      ],
+      "contextSources": [
+        "DOC-021.md",
+        "DOC-022.md",
+        "DOC-026.md",
+        "DOC-007.md",
+        "DOC-002.md",
+        "DOC-030.md"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V4",
+      "type": "unknown",
+      "question": "성능 최적화를 위한 DB 튜닝 방법 알려줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1812,
+      "wallMs": 1815,
+      "toolCalls": [
+        "vector_search"
+      ],
+      "contextSources": [
+        "DOC-019.md",
+        "DOC-026.md",
+        "DOC-003.md",
+        "DOC-030.md"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V5",
+      "type": "unknown",
+      "question": "보안 취약점 점검 관련 내용이 있어?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 28,
+      "wallMs": 30,
+      "toolCalls": [
+        "vector_search"
+      ],
+      "contextSources": [],
+      "answer": "죄송합니다. '보안 취약점 점검 관련 내용이 있어?'에 대해 충분한 정보를 찾지 못했습니다. 질문을 더 구체적으로 해주시거나 다른 방식으로 질문해 주세요.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V6",
+      "type": "unknown",
+      "question": "백업 정책은 어떻게 되어 있어?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 949,
+      "wallMs": 951,
+      "toolCalls": [
+        "vector_search"
+      ],
+      "contextSources": [
+        "DOC-024.md",
+        "DOC-030.md",
+        "DOC-001.md",
+        "DOC-023.md"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V7",
+      "type": "unknown",
+      "question": "API 인증 방식은 뭐야?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "Bearer",
+        "토큰"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 592,
+      "wallMs": 594,
+      "toolCalls": [
+        "vector_search"
+      ],
+      "contextSources": [
+        "DOC-015.md",
+        "DOC-005.md",
+        "DOC-006.md",
+        "DOC-020.md"
+      ],
+      "answer": "API 인증 방식은 Bearer 토큰 방식을 사용합니다. /auth/token 엔드포인트에서 발급받습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V8",
+      "type": "unknown",
+      "question": "고객사 미팅에서 논의된 일정 지연 이슈는?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "GRAPH",
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "Client-"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2325,
+      "wallMs": 2327,
+      "toolCalls": [
+        "kg_search",
+        "vector_search"
+      ],
+      "contextSources": [
+        "knowledge-graph",
+        "DOC-021.md",
+        "DOC-030.md",
+        "DOC-023.md",
+        "DOC-018.md"
+      ],
+      "answer": "고객사 미팅에서 논의된 일정 지연 이슈는 Client-A입니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V9",
+      "type": "unknown",
+      "question": "클라우드 마이그레이션 제안서 내용 보여줘",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2073,
+      "wallMs": 2075,
+      "toolCalls": [
+        "vector_search"
+      ],
+      "contextSources": [
+        "DOC-018.md",
+        "DOC-030.md",
+        "DOC-028.md",
+        "DOC-023.md"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "V10",
+      "type": "unknown",
+      "question": "SSL 인증서 관련 장애가 있었어?",
+      "expectedRoute": "VECTOR",
+      "actualRoutes": [
+        "VECTOR"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1963,
+      "wallMs": 1965,
+      "toolCalls": [
+        "vector_search"
+      ],
+      "contextSources": [
+        "DOC-030.md",
+        "DOC-002.md",
+        "DOC-006.md",
+        "DOC-005.md"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G1",
+      "type": "unknown",
+      "question": "Client-A가 사용 중인 제품 목록은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "Product-C3",
+        "Product-S1"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 6277,
+      "wallMs": 6278,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "kg_search",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql",
+        "knowledge-graph"
+      ],
+      "answer": "Client-A가 사용 중인 제품 목록은 다음과 같습니다.\n* Product-S1\n* Product-S3\n* Product-S3\n* Product-S1\n* Product-C3\n* Product-S3\n* Product-S3\n* Product-S1\n* Product-C3\n* Product-S3\n* Product-S3\n* Product-S1\n* Product-C3\n* Product-S3\n* Product-S3\n* Product-S1\n* Product-C3\n* Product-S3\n* Product-S3\n* Product-S1\n* Product-C3\n\n출처: sql",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G2",
+      "type": "unknown",
+      "question": "Product-C1을 사용하는 고객사는 어디야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 8,
+      "wallMs": 10,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [],
+      "answer": "죄송합니다. 'Product-C1을 사용하는 고객사는 어디야?'에 대해 충분한 정보를 찾지 못했습니다. 질문을 더 구체적으로 해주시거나 다른 방식으로 질문해 주세요.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G3",
+      "type": "unknown",
+      "question": "클라우드사업부 소속 직원들은 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "안진우",
+        "강현우",
+        "서재원",
+        "김도윤",
+        "조동현",
+        "이지훈",
+        "황다은",
+        "한은지"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 5680,
+      "wallMs": 5683,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "kg_search",
+        "run_sql(retry-1)",
+        "vector_search(additional)",
+        "vector_search(additional)"
+      ],
+      "contextSources": [
+        "sql",
+        "DOC-018.md",
+        "DOC-023.md",
+        "DOC-030.md",
+        "DOC-024.md",
+        "knowledge-graph"
+      ],
+      "answer": "클라우드사업부의 안진우, 강현우, 서재원, 김도윤, 조동현, 이지훈, 황다은, 한은지, 황재원, 김준혁, 조동현, 이지훈, 황다은, 강현우, 김도윤, 조동현, 이지훈, 황다은, 강현우, 김준혁, 조동현, 이지훈, 황다은, 강현우, 김준혁",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G4",
+      "type": "unknown",
+      "question": "서울물산 담당 엔지니어는 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "찾을 수 없",
+        "없습니다"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1178,
+      "wallMs": 1182,
+      "toolCalls": [
+        "kg_search",
+        "vector_search(additional)",
+        "vector_search(additional)"
+      ],
+      "contextSources": [
+        "knowledge-graph",
+        "DOC-018.md",
+        "DOC-030.md",
+        "DOC-024.md",
+        "DOC-025.md",
+        "DOC-002.md",
+        "DOC-013.md"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G5",
+      "type": "unknown",
+      "question": "Product-D1 제품과 관련된 프로젝트는?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 4329,
+      "wallMs": 4331,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "kg_search",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql",
+        "knowledge-graph"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G6",
+      "type": "unknown",
+      "question": "기술 지원 이슈가 가장 많은 제품은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 4337,
+      "wallMs": 4339,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "kg_search",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "sql",
+        "knowledge-graph"
+      ],
+      "answer": "기술 지원 이슈가 가장 많은 제품은 12번입니다.\n출처: sql\n",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G7",
+      "type": "unknown",
+      "question": "경영지원팀 팀장은 누구야?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "윤소연"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 1930,
+      "wallMs": 1933,
+      "toolCalls": [
+        "kg_search",
+        "vector_search(additional)",
+        "vector_search(additional)"
+      ],
+      "contextSources": [
+        "knowledge-graph",
+        "DOC-021.md",
+        "DOC-023.md",
+        "DOC-030.md",
+        "tacc.md"
+      ],
+      "answer": "경영지원팀 팀원들은 윤소연, 홍서연, 서지현, 정혜원, 오수진, 신하은, 박은지, 최상우, 경역지원팀 팀원들입니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G8",
+      "type": "unknown",
+      "question": "진행 중인 프로젝트를 이끄는 직원 목록",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 5395,
+      "wallMs": 5397,
+      "toolCalls": [
+        "kg_search",
+        "run_sql(retry-1)",
+        "run_sql(retry-2)"
+      ],
+      "contextSources": [
+        "knowledge-graph",
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G9",
+      "type": "unknown",
+      "question": "Product-S1 관련 고객 이슈 현황은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": true,
+      "matchedKeywords": [
+        "Client-D",
+        "Client-J",
+        "Client-X",
+        "Client-V",
+        "Client-O"
+      ],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 11388,
+      "wallMs": 11392,
+      "toolCalls": [
+        "kg_search"
+      ],
+      "contextSources": [
+        "knowledge-graph"
+      ],
+      "answer": "Product-S1 관련 고객 이슈 현황은 다음과 같습니다.\n\n*   Client-D - 이슈보고\n*   Client-J - 이슈보고\n*   Client-X - 이슈보고\n*   Client-V - 이슈보고\n*   Client-O - 이슈보고\n*   Client-A - 이슈보고\n*   Client-K - 이슈보고\n*   Client-D - 사용한다\n*   Client-N - 사용한다\n*   Client-A - 사용한다\n*   Client-K - 사용한다\n*   Client-D - 이슈보고\n*   Client-J - 이슈보고\n*   Client-X - 이슈보고\n*   Client-V - 이슈보고\n*   Client-O - 이슈보고\n*   Client-S - 이슈보고\n*   Client-AA - 이슈보고\n*   Client-E - 이슈보고\n*   Client-D - 사용한다\n*   Client-C2 - 사용한다\n*   Client-C1 - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C2 - 사용한다\n*   Client-C1 - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C4 - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-S3 - 사용한다\n*   Client-D - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-S2 - 사용한다\n*   Client-D - 사용한다\n*   Client-E - 사용한다\n*   Client-X - 사용한다\n*   Product-C2 - 사용한다\n*   Client-X - 사용한다\n*   Client-A - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C1 - 사용한다\n*   Client-D - 사용한다\n*   Client-N - 사용한다\n*   Client-D - 사용한다\n*   Product-C4 - 사용한다\n*   Client-E - 사용한다\n*   Client-X - 사용한다\n*   Product-D2 - 사용한다\n*   Client-X - 사용한다\n*   ",
+      "error": null
+    },
+    {
+      "rep": 1,
+      "id": "G10",
+      "type": "unknown",
+      "question": "가장 많은 고객을 담당하는 직원은?",
+      "expectedRoute": "GRAPH",
+      "actualRoutes": [
+        "SQL",
+        "GRAPH"
+      ],
+      "routeCorrect": true,
+      "answerCorrect": false,
+      "matchedKeywords": [],
+      "ruleUsed": "legacy-anyOf",
+      "latencyMs": 2768,
+      "wallMs": 2773,
+      "toolCalls": [
+        "get_schema",
+        "run_sql",
+        "kg_search",
+        "run_sql(retry-1)",
+        "vector_search(additional)",
+        "vector_search(additional)"
+      ],
+      "contextSources": [
+        "knowledge-graph",
+        "DOC-021.md",
+        "DOC-027.md",
+        "DOC-030.md",
+        "DOC-024.md",
+        "DOC-025.md",
+        "DOC-016.md",
+        "sql"
+      ],
+      "answer": "제공된 데이터에서 찾을 수 없습니다.",
+      "error": null
+    }
+  ]
+}

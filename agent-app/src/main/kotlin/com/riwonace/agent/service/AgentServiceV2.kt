@@ -1,6 +1,8 @@
 package com.riwonace.agent.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.riwonace.agent.answer.ExtractionGuidedPrompt
+import com.riwonace.agent.answer.GroundedAnswerRenderer
 import com.riwonace.agent.context.ContextItem
 import com.riwonace.agent.core.*
 import com.riwonace.agent.mcp.McpGateway
@@ -37,6 +39,8 @@ class AgentServiceV2(
     private val gate: AnswerabilityGate,
     private val recovery: RecoveryPolicy,
     private val escalator: ModelEscalator,
+    private val groundedAnswerRenderer: GroundedAnswerRenderer,
+    private val extractionPrompt: ExtractionGuidedPrompt,
     private val gateway: McpGateway,
     private val chatClient: ChatClient,
     private val mapper: ObjectMapper,
@@ -126,11 +130,17 @@ class AgentServiceV2(
 
         // 6. 답변 생성 (모델 에스컬레이션 포함)
         var modelSelection = escalator.selectModel(plan.profile)
-        var answer = generateAnswer(question, finalEvidence, modelSelection.model)
+        val deterministicAnswer = groundedAnswerRenderer.render(
+            question,
+            plan.profile.suggestedRoutes,
+            finalEvidence,
+        )
+        var answer = deterministicAnswer
+            ?: generateAnswer(question, finalEvidence, modelSelection.model, plan.profile.suggestedRoutes)
 
         // 7. 품질 검증 및 재에스컬레이션
         val answerQuality = estimateAnswerQuality(answer, question)
-        if (answerQuality < 0.6 || gateResult.claimCoverage < 0.7) {
+        if (deterministicAnswer == null && (answerQuality < 0.6 || gateResult.claimCoverage < 0.7)) {
             val reescalation = escalator.shouldReescalate(
                 modelSelection,
                 answerQuality,
@@ -138,7 +148,7 @@ class AgentServiceV2(
             )
             if (reescalation != null) {
                 log.info("모델 재에스컬레이션: {} → {}", modelSelection.model, reescalation.model)
-                answer = generateAnswer(question, finalEvidence, reescalation.model)
+                answer = generateAnswer(question, finalEvidence, reescalation.model, plan.profile.suggestedRoutes)
                 modelSelection = reescalation
                 wasEscalated = true
             }
@@ -564,21 +574,22 @@ class AgentServiceV2(
         listOf(ContextItem("document", json, 0.5))
     }
 
-    private fun generateAnswer(question: String, context: List<ContextItem>, model: String): String {
-        val contextBlock = if (context.isEmpty()) "(검색된 컨텍스트 없음)"
-        else context.joinToString("\n\n") { "[출처: ${it.source}]\n${it.text}" }
-
+    private fun generateAnswer(
+        question: String,
+        context: List<ContextItem>,
+        model: String,
+        routes: List<Route>,
+    ): String {
         // TODO: 모델 동적 전환 구현 (현재는 기본 모델 사용)
-        log.debug("답변 생성: model={}, context_size={}", model, context.size)
+        log.debug("답변 생성: model={}, context_size={}, routes={}", model, context.size, routes)
+
+        // 추출 가이드 프롬프트 사용 (근거→정답 변환 개선)
+        val systemPrompt = extractionPrompt.buildSystemPrompt(routes)
+        val userPrompt = extractionPrompt.buildUserPrompt(question, context, routes)
 
         return chatClient.prompt()
-            .system(
-                "너는 리원에이스의 데이터 플랫폼 AI 비서다. " +
-                    "반드시 아래 제공된 컨텍스트에 근거해서만 한국어로 답하고, " +
-                    "컨텍스트에 없는 내용은 '제공된 데이터에서 찾을 수 없습니다'라고 답한다. " +
-                    "답변 끝에 사용한 출처를 표기한다.",
-            )
-            .user("컨텍스트:\n$contextBlock\n\n질문: $question")
+            .system(systemPrompt)
+            .user(userPrompt)
             .call()
             .content()
             .orEmpty()
