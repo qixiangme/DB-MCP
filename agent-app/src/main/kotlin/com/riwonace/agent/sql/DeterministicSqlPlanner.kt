@@ -75,15 +75,15 @@ class DeterministicSqlPlanner {
                 "WHERE p.status = 'in_progress' GROUP BY c.id, c.name ORDER BY project_count DESC LIMIT 1"
         }
         if (isUnresolvedCritical(q)) {
-            return "SELECT count(*) AS count FROM support_tickets WHERE priority = 'Critical' " +
-                "AND status NOT IN ('resolved', 'closed')"
+            return "SELECT count(*) AS count FROM support_tickets WHERE priority = 'critical' " +
+                "AND status IN ('open', 'in_progress')"
         }
         if (isProductContractTotals(q)) {
             return "SELECT p.name, sum(c.amount) AS total_amount FROM contracts c JOIN products p ON p.id = c.product_id " +
                 "GROUP BY p.id, p.name ORDER BY total_amount DESC"
         }
         if (isRegisteredClients(q)) {
-            val year = YEAR.find(question)?.value ?: "2024"
+            val year = YEAR.find(question)?.groupValues?.get(1) ?: "2024"
             return "SELECT count(*) AS count FROM clients WHERE registered_at >= '${year}-01-01' " +
                 "AND registered_at < '${year.toInt() + 1}-01-01'"
         }
@@ -122,7 +122,7 @@ class DeterministicSqlPlanner {
     private fun isCategoryAverageSales(q: String) = "카테고리" in q && "평균" in q && "매출" in q
     private fun isDepartmentEmployees(q: String) = "직원" in q && ("목록" in q || "누구" in q) && DEPARTMENT.containsMatchIn(q)
     private fun isTopProjectClient(q: String) = "프로젝트" in q && ("가장 많은" in q || "많이" in q) && "고객사" in q
-    private fun isUnresolvedCritical(q: String) = "Critical" in q && ("해결되지" in q || "미해결" in q)
+    private fun isUnresolvedCritical(q: String) = "critical" in q && ("해결되지" in q || "미해결" in q)
     private fun isProductContractTotals(q: String) = "제품별" in q && "계약" in q && ("금액" in q || "합계" in q)
     private fun isRegisteredClients(q: String) = "등록" in q && "고객사" in q && ("몇" in q || "수" in q)
     private fun isHighestDepartmentSalary(q: String) = "평균 연봉" in q && ("높은" in q || "가장" in q) && "부서" in q

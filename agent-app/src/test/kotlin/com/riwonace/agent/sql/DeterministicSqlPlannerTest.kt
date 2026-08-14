@@ -53,4 +53,20 @@ class DeterministicSqlPlannerTest {
         assertContains(planner.plan("현재 활성 상태인 계약 수는 몇 개야?")!!, "status = 'active'")
         assertContains(planner.plan("평균 연봉이 가장 높은 부서는 어디야?")!!, "ORDER BY average_salary DESC")
     }
+
+    @Test
+    fun `미해결 Critical 티켓은 실제 저장값과 미해결 상태만 집계한다`() {
+        val sql = planner.plan("아직 해결되지 않은 Critical 티켓은 몇 건이야?")!!
+
+        assertContains(sql, "priority = 'critical'")
+        assertContains(sql, "status IN ('open', 'in_progress')")
+    }
+
+    @Test
+    fun `연도가 포함된 등록 고객사 질문은 연도 경계를 만든다`() {
+        val sql = planner.plan("2024년에 등록된 고객사는 몇 곳이야?")!!
+
+        assertContains(sql, "registered_at >= '2024-01-01'")
+        assertContains(sql, "registered_at < '2025-01-01'")
+    }
 }
