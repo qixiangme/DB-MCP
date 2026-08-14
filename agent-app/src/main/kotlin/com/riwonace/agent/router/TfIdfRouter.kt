@@ -102,7 +102,7 @@ class TfIdfRouter : RouteFallback {
      * @param question 사용자 질문
      * @return 예측된 라우트
      */
-    override fun classify(question: String): Route {
+    override fun classify(question: String): List<Route> {
         val queryVector = computeTfIdf(question)
 
         // 각 학습 데이터와의 코사인 유사도 계산
@@ -126,7 +126,7 @@ class TfIdfRouter : RouteFallback {
             topK.map { "${it.first.route}:${String.format("%.2f", it.second)}" },
         )
 
-        return predicted
+        return listOf(predicted)
     }
 
     /**

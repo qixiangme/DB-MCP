@@ -1,0 +1,10 @@
+{
+  "version": "1.0.0",
+  "scenarios": [
+    {"id":"F-SQL","questionId":"C-ALL-01","faultRoutes":["SQL"],"faultMode":"EXCEPTION","expectedResponseMode":"DEGRADED"},
+    {"id":"F-VECTOR","questionId":"C-ALL-01","faultRoutes":["VECTOR"],"faultMode":"EXCEPTION","expectedResponseMode":"DEGRADED"},
+    {"id":"F-GRAPH","questionId":"C-ALL-01","faultRoutes":["GRAPH"],"faultMode":"EXCEPTION","expectedResponseMode":"DEGRADED"},
+    {"id":"F-TWO","questionId":"C-ALL-01","faultRoutes":["SQL","VECTOR"],"faultMode":"EXCEPTION","expectedResponseMode":"DEGRADED"},
+    {"id":"F-ALL","questionId":"C-ALL-01","faultRoutes":["SQL","VECTOR","GRAPH"],"faultMode":"EXCEPTION","expectedResponseMode":"FAILED"}
+  ]
+}

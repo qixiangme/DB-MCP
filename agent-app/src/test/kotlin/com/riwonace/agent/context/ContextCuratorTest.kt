@@ -90,4 +90,57 @@ class ContextCuratorTest {
         )
         assertEquals(1, curator.curate(items, listOf(Route.VECTOR)).size)
     }
+
+    @Test
+    fun `ALL 정책은 점수 하한과 중복 제거 없이 검색 순서를 보존한다`() {
+        val all = ContextCurator(300, "ALL_WITH_HARD_CAP")
+        val duplicate = "같은 문서"
+        val selected = all.curate(
+            "질문",
+            listOf(
+                ContextItem("first", duplicate, 0.1),
+                ContextItem("second", duplicate, 0.1),
+            ),
+            listOf(Route.VECTOR),
+        )
+
+        assertEquals(listOf("first", "second"), selected.map { it.source })
+    }
+
+    @Test
+    fun `COVERAGE 정책은 질문 엔티티를 새로 포함하는 근거를 중복 근거보다 우선한다`() {
+        val coverage = ContextCurator(500, "COVERAGE")
+        val selected = coverage.curate(
+            "Product-C1 재시작 절차와 담당 팀",
+            listOf(
+                ContextItem("doc-a", "Product-C1 재시작 절차는 rollout restart다", 0.9),
+                ContextItem("doc-duplicate", "Product-C1 재시작 절차는 rollout restart다", 0.89),
+                ContextItem("knowledge-graph", "Product-C1 담당 팀은 플랫폼팀이다", 0.8),
+            ),
+            listOf(Route.VECTOR, Route.GRAPH),
+        )
+
+        assertEquals(listOf("doc-a", "knowledge-graph"), selected.map { it.source })
+    }
+
+    @Test
+    fun `COVERAGE 복합 질문은 경로별 최고 효용 근거 하나로 잡음을 제한한다`() {
+        val coverage = ContextCurator(1000, "COVERAGE")
+        val selected = coverage.curate(
+            "Product-C1 가격과 설치 도구",
+            listOf(
+                ContextItem("sql", "Product-C1 price_monthly=350", 1.0),
+                ContextItem("DOC-install", "Product-C1 설치에는 Docker가 필요하다", 0.9),
+                ContextItem("DOC-proposal", "Product-C1 제안 비용은 8000이다", 0.8),
+            ),
+            listOf(Route.SQL, Route.VECTOR),
+        )
+
+        assertEquals(listOf("sql", "DOC-install"), selected.map { it.source })
+    }
+
+    @Test
+    fun `알 수 없는 평가 정책은 시작 시 거부한다`() {
+        kotlin.test.assertFailsWith<IllegalArgumentException> { ContextCurator(300, "invented") }
+    }
 }

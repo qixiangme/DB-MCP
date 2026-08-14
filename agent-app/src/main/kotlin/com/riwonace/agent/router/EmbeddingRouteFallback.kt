@@ -41,12 +41,12 @@ class EmbeddingRouteFallback(private val embeddingModel: EmbeddingModel) : Route
         examples.mapValues { (_, texts) -> texts.map { embeddingModel.embed(it) } }
     }
 
-    override fun classify(question: String): Route {
+    override fun classify(question: String): List<Route> {
         val q = embeddingModel.embed(question)
-        return exampleVectors.entries
+        return listOf(exampleVectors.entries
             .map { (route, vectors) -> route to vectors.maxOf { cosine(q, it) } }
             .maxBy { it.second }
-            .first
+            .first)
     }
 
     private fun cosine(a: FloatArray, b: FloatArray): Double {

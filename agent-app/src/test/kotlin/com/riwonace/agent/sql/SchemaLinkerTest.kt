@@ -9,7 +9,7 @@ class SchemaLinkerTest {
     private val linker = SchemaLinker(ObjectMapper())
 
     @Test
-    fun `get_schema 실제 valueHints 계약에서 질문의 값을 연결한다`() {
+    fun `db schema Resource의 valueHints 계약에서 질문의 값을 연결한다`() {
         val schema = """
             {
               "tables": {"departments": ["name (character varying)"]},

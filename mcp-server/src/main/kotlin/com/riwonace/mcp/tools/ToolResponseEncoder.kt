@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory
  *
  * 보안 강화:
  * - 에러 메시지를 유형별로 일반화하여 내부 정보 노출 방지
- * - DB 스키마, 테이블명, 컬럼명 등 민감 정보 마스킹
+ * - 과도한 결과를 구조화된 오류로 대체해 무효 JSON과 컨텍스트 폭증 방지
  */
-internal class ToolResponseEncoder(
+class ToolResponseEncoder(
     private val mapper: ObjectMapper,
     private val maxOutputChars: Int,
 ) {

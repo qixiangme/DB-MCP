@@ -25,7 +25,7 @@ class SchemaLinker(
     /**
      * 스키마 JSON에서 valueHints를 추출하고 질문과 매칭한다.
      *
-     * @param schemaJson get_schema 결과 JSON
+     * @param schemaJson db://schema Resource의 JSON
      * @param question 사용자 질문
      * @return 매칭된 스키마 힌트 목록 (예: "departments.name = '플랫폼팀'")
      */
@@ -39,7 +39,7 @@ class SchemaLinker(
                 mapper.typeFactory.constructMapType(Map::class.java, String::class.java, Any::class.java),
             )
 
-            // get_schema의 실제 계약은 최상위 valueHints 객체에 "table.column": [values] 형태다.
+            // db://schema 계약은 최상위 valueHints 객체에 "table.column": [values] 형태다.
             val valueHints = schema["valueHints"] as? Map<String, List<Any?>> ?: return emptyList()
             for ((qualifiedColumn, rawValues) in valueHints) {
                 val separator = qualifiedColumn.indexOf('.')

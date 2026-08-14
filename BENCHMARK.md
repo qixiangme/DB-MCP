@@ -1,7 +1,12 @@
 # 벤치마크 보고서 — 수치로 증명하기
 
+> 최신 제출 후보의 3회 반복 복합 질문·TACC·AIR/Spring·장애 주입 판정은
+> [제출 후보 벤치마크 판정](./docs/research/CONTEST_FINAL_BENCHMARK.md)을 먼저 보세요.
+> 과거 실험은 가설과 실패 이력을 보존하기 위해 아래에 유지합니다.
+
 > 측정 환경: Windows 11 노트북(GPU 없음, CPU 추론) · Ollama gemma3:1b(815MB, temperature 0)
-> · nomic-embed-text · PostgreSQL 16 + pgvector(도커) · 채점 = 정답 키워드 포함 여부(자동)
+> · nomic-embed-text · PostgreSQL 16 + pgvector(도커) · 채점 = 문항별 `keywords` 또는
+> `answerRule(anyOf/allOf/minMatches)` 자동 판정
 > 하네스: `eval/run-eval.ps1` (질문 → /api/chat → 답변 정확도·라우팅 적중률·지연시간 기록)
 
 ## 1. 1차: 시드 데이터 12문항 — 개선 전/후
@@ -24,6 +29,11 @@
    SQL 결과를 "컬럼=값" 평문으로 변환해 개선.
 
 ## 2. 2차: 공식 데이터셋(Company-X) 30문항 — Spring AI 서버 vs air 서버
+
+> 역사적 결과: 이 측정은 스키마가 `get_schema` Tool이던 시점의 1회 실행이다. 현재 계약은
+> 실행 Tool 3개와 `db://schema` Resource로 바뀌었으며, AIR의 하이브리드 검색과 Spring의
+> 순수 벡터 검색도 동일 알고리즘이 아니다. 따라서 아래 지연 차이를 프레임워크 단독 효과나
+> 현재 기본 구현 선택의 근거로 사용하지 않는다.
 
 동일한 에이전트(Kotlin/Spring AI), 동일한 질문 30개(questions.json), 동일한 모델(gemma3:1b).
 MCP 서버만 교체: Spring AI MCP Server(Kotlin, :8081) ↔ **air 프레임워크(TypeScript, :8082)**.
@@ -48,8 +58,8 @@ MCP 서버만 교체: Spring AI MCP Server(Kotlin, :8081) ↔ **air 프레임워
   단정에는 반복 측정이 필요. 도구 호출 자체는 양쪽 모두 지연의 소수 비중.
 - **개발 경험: air 우세.** 서버 전체가 파일 1개(~200줄, 플러그인 2줄 포함)로,
   Kotlin 모듈(빌드+기동 ~20초) 대비 기동 1초 미만. timeout·cache가 플러그인 한 줄.
-- 결론: **서버는 air 기준으로 개발 진행** (주최사 권장 + 경량 + 동등 성능 실증),
-  에이전트(라우터·TACC·NL2SQL)는 Kotlin/Spring AI 유지 — MCP 표준 덕에 양쪽이 독립적이다.
+- 결론: 이 1회 결과로 기본 서버를 변경하지 않는다. Spring AI를 기본 실행으로 유지하고 AIR은
+  동일 계약 비교 구현으로 둔다. 같은 검색 알고리즘·데이터·모델·반복 수의 재측정 후 선택한다.
 
 ## 3. 실패 분석 (공식 30문항 기준, 정직하게)
 
@@ -126,72 +136,15 @@ powershell -File eval\run-eval.ps1 -Label official -Reps 1 -SetFile official-eva
 powershell -File eval\run-eval.ps1 -Label official-air -Reps 1 -SetFile official-eval.json
 # 키워드 미매칭 갭 — 에이전트를 ROUTER_FALLBACK=embedding 또는 ai 로 기동 후
 powershell -File eval\run-eval.ps1 -Label gap-embedding-air -Reps 1 -SetFile keyword-gap-eval.json
+# 구형 평면 배열 결과를 구조화 스키마로 정규화
+python3 eval/normalize_legacy_results.py --in-file eval/results/baseline.json --out-file eval/results/baseline-fixed.json --dataset eval/eval-set.json --label baseline-fixed
 ```
 
-## 7. Architecture v2 벤치마크 (Execution DAG + Adaptive Escalation)
+`eval/run-full-eval.py`는 새 측정값을 처음부터 `metadata`/`summary`/`rows` 구조로 저장합니다.
+예전 `baseline.json`, `after.json` 같은 평면 배열 결과는 `normalize_legacy_results.py` 또는
+`eval/rescore.ps1`를 통해 같은 스키마로 다시 저장해 비교합니다.
 
-Architecture v2는 기존 "라우팅 → 병렬 호출 → 큐레이션" 구조를
-"프로파일링 → 실행 계획 → DAG 실행 → 증거 최적화 → 검증 → 생성"으로 전환했다.
-
-### 7.1 핵심 메트릭 비교
-
-| 메트릭 | v1 (기존) | v2 (신규) | 개선율 |
-|--------|-----------|-----------|--------|
-| 라우트 적중률 | 83.3% | 93.3% | **+12.0%** |
-| 키워드 적중률 | 76.7% | 86.7% | **+13.0%** |
-| 평균 지연시간 | 2,450ms | 2,180ms | **-11.0%** |
-| P95 지연시간 | 4,200ms | 3,100ms | **-26.2%** |
-| 에러 복구 성공률 | N/A | 67.3% | - |
-| 평균 클레임 커버리지 | N/A | 78.5% | - |
-
-### 7.2 모델 에스컬레이션 분포
-
-복잡도 기반 적응형 모델 선택:
-- **SMALL (1B)**: 52.4% (평균 복잡도 0.28)
-- **MEDIUM (3B)**: 33.3% (평균 복잡도 0.52)
-- **LARGE (7B)**: 14.3% (평균 복잡도 0.78)
-
-### 7.3 복합 질문 성능 (Compositional Questions)
-
-| 질문 유형 | v1 정확도 | v2 정확도 | 개선 |
-|-----------|-----------|-----------|------|
-| 단일 도구 | 88.9% | 94.4% | +5.5% |
-| 다중 도구 (병렬) | 77.8% | 88.9% | +11.1% |
-| 다중 도구 (순차) | 66.7% | 83.3% | +16.6% |
-| SQL + Vector | 72.2% | 88.9% | +16.7% |
-
-### 7.4 Recovery Policy 실패 복구
-
-| 실패 유형 | 발생 건수 | 복구 성공 | 성공률 |
-|-----------|-----------|-----------|--------|
-| SQL_SCHEMA_ERROR | 8 | 6 | 75.0% |
-| SQL_SYNTAX_ERROR | 5 | 4 | 80.0% |
-| RETRIEVAL_EMPTY | 12 | 7 | 58.3% |
-| MCP_TIMEOUT | 3 | 2 | 66.7% |
-| ROUTE_MISS | 6 | 4 | 66.7% |
-
-### 7.5 새 기능 구성요소
-
-1. **QueryProfiler**: 질문 의도/복잡도/불확실성 분석
-2. **ModelEscalator**: 1B→4B→7B 적응형 선택
-3. **ExecutionPlanner**: 의존 관계 기반 DAG 생성
-4. **EvidenceOptimizer**: 제약 최적화 기반 증거 선택
-5. **AnswerabilityGate**: 클레임 커버리지 검증
-6. **RecoveryPolicy**: 실패 분류 및 복구 전략
-
-### 7.6 재현 방법
-
-```bash
-# v2 API 테스트
-curl -X POST http://localhost:8080/api/chat/v2?trace=true \
-  -H "Content-Type: application/json" \
-  -d '{"question": "직원 수는 몇 명이야?"}'
-
-# 장애 복구 데모
-./scripts/fault-injection-demo.sh all
-```
-
-## 8. 의미 기반 폴백 — 90%대 재현
+## 7. 의미 기반 폴백 — 90%대 재현
 
 기존 키워드를 질문에서 모두 제거한 공개 30문항과, 프롬프트 고정 뒤 새로 만든 보류
 30문항을 `gemma3:4b` + `semantic-ai`로 평가했다.

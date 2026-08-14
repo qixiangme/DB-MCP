@@ -144,10 +144,13 @@ class ChatController(
         )
     }
 
-    /** MCP 연결 상태를 진단할 수 있도록 서버가 노출한 도구 이름을 반환한다. */
+    /** MCP 연결 상태와 K/A 분리를 진단할 수 있도록 실행 도구와 지식 리소스를 반환한다. */
     @GetMapping("/tools")
     fun tools(): Map<String, Any> =
-        mapOf("mcpTools" to gateway.listToolNames())
+        mapOf(
+            "mcpTools" to gateway.listToolNames(),
+            "mcpResources" to gateway.listResourceUris(),
+        )
 
     /**
      * v2 상태 확인

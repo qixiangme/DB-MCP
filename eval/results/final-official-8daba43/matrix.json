@@ -1,0 +1,14 @@
+{
+  "protocol": {
+    "dataset": "eval/official-eval.json",
+    "model": "gemma3:1b",
+    "embeddingModel": "nomic-embed-text",
+    "temperature": 0,
+    "seed": 20260813,
+    "repetitions": 3,
+    "runtimeCommit": "8daba43"
+  },
+  "reports": {
+    "OURS_CURRENT": "eval/results/final-official-8daba43/ours_current.json"
+  }
+}

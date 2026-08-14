@@ -1,13 +1,13 @@
 package com.riwonace.mcp.ingest
 
 import org.slf4j.LoggerFactory
-import org.springframework.ai.document.Document
-import org.springframework.ai.vectorstore.VectorStore
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.io.File
+import java.nio.file.Path
 import java.nio.file.Paths
 
 /**
@@ -24,13 +24,15 @@ import java.nio.file.Paths
 @RequestMapping("/admin")
 class IngestController(
     private val ingestor: DataIngestor,
-    private val vectorStore: VectorStore,
+    private val directoryIngestionService: DirectoryIngestionService,
+    @Value("\${ingest.allowed-root:../companyx-dataset-v1.0/documents}")
+    private val allowedRootPath: String,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    /** 허용된 루트 디렉토리 (프로젝트 디렉토리 기준) */
-    private val allowedRoot: String by lazy {
-        Paths.get(System.getProperty("user.dir")).toAbsolutePath().toString()
+    /** 허용된 읽기 전용 문서 루트. 배포 환경에서는 INGEST_ALLOWED_ROOT로 명시한다. */
+    private val allowedRoot: Path by lazy {
+        Paths.get(allowedRootPath).toAbsolutePath().normalize().toFile().canonicalFile.toPath()
     }
 
     /** 벡터 저장소가 비어 있을 때만 기본 문서를 적재하고, 추가된 문서 수를 반환한다. */
@@ -42,11 +44,17 @@ class IngestController(
 
     /**
      * 지정한 디렉토리의 README를 제외한 마크다운 파일을 파일당 문서 1건으로 적재한다.
-     * 이 작업은 기존 파일과의 중복 여부를 검사하지 않으므로 호출자가 재실행 여부를 관리해야 한다.
+     * 같은 dataset의 기존 벡터를 트랜잭션 안에서 교체하므로 재실행해도 중복되지 않는다.
      */
     @PostMapping("/ingest-dir")
-    fun ingestDirectory(@RequestParam path: String): Map<String, Any?> {
+    fun ingestDirectory(
+        @RequestParam path: String,
+        @RequestParam(defaultValue = "manual") dataset: String,
+    ): Map<String, Any?> {
         return try {
+            require(DATASET_PATTERN.matches(dataset)) {
+                "dataset은 영문, 숫자, 점, 밑줄, 하이픈만 사용해 1~64자로 지정해야 합니다."
+            }
             val sanitizedPath = validateAndSanitizePath(path)
             val dir = File(sanitizedPath)
 
@@ -57,18 +65,16 @@ class IngestController(
                 return mapOf("error" to "읽기 권한이 없습니다.")
             }
 
-            val files = dir.listFiles { f ->
-                f.isFile && f.extension == "md" && !f.name.equals("README.md", true)
-            }.orEmpty().sortedBy { it.name }
-
-            val docs = files.map { f ->
-                Document(f.readText(Charsets.UTF_8), mutableMapOf<String, Any>("source" to f.name))
-            }
-
-            if (docs.isNotEmpty()) vectorStore.add(docs)
-            log.info("디렉토리 임베딩 완료: {} 파일", docs.size)
-
-            mapOf("ingested" to docs.size, "files" to files.map { it.name })
+            val result = directoryIngestionService.replaceMarkdownDirectory(dir, dataset)
+            log.info("디렉토리 임베딩 교체 완료: dataset={}, {} 파일", dataset, result.ingested)
+            mapOf(
+                "ingested" to result.ingested,
+                "replaced" to result.replaced,
+                "files" to result.files,
+                "dataset" to result.dataset,
+            )
+        } catch (e: IllegalArgumentException) {
+            mapOf("error" to e.message)
         } catch (e: SecurityException) {
             log.warn("경로 접근 거부: {}", e.message)
             mapOf("error" to e.message)
@@ -87,17 +93,20 @@ class IngestController(
         val requestedPath = Paths.get(path).toAbsolutePath().normalize()
 
         // 허용 루트 내에 있는지 확인
-        if (!requestedPath.toString().startsWith(allowedRoot)) {
+        if (!requestedPath.startsWith(allowedRoot)) {
             throw SecurityException("허용된 디렉토리 범위를 벗어났습니다.")
         }
 
         // 심볼릭 링크 확인 (canonical path로 실제 경로 확인)
-        val file = File(path)
-        val canonicalPath = file.canonicalPath
+        val canonicalPath = requestedPath.toFile().canonicalFile.toPath()
         if (!canonicalPath.startsWith(allowedRoot)) {
             throw SecurityException("심볼릭 링크를 통한 범위 탈출이 탐지되었습니다.")
         }
 
-        return canonicalPath
+        return canonicalPath.toString()
+    }
+
+    companion object {
+        private val DATASET_PATTERN = Regex("[A-Za-z0-9._-]{1,64}")
     }
 }
