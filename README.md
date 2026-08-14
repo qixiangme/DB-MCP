@@ -289,6 +289,9 @@ npm run build
 |---|---|
 | [ARCHITECTURE.md](./ARCHITECTURE.md) | 전체 구조, 요청 처리 흐름, 주요 설계 결정 |
 | [BENCHMARK.md](./BENCHMARK.md) | 벤치마크 결과 및 재현 방법 |
+| [최종 재현 벤치마크](./docs/research/CONTEST_FINAL_BENCHMARK.md) | 복합 질문·TACC·AIR/Spring AI·장애 주입 판정 |
+| [AIR 프레임워크 피드백](./docs/research/AIR_FRAMEWORK_FEEDBACK.md) | AIR 비교 결과와 운영 피드백 |
+| [레드팀 보안 검토](./docs/security/RED_TEAM_REVIEW_2026-08-13.md) | 애플리케이션 보안 검토와 차단 항목 |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | 기여자가 먼저 확인할 핵심 규칙 |
 | [이슈와 PR 운영 절차](./docs/contributing/WORKFLOW.md) | 작업 유형, 브랜치, 리뷰 게이트, PR 절차 |
 | [벤치마크 무결성 정책](./docs/contributing/BENCHMARK_POLICY.md) | 데이터 누수 방지, 재현 조건, 최소 통과 기준 |

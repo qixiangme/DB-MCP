@@ -71,7 +71,8 @@ COVERAGE는 컨텍스트를 56.5% 줄였지만 답변이 5%p 회귀했다. 사�
 ## 장애 주입
 
 SQL·VECTOR·GRAPH 단일 실패 3종, SQL+VECTOR 동시 실패, 전체 경로 실패를 주입했다. 일부
-실패는 `DEGRADED`, 전체 실패는 `FAILED`로 반환해 5/5 통과했다. 실제 PostgreSQL/Ollama
+실패는 `DEGRADED`, 전체 실패는 `FAILED`로 반환해 5/5 통과했다. 원시 결과는
+`eval/results/final-faults-ebcdba4.json`에 보존했다. 실제 PostgreSQL/Ollama
 프로세스 장애와 네트워크 단절 실험은 별도 후속 과제다.
 
 ## 최종 판정
@@ -81,4 +82,3 @@ SQL·VECTOR·GRAPH 단일 실패 3종, SQL+VECTOR 동시 실패, 전체 경로 �
 - MCP 서버: **Spring AI 유지**, AIR 전환 근거 없음.
 - `AgentService` 대규모 구조 분리와 Spring Event/listener 분리: 정확도·장애 내성 효과가 없는
   코드 미학 변경이므로 이번 후보에서는 **구현하지 않음**.
-
