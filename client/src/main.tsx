@@ -3,10 +3,12 @@ import { createRoot } from "react-dom/client";
 import {
   Activity,
   BarChart3,
+  Brain,
   CheckCircle2,
   ClipboardList,
   Database,
   Download,
+  GitBranch,
   Loader2,
   Play,
   RefreshCcw,
@@ -14,7 +16,9 @@ import {
   Server,
   Sparkles,
   Target,
+  TrendingUp,
   TriangleAlert,
+  Zap,
 } from "lucide-react";
 import "./styles.css";
 
@@ -28,6 +32,30 @@ type AgentAnswer = {
   toolCalls: string[];
   contextSources: string[];
   latencyMs: number;
+  // v2 fields
+  selectedModel?: string;
+  claimCoverage?: number;
+  wasEscalated?: boolean;
+  trace?: ExecutionTraceSummary;
+};
+
+type ExecutionTraceSummary = {
+  totalNodes: number;
+  successNodes: number;
+  failedNodes: number;
+  skippedNodes: number;
+  nodes: NodeTraceSummary[];
+  planningTimeMs: number;
+  intent: string;
+  complexity: number;
+};
+
+type NodeTraceSummary = {
+  id: string;
+  route: string;
+  status: string;
+  durationMs: number;
+  resultSummary?: string;
 };
 
 type DatasetItem = {
@@ -485,6 +513,9 @@ function AnswerView({ run }: { run: RunResult }) {
 
   return (
     <div className="answer-view">
+      {/* v2 Execution Trace Panel */}
+      {response.trace && <ExecutionTracePanel trace={response.trace} selectedModel={response.selectedModel} claimCoverage={response.claimCoverage} wasEscalated={response.wasEscalated} />}
+
       <div className="grading-box" data-testid="grading-box">
         <div>
           <span>라우트 정답</span>
@@ -507,6 +538,31 @@ function AnswerView({ run }: { run: RunResult }) {
           </div>
         )}
       </div>
+
+      {/* v2 Model & Coverage Info */}
+      {(response.selectedModel || response.claimCoverage !== undefined) && (
+        <div className="v2-info-bar">
+          {response.selectedModel && (
+            <span className="v2-badge model">
+              <Brain size={14} />
+              {response.selectedModel}
+            </span>
+          )}
+          {response.claimCoverage !== undefined && (
+            <span className={`v2-badge coverage ${response.claimCoverage >= 0.7 ? "ok" : "low"}`}>
+              <Target size={14} />
+              Coverage {Math.round(response.claimCoverage * 100)}%
+            </span>
+          )}
+          {response.wasEscalated && (
+            <span className="v2-badge escalated">
+              <TrendingUp size={14} />
+              Escalated
+            </span>
+          )}
+        </div>
+      )}
+
       <div className="answer-body">{response.answer || "응답 본문이 비어 있습니다."}</div>
       <div className="tag-group">
         {run.expectedRoute && <span className={`tag ${routeHit ? "ok" : "bad"}`}>expected {run.expectedRoute}</span>}
@@ -534,6 +590,70 @@ function AnswerView({ run }: { run: RunResult }) {
   );
 }
 
+function ExecutionTracePanel({ trace, selectedModel, claimCoverage, wasEscalated }: {
+  trace: ExecutionTraceSummary;
+  selectedModel?: string;
+  claimCoverage?: number;
+  wasEscalated?: boolean;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="execution-trace-panel" data-testid="execution-trace-panel">
+      <button className="trace-header" onClick={() => setExpanded(!expanded)}>
+        <div className="trace-summary">
+          <GitBranch size={16} />
+          <span className="trace-title">Execution Trace</span>
+          <span className="trace-stats">
+            {trace.successNodes}/{trace.totalNodes} nodes
+            {trace.failedNodes > 0 && <span className="trace-failed"> ({trace.failedNodes} failed)</span>}
+          </span>
+        </div>
+        <div className="trace-badges">
+          <span className="trace-badge intent">{trace.intent}</span>
+          <span className={`trace-badge complexity ${trace.complexity >= 0.7 ? "high" : trace.complexity >= 0.4 ? "medium" : "low"}`}>
+            complexity {Math.round(trace.complexity * 100)}%
+          </span>
+          <span className="trace-badge planning">{trace.planningTimeMs}ms plan</span>
+        </div>
+      </button>
+
+      {expanded && (
+        <div className="trace-details">
+          <div className="trace-timeline">
+            {trace.nodes.map((node, index) => (
+              <div key={node.id} className={`trace-node ${node.status.toLowerCase()}`}>
+                <div className="node-connector">
+                  {index > 0 && <div className="connector-line" />}
+                  <div className={`node-dot ${node.status.toLowerCase()}`}>
+                    {node.status === "SUCCESS" ? (
+                      <CheckCircle2 size={12} />
+                    ) : node.status === "FAILED" ? (
+                      <TriangleAlert size={12} />
+                    ) : (
+                      <Zap size={12} />
+                    )}
+                  </div>
+                </div>
+                <div className="node-content">
+                  <div className="node-header">
+                    <span className="node-id">{node.id}</span>
+                    <span className="node-route">{node.route}</span>
+                    <span className="node-duration">{node.durationMs}ms</span>
+                  </div>
+                  {node.resultSummary && (
+                    <div className="node-result">{node.resultSummary}</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function EmptyState() {
   return (
     <div className="empty-state">
@@ -548,7 +668,8 @@ async function executeQuestion(question: string, metadata?: DatasetItem): Promis
   const start = performance.now();
 
   try {
-    const res = await fetch("/api/chat", {
+    // Use v2 API with trace enabled
+    const res = await fetch("/api/chat/v2?trace=true", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question }),
