@@ -60,7 +60,7 @@ class RuleBasedRouterTest {
     fun `수치 조건 제품과 문서 및 사용 관계는 세 경로를 선택한다`() {
         assertEquals(
             listOf(Route.SQL, Route.GRAPH, Route.VECTOR),
-            router.route("월 120인 cloud 제품 중 CPU 62%이며 Client-A가 쓰는 것은?"),
+            router.route("월 120인 cloud 제품 중 CPU 62%이며 Client-A가 사용하는 것은?"),
         )
     }
 
