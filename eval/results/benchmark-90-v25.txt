@@ -1,0 +1,97 @@
+[N1 rep1] route=O answer=O actual=SQL 2892ms
+[N2 rep1] route=O answer=O actual=SQL 1619ms
+[N3 rep1] route=O answer=O actual=SQL 1843ms
+[N4 rep1] route=O answer=O actual=SQL 1547ms
+[N5 rep1] route=O answer=O actual=SQL 2791ms
+[N6 rep1] route=O answer=O actual=SQL 1289ms
+[N7 rep1] route=O answer=O actual=SQL 1460ms
+[N8 rep1] route=O answer=O actual=SQL 6421ms
+[N9 rep1] route=O answer=O actual=SQL 1279ms
+[N10 rep1] route=O answer=O actual=SQL 1436ms
+[V1 rep1] route=O answer=O actual=VECTOR 12448ms
+[V2 rep1] route=O answer=O actual=VECTOR 7925ms
+[V3 rep1] route=O answer=O actual=VECTOR 15036ms
+[V4 rep1] route=O answer=O actual=VECTOR 6172ms
+[V5 rep1] route=O answer=O actual=VECTOR 8732ms
+[V6 rep1] route=O answer=X actual=VECTOR 8157ms
+[V7 rep1] route=O answer=O actual=VECTOR 3804ms
+[V8 rep1] route=O answer=O actual=VECTOR 4514ms
+[V9 rep1] route=O answer=O actual=VECTOR 5488ms
+[V10 rep1] route=O answer=O actual=VECTOR 17535ms
+[G1 rep1] route=O answer=O actual=GRAPH 2404ms
+[G2 rep1] route=O answer=O actual=GRAPH 2037ms
+[G3 rep1] route=O answer=O actual=GRAPH 3419ms
+[G4 rep1] route=O answer=X actual=GRAPH 2442ms
+[G5 rep1] route=O answer=O actual=GRAPH 3469ms
+[G6 rep1] route=X answer=O actual=SQL 3110ms
+[G7 rep1] route=O answer=O actual=GRAPH 1308ms
+[G8 rep1] route=O answer=X actual=GRAPH 5952ms
+[G9 rep1] route=O answer=O actual=GRAPH 4004ms
+[G10 rep1] route=O answer=O actual=GRAPH 3204ms
+{
+  "answerAccuracyPct": 90.0,
+  "routeAccuracyPct": 96.7,
+  "routeRecallAccuracyPct": 96.7,
+  "answerCorrect": 27,
+  "routeCorrect": 29,
+  "routeRecallCorrect": 29,
+  "total": 30,
+  "errors": 0,
+  "averageLatencyMs": 4791,
+  "latencyMs": {
+    "mean": 4791,
+    "p50": 3204,
+    "p95": 15036
+  },
+  "wallMs": {
+    "mean": 4795,
+    "p50": 3205,
+    "p95": 15038
+  },
+  "contextChars": {
+    "mean": 0,
+    "p50": 0,
+    "p95": 0
+  },
+  "estimatedContextTokens": {
+    "mean": 0,
+    "p50": 0,
+    "p95": 0
+  },
+  "responseModes": {
+    "UNKNOWN": 30
+  },
+  "failedRoutes": {},
+  "claimSupport": {
+    "supported": 0,
+    "unsupported": 0,
+    "unsupportedRatePct": null,
+    "scope": "numbers-and-explicit-identifiers-only"
+  },
+  "byExpectedRoute": {
+    "SQL": {
+      "answerAccuracyPct": 100.0,
+      "routeAccuracyPct": 100.0,
+      "routeRecallAccuracyPct": 100.0,
+      "count": 10
+    },
+    "VECTOR": {
+      "answerAccuracyPct": 90.0,
+      "routeAccuracyPct": 100.0,
+      "routeRecallAccuracyPct": 100.0,
+      "count": 10
+    },
+    "GRAPH": {
+      "answerAccuracyPct": 80.0,
+      "routeAccuracyPct": 90.0,
+      "routeRecallAccuracyPct": 90.0,
+      "count": 10
+    }
+  },
+  "outcomes": {
+    "answer-only": 3,
+    "pass": 26,
+    "route-only": 1
+  }
+}
+saved: eval/results/benchmark-90-v25.json
