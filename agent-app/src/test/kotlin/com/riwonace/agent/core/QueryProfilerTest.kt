@@ -1,16 +1,14 @@
 package com.riwonace.agent.core
 
 import com.riwonace.agent.router.Route
+import com.riwonace.agent.router.RuleBasedRouter
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.mock
-import org.springframework.ai.chat.client.ChatClient
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class QueryProfilerTest {
 
-    private val chatClient = mock(ChatClient::class.java)
-    private val profiler = QueryProfiler(chatClient)
+    private val profiler = QueryProfiler(RuleBasedRouter())
 
     @Test
     fun `단순 사실 질문은 FACTUAL 또는 AGGREGATION으로 분류된다`() {
@@ -64,6 +62,16 @@ class QueryProfilerTest {
         assertEquals(QueryIntent.RELATION, profile.intent)
         assertTrue(profile.requiredEvidence.contains(EvidenceType.GRAPH_RELATION))
         assertTrue(profile.suggestedRoutes.contains(Route.GRAPH))
+    }
+
+    @Test
+    fun `프로파일러는 검증된 결정적 라우터의 경로를 보존한다`() {
+        val vector = profiler.profile("백업 정책은 어떻게 되어 있어?")
+        val graph = profiler.profile("플랫폼팀 팀장은 누구야?")
+
+        assertTrue(Route.VECTOR in vector.suggestedRoutes)
+        assertTrue(Route.GRAPH in graph.suggestedRoutes)
+        assertTrue(Route.SQL !in vector.suggestedRoutes)
     }
 
     @Test
