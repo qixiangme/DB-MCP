@@ -39,7 +39,9 @@ mcp-server :8081             air-server :8082
 
 기본 실행 경로는 `agent-app` → `mcp-server`입니다. `air-server`는 기본 서버를 동시에
 실행하기 위한 모듈이 아니라, 같은 MCP 도구 계약을 다른 프레임워크로 구현해 서버를
-교체할 수 있음을 검증하기 위한 선택형 구현입니다.
+교체할 수 있음을 검증하기 위한 선택형 구현입니다. `mcp-server-go`/`agent-app-go`도
+같은 방식의 선택형 구현으로, 전체 스택을 Go + 공식 MCP SDK로 1:1 포팅해 언어·런타임
+차이에 따른 성능·자원 사용량을 비교합니다.
 
 현재 에이전트의 핵심 흐름은 `QueryProfiler → ExecutionPlanner → MCP Gateway →
 EvidenceOptimizer / ContextCurator → AnswerabilityGate → Ollama`입니다. 단순 질문은
@@ -69,6 +71,8 @@ EvidenceOptimizer / ContextCurator → AnswerabilityGate → Ollama`입니다. �
 | `agent-app` | 8080 | 질문 프로파일링·실행계획, 라우팅, NL2SQL, 근거 검증, 답변 생성, HTTP API |
 | `mcp-server` | 8081 | 기본 MCP 서버. 검색·SQL·그래프·스키마 도구와 데이터 적재 제공 |
 | `air-server` | 8082 | 동일한 도구 이름과 안전 정책을 제공하는 선택형 Node.js MCP 서버 |
+| `agent-app-go` | 8080 | `agent-app`의 선택형 Go 포팅 (동시 실행 시 포트 변경 필요) |
+| `mcp-server-go` | 8081 | `mcp-server`의 선택형 Go 포팅 (동시 실행 시 포트 변경 필요) |
 | `client` | 5173 | 선택형 React 웹 클라이언트 |
 | PostgreSQL + pgvector | 5433 | 문서 벡터, 관계형 데이터, 지식 그래프 저장 |
 | Ollama | 11434 | 로컬 대화 모델과 임베딩 모델 실행 |
@@ -226,6 +230,48 @@ OLLAMA_MODEL=gemma3:4b ROUTER_FALLBACK=semantic-ai ./gradlew :agent-app:bootRun
 공개셋 93.3%, 키워드 무교집합 보류셋 96.7%이며 100%는 아닙니다. 평가 범위와 원시 결과는
 [키워드 없는 라우팅 실험 결과](./docs/research/KEYWORDLESS_ROUTING_RESULTS.md)를 참고하세요.
 Company-X 전체 스택에서는 공식 원문 답변 66.7%, 키워드 제거 답변 50.0%를 측정했습니다.
+
+## Go 구현이 별도로 있는 이유
+
+AIR가 "다른 프레임워크로 같은 MCP 계약을 구현"하는 실험이라면, Go 포팅은 "다른
+언어/런타임으로 같은 아키텍처를 구현"하는 실험입니다.
+
+- **`mcp-server-go`/`agent-app-go`는 `mcp-server`/`agent-app`의 1:1 포팅**입니다.
+  라우팅·NL2SQL·SQL 검증·caching 정책·MCP 도구 계약을 임의로 개선하지 않고 동일하게
+  재현합니다. 공식 [Go MCP SDK](https://github.com/modelcontextprotocol/go-sdk)를 사용합니다.
+- Spring AI 구현이 여전히 기본이며 자동화 테스트·데이터 적재를 담당합니다. Go 구현은
+  Gradle 기본 빌드에 포함되지 않고, 별도 Go 모듈로 독립 실행됩니다.
+- baseline 대비 실측 비교(startup, RSS, latency, 동시성, 답변 정확도)는
+  [`eval/bench-results/README.md`](./eval/bench-results/README.md)에 정리했습니다. 결론을
+  요약하면 startup/메모리 사용량은 Go가 크게 낮지만, 로컬 Ollama 추론 인프라의 처리량
+  변동성이 병목인 워크로드에서는 언어 차이가 체감 latency를 지배하지 않습니다(원인은
+  `pprof` CPU 프로파일과 애플리케이션을 배제한 대조 실험으로 확인).
+
+### 빌드와 실행
+
+Go 1.21+ 가 필요합니다. 범용 빌드 스크립트로 현재 플랫폼용 바이너리를 만들거나,
+`go run`으로 바로 실행할 수 있습니다.
+
+```bash
+# 현재 플랫폼용 바이너리를 bin/에 생성
+./scripts/build-go.sh
+
+# macOS/Linux/Windows 크로스 컴파일 (bin/에 8개 바이너리 생성)
+./scripts/build-go.sh --all
+
+# 또는 go run으로 바로 실행 (mcp-server 먼저, agent-app 나중)
+cd mcp-server-go && DATABASE_URL=postgres://riwonace:riwonace@localhost:5433/riwonace \
+  OLLAMA_BASE_URL=http://localhost:11434 SERVER_PORT=8081 go run ./...
+
+# 별도 터미널
+cd agent-app-go && MCP_SERVER_URL=http://localhost:8081 \
+  OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=gemma3:1b SERVER_PORT=8080 go run .
+```
+
+기본 Spring AI 구현과 마찬가지로 `docker-compose.yml`의 `postgres`(5433)·`ollama`(11434)에
+연결합니다. 벡터 데이터는 Spring AI `mcp-server`로 먼저 적재해야 합니다(AIR와 동일한 제약).
+세부 포팅 노트는 [`mcp-server-go/README.md`](./mcp-server-go/README.md),
+[`agent-app-go/README.md`](./agent-app-go/README.md)를 참고하세요.
 
 ## 빠른 시작
 
