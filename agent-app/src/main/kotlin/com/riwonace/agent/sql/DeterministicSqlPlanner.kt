@@ -46,6 +46,11 @@ class DeterministicSqlPlanner {
                 "JOIN departments d ON e.dept_id = d.id WHERE d.name = ${quote(department)}"
         }
 
+        if (department != null && isDepartmentHeadcount(q)) {
+            return "SELECT count(*) AS count FROM employees e " +
+                "JOIN departments d ON e.dept_id = d.id WHERE d.name = ${quote(department)}"
+        }
+
         // 고정된 질문 문장을 저장하지 않고, 스키마 의미(기간·집계·정렬)를
         // 일반 규칙으로 컴파일한다. 모델이 한글 표현을 SQL 식별자로 오인해
         // 빈 결과를 내는 공식 평가 회귀를 줄이는 경로다.
@@ -142,6 +147,8 @@ class DeterministicSqlPlanner {
     private fun isActiveContractAmount(q: String) = "활성" in q && "계약" in q && listOf("금액", "합계", "총액").any(q::contains)
     private fun isTotalSales(q: String) = "매출" in q && listOf("총", "전체", "합계").any(q::contains)
     private fun isAverageSalary(q: String) = "평균" in q && ("급여" in q || "연봉" in q)
+    private fun isDepartmentHeadcount(q: String) =
+        listOf("인원수", "인원 수", "몇 명", "명으로 구성").any(q::contains) && "직원" !in q
     private fun isTopClientsByRegion(q: String) = "고객사" in q && ("상위" in q || "큰" in q) && "서울" in q
     private fun isQuarterSales(q: String) = "분기" in q && "매출" in q
     private fun isCategoryAverageSales(q: String) = "카테고리" in q && "평균" in q && "매출" in q
@@ -163,7 +170,7 @@ class DeterministicSqlPlanner {
     private fun isCompanySizeTotalSales(q: String) =
         "매출" in q && listOf("총", "전체", "합계").any(q::contains) && COMPANY_SIZE.containsMatchIn(q)
     private fun isSupportTicketCount(q: String) =
-        "티켓" in q && listOf("몇", "건", "개수", "수는").any(q::contains)
+        "티켓" in q && listOf("몇", "건", "개수", "수").any(q::contains)
     private fun quote(value: String) = "'${value.replace("'", "''")}'"
     private fun normalizeCategory(value: String): String = when (value.lowercase()) {
         "보안", "보안 솔루션" -> "security"

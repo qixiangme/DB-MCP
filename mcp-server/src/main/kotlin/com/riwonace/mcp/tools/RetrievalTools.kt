@@ -90,8 +90,17 @@ class RetrievalTools(
                 token.endsWith("사업부") || token.any(Char::isUpperCase)
         }
         // predicate 키워드로 매칭되는 predicate 찾기
+        // "이끄는"은 사람 뒤에 오면 "이끈다"(프로젝트 리드)지만, 부서 뒤에 오면 실제로는
+        // "부서장"을 묻는 것이다("경영지원팀을 이끄는 사람" = 부서장). 엔티티가 부서 토큰이면
+        // LEADS_PROJECT_KEYWORDS 매칭을 부서장으로 바꿔 잘못된 predicate 검색을 막는다.
+        val isDepartmentEntity = entityTokens.any { token ->
+            listOf("팀", "부", "부서", "사업부").any(token::endsWith)
+        }
         val matchedPredicates = PREDICATE_KEYWORDS.filter { (korean, _) -> query.contains(korean) }
-            .map { it.second }
+            .map { (korean, predicate) ->
+                if (isDepartmentEntity && korean in LEADS_PROJECT_KEYWORDS) "부서장" else predicate
+            }
+            .distinct()
         val tokens = (entityTokens.ifEmpty { rawTokens.filterNot { it in GRAPH_STOP_TOKENS } }).take(4)
         log.info("[kg_search] rawTokens=$rawTokens, entityTokens=$entityTokens, tokens=$tokens, matchedPredicates=$matchedPredicates")
         // 토큰이 없어도 predicate 검색 가능
@@ -212,6 +221,7 @@ class RetrievalTools(
             "팀장" to "부서장",
             "진행" to "프로젝트",  // "진행 중인 프로젝트" → 프로젝트 predicate
         )
+        private val LEADS_PROJECT_KEYWORDS = setOf("이끈", "이끌", "이끄")
     }
 }
 
