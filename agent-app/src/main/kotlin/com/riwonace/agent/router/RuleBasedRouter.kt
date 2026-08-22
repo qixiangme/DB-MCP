@@ -41,10 +41,14 @@ class RuleBasedRouter(private val fallback: RouteFallback? = null) {
 
     fun route(question: String): List<Route> {
         val q = question.lowercase()
+        // "인프라운영팀"처럼 부서/조직명 안에 vectorKeywords 단어("운영" 등)가 우연히
+        // 포함된 경우, 그 매칭만으로 VECTOR를 확정하면 안 된다 — 부서명 토큰 자체를
+        // 지우고 나머지 텍스트로만 vectorKeywords를 재검사한다.
+        val qWithoutDeptNames = DEPARTMENT_LIKE.replace(q, " ")
         val routes = buildList {
             if (sqlKeywords.any { q.contains(it) } || PRODUCT_NUMERIC.containsMatchIn(q)) add(Route.SQL)
             if (graphKeywords.any { q.contains(it) }) add(Route.GRAPH)
-            if (vectorKeywords.any { q.contains(it) }) add(Route.VECTOR)
+            if (vectorKeywords.any { qWithoutDeptNames.contains(it) }) add(Route.VECTOR)
         }
         if (routes.isEmpty()) return fallback?.classify(question) ?: listOf(Route.VECTOR)
 
@@ -59,5 +63,6 @@ class RuleBasedRouter(private val fallback: RouteFallback? = null) {
     companion object {
         private val COMPOSITION_CUES = listOf("함께", "같이", "동시에", "한 번에", "구분", "그리고", " 및 ", "와 ", "과 ")
         private val PRODUCT_NUMERIC = Regex("(?<![a-z0-9_-])\\d[\\d,]*(?:\\.\\d+)?(?:원|만원|%|인|개|건|명)?[^.?!]{0,20}(?:제품|product)")
+        private val DEPARTMENT_LIKE = Regex("[가-힣a-z0-9]+(?:사업부|부서|팀)")
     }
 }

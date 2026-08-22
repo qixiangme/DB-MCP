@@ -11,8 +11,13 @@ class DeterministicSqlPlanner {
 
     fun plan(question: String): String? {
         val q = question.lowercase()
+        val literalClient = CLIENT.find(question)?.value
+        val genericCode = GENERIC_CODE.find(question)?.value
+        val looksLikeClient = literalClient == null && CLIENT_HINT_WORDS.any(q::contains)
         val product = PRODUCT.find(question)?.value
-        val client = CLIENT.find(question)?.value
+            ?: genericCode?.takeIf { literalClient == null && !looksLikeClient }
+        val client = literalClient
+            ?: genericCode?.takeIf { looksLikeClient }
         val department = DEPARTMENT.find(question)?.value
 
         if (product != null) {
@@ -184,6 +189,10 @@ class DeterministicSqlPlanner {
     companion object {
         private val PRODUCT = Regex("(?i)Product-[A-Z0-9]+")
         private val CLIENT = Regex("(?i)Client-[A-Z0-9]+")
+        // "Product-"/"Client-" 리터럴 접두사가 없는 코드형 명칭(예: Nova-B2)도 인식하기 위한
+        // 일반 패턴 — 이 데이터셋 고유 명명 규칙에 의존하지 않는다.
+        private val GENERIC_CODE = Regex("(?i)[A-Za-z][A-Za-z]*-[A-Z0-9]+")
+        private val CLIENT_HINT_WORDS = listOf("고객사", "거래처", "클라이언트")
         private val DEPARTMENT = Regex("[가-힣A-Za-z0-9]+(?:사업부|부서|팀)")
         private val CATEGORY = Regex("(?i)(?:cloud|data|security|consulting)")
         private val CATEGORY_KR = Regex("(?i)(?:보안(?: 솔루션)?|security|클라우드|cloud|데이터|data|컨설팅|consulting)")
