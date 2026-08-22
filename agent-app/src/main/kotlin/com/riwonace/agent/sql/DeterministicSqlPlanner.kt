@@ -91,7 +91,15 @@ class DeterministicSqlPlanner {
             return "SELECT d.name, avg(e.salary) AS average_salary FROM departments d JOIN employees e ON e.dept_id = d.id " +
                 "GROUP BY d.id, d.name ORDER BY average_salary DESC LIMIT 1"
         }
-        
+        if (isLowestDepartmentSalary(q)) {
+            return "SELECT d.name, avg(e.salary) AS average_salary FROM departments d JOIN employees e ON e.dept_id = d.id " +
+                "GROUP BY d.id, d.name ORDER BY average_salary ASC LIMIT 1"
+        }
+        if (isMostCancelledContractProduct(q)) {
+            return "SELECT p.name, count(*) AS cancelled_count FROM contracts c JOIN products p ON c.product_id = p.id " +
+                "WHERE c.status = 'cancelled' GROUP BY p.id, p.name ORDER BY cancelled_count DESC LIMIT 1"
+        }
+
         val category = CATEGORY.find(q)?.value
         if (category != null) {
             ACTIVE_AMOUNT.find(question)?.groupValues?.get(1)?.toIntValue()?.takeIf { isActiveContractAmount(q) }?.let { amount ->
@@ -125,7 +133,12 @@ class DeterministicSqlPlanner {
     private fun isUnresolvedCritical(q: String) = "critical" in q && ("해결되지" in q || "미해결" in q)
     private fun isProductContractTotals(q: String) = "제품별" in q && "계약" in q && ("금액" in q || "합계" in q)
     private fun isRegisteredClients(q: String) = "등록" in q && "고객사" in q && ("몇" in q || "수" in q)
-    private fun isHighestDepartmentSalary(q: String) = "평균 연봉" in q && ("높은" in q || "가장" in q) && "부서" in q
+    private fun isHighestDepartmentSalary(q: String) =
+        "평균 연봉" in q && ("높은" in q || "가장" in q) && "부서" in q && "낮은" !in q
+    private fun isLowestDepartmentSalary(q: String) =
+        "평균 연봉" in q && "낮은" in q && "부서" in q
+    private fun isMostCancelledContractProduct(q: String) =
+        "해지" in q && "계약" in q && ("가장 많은" in q || "제일 많은" in q) && "제품" in q
     private fun quote(value: String) = "'${value.replace("'", "''")}'"
     private fun normalizeCategory(value: String): String = when (value.lowercase()) {
         "보안", "보안 솔루션" -> "security"

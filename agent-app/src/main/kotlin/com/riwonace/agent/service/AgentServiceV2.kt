@@ -5,6 +5,7 @@ import com.riwonace.agent.context.ContextItem
 import com.riwonace.agent.core.*
 import com.riwonace.agent.mcp.McpGateway
 import com.riwonace.agent.router.Route
+import com.riwonace.agent.sql.DeterministicSqlPlanner
 import com.riwonace.agent.sql.FewShotSelector
 import com.riwonace.agent.sql.SchemaLinker
 import com.riwonace.agent.sql.SchemaPromptFormatter
@@ -43,6 +44,7 @@ class AgentServiceV2(
     private val fewShotSelector: FewShotSelector,
     private val schemaLinker: SchemaLinker,
     private val schemaPromptFormatter: SchemaPromptFormatter,
+    private val deterministicSqlPlanner: DeterministicSqlPlanner,
     @Value("\${agent.v2.enabled:true}")
     private val v2Enabled: Boolean,
 ) {
@@ -488,6 +490,9 @@ class AgentServiceV2(
     // === SQL/Vector 처리 (기존 AgentService에서 이동) ===
 
     private fun generateSql(question: String, previousAttempt: String? = null, error: String? = null): String {
+        if (previousAttempt == null) {
+            deterministicSqlPlanner.plan(question)?.let { return it }
+        }
         val rawSchema = gateway.schema()
         val schema = schemaPromptFormatter.format(rawSchema)
         val selectedExamples = fewShotSelector.selectExamples(question, topK = 1)
@@ -576,6 +581,9 @@ class AgentServiceV2(
                 "너는 리원에이스의 데이터 플랫폼 AI 비서다. " +
                     "아래 컨텍스트에서 질문과 관련된 정보를 찾아 한국어로 답한다. " +
                     "컨텍스트에 장애 보고서, 기술 문서, 회의록 등이 있으면 핵심 내용(고객사, 제품, 원인, 조치사항 등)을 요약한다. " +
+                    "컨텍스트가 여러 출처([출처: sql], [출처: knowledge-graph] 등)로 나뉘어 있으면, " +
+                    "질문의 엔티티(고객사/제품/부서/이름 등)와 실제로 일치하는 출처만 사용하고 " +
+                    "무관한 출처의 결과는 답변에 섞지 않는다. " +
                     "답변 끝에 출처를 표기한다.",
             )
             .user("컨텍스트:\n$contextBlock\n\n질문: $question")
