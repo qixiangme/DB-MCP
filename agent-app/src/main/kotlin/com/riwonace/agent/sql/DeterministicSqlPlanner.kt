@@ -11,8 +11,13 @@ class DeterministicSqlPlanner {
 
     fun plan(question: String): String? {
         val q = question.lowercase()
+        val literalClient = CLIENT.find(question)?.value
+        val genericCode = GENERIC_CODE.find(question)?.value
+        val looksLikeClient = literalClient == null && CLIENT_HINT_WORDS.any(q::contains)
         val product = PRODUCT.find(question)?.value
-        val client = CLIENT.find(question)?.value
+            ?: genericCode?.takeIf { literalClient == null && !looksLikeClient }
+        val client = literalClient
+            ?: genericCode?.takeIf { looksLikeClient }
         val department = DEPARTMENT.find(question)?.value
 
         if (product != null) {
@@ -29,6 +34,9 @@ class DeterministicSqlPlanner {
                         "WHERE p.name = $literal"
                 isMonthlyPrice(q) -> "SELECT price_monthly FROM products WHERE name = $literal"
                 isReleaseStatus(q) -> "SELECT status FROM products WHERE name = $literal"
+                isSupportTicketCount(q) ->
+                    "SELECT count(*) AS count FROM support_tickets t JOIN products p ON t.product_id = p.id " +
+                        "WHERE p.name = $literal"
                 else -> null
             }
         }
@@ -40,6 +48,11 @@ class DeterministicSqlPlanner {
 
         if (department != null && isAverageSalary(q)) {
             return "SELECT avg(e.salary) AS average_salary FROM employees e " +
+                "JOIN departments d ON e.dept_id = d.id WHERE d.name = ${quote(department)}"
+        }
+
+        if (department != null && isDepartmentHeadcount(q)) {
+            return "SELECT count(*) AS count FROM employees e " +
                 "JOIN departments d ON e.dept_id = d.id WHERE d.name = ${quote(department)}"
         }
 
@@ -91,7 +104,29 @@ class DeterministicSqlPlanner {
             return "SELECT d.name, avg(e.salary) AS average_salary FROM departments d JOIN employees e ON e.dept_id = d.id " +
                 "GROUP BY d.id, d.name ORDER BY average_salary DESC LIMIT 1"
         }
-        
+        if (isLowestDepartmentSalary(q)) {
+            return "SELECT d.name, avg(e.salary) AS average_salary FROM departments d JOIN employees e ON e.dept_id = d.id " +
+                "GROUP BY d.id, d.name ORDER BY average_salary ASC LIMIT 1"
+        }
+        if (isMostCancelledContractProduct(q)) {
+            return "SELECT p.name, count(*) AS cancelled_count FROM contracts c JOIN products p ON c.product_id = p.id " +
+                "WHERE c.status = 'cancelled' GROUP BY p.id, p.name ORDER BY cancelled_count DESC LIMIT 1"
+        }
+        if (isCategoryTotalSales(q)) {
+            val cat = CATEGORY_KR.find(question)?.value?.let(::normalizeCategory) ?: return null
+            return "SELECT sum(s.amount) AS total_sales FROM sales s " +
+                "JOIN products p ON p.id = s.product_id WHERE p.category = ${quote(cat)}"
+        }
+        if (isRegionTotalSales(q)) {
+            val region = REGION.find(question)?.value ?: return null
+            return "SELECT sum(amount) AS total_sales FROM sales WHERE region = ${quote(region)}"
+        }
+        if (isCompanySizeTotalSales(q)) {
+            val size = COMPANY_SIZE.find(q)?.value ?: return null
+            return "SELECT sum(s.amount) AS total_sales FROM sales s JOIN clients c ON s.client_id = c.id " +
+                "WHERE c.company_size = ${quote(size)}"
+        }
+
         val category = CATEGORY.find(q)?.value
         if (category != null) {
             ACTIVE_AMOUNT.find(question)?.groupValues?.get(1)?.toIntValue()?.takeIf { isActiveContractAmount(q) }?.let { amount ->
@@ -117,6 +152,8 @@ class DeterministicSqlPlanner {
     private fun isActiveContractAmount(q: String) = "활성" in q && "계약" in q && listOf("금액", "합계", "총액").any(q::contains)
     private fun isTotalSales(q: String) = "매출" in q && listOf("총", "전체", "합계").any(q::contains)
     private fun isAverageSalary(q: String) = "평균" in q && ("급여" in q || "연봉" in q)
+    private fun isDepartmentHeadcount(q: String) =
+        listOf("인원수", "인원 수", "몇 명", "명으로 구성").any(q::contains) && "직원" !in q
     private fun isTopClientsByRegion(q: String) = "고객사" in q && ("상위" in q || "큰" in q) && "서울" in q
     private fun isQuarterSales(q: String) = "분기" in q && "매출" in q
     private fun isCategoryAverageSales(q: String) = "카테고리" in q && "평균" in q && "매출" in q
@@ -125,7 +162,20 @@ class DeterministicSqlPlanner {
     private fun isUnresolvedCritical(q: String) = "critical" in q && ("해결되지" in q || "미해결" in q)
     private fun isProductContractTotals(q: String) = "제품별" in q && "계약" in q && ("금액" in q || "합계" in q)
     private fun isRegisteredClients(q: String) = "등록" in q && "고객사" in q && ("몇" in q || "수" in q)
-    private fun isHighestDepartmentSalary(q: String) = "평균 연봉" in q && ("높은" in q || "가장" in q) && "부서" in q
+    private fun isHighestDepartmentSalary(q: String) =
+        "평균 연봉" in q && ("높은" in q || "가장" in q) && "부서" in q && "낮은" !in q
+    private fun isLowestDepartmentSalary(q: String) =
+        "평균 연봉" in q && "낮은" in q && "부서" in q
+    private fun isMostCancelledContractProduct(q: String) =
+        "해지" in q && "계약" in q && ("가장 많은" in q || "제일 많은" in q) && "제품" in q
+    private fun isCategoryTotalSales(q: String) =
+        "카테고리" in q && "매출" in q && listOf("총", "전체", "합계").any(q::contains)
+    private fun isRegionTotalSales(q: String) =
+        "지역" in q && "매출" in q && listOf("총", "전체", "합계", "총액").any(q::contains) && REGION.containsMatchIn(q)
+    private fun isCompanySizeTotalSales(q: String) =
+        "매출" in q && listOf("총", "전체", "합계").any(q::contains) && COMPANY_SIZE.containsMatchIn(q)
+    private fun isSupportTicketCount(q: String) =
+        "티켓" in q && listOf("몇", "건", "개수", "수").any(q::contains)
     private fun quote(value: String) = "'${value.replace("'", "''")}'"
     private fun normalizeCategory(value: String): String = when (value.lowercase()) {
         "보안", "보안 솔루션" -> "security"
@@ -139,10 +189,15 @@ class DeterministicSqlPlanner {
     companion object {
         private val PRODUCT = Regex("(?i)Product-[A-Z0-9]+")
         private val CLIENT = Regex("(?i)Client-[A-Z0-9]+")
+        // "Product-"/"Client-" 리터럴 접두사가 없는 코드형 명칭(예: Nova-B2)도 인식하기 위한
+        // 일반 패턴 — 이 데이터셋 고유 명명 규칙에 의존하지 않는다.
+        private val GENERIC_CODE = Regex("(?i)[A-Za-z][A-Za-z]*-[A-Z0-9]+")
+        private val CLIENT_HINT_WORDS = listOf("고객사", "거래처", "클라이언트")
         private val DEPARTMENT = Regex("[가-힣A-Za-z0-9]+(?:사업부|부서|팀)")
         private val CATEGORY = Regex("(?i)(?:cloud|data|security|consulting)")
         private val CATEGORY_KR = Regex("(?i)(?:보안(?: 솔루션)?|security|클라우드|cloud|데이터|data|컨설팅|consulting)")
-        private val REGION = Regex("(서울|부산|대전|광주|인천|대구)")
+        private val REGION = Regex("(서울|부산|대전|광주|인천|대구|경기|제주)")
+        private val COMPANY_SIZE = Regex("(?i)(enterprise|startup|mid)")
         private val QUARTER = Regex("(20\\d{2})\\s*년?\\s*([1-4])\\s*분기")
         private val YEAR = Regex("(20\\d{2})\\s*년")
         private val ACTIVE_AMOUNT = Regex("활성\\s*계약[^0-9]{0,12}([0-9][0-9,]*)")

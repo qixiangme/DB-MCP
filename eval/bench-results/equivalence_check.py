@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from answer_rules import grade_answer  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-EVAL_FILE = REPO_ROOT / "eval" / "official-eval.json"
+DEFAULT_EVAL_FILE = REPO_ROOT / "eval" / "official-eval.json"
 
 
 def ask(base_url, question, timeout=120):
@@ -49,11 +49,13 @@ def main():
     parser.add_argument("--impl", required=True)
     parser.add_argument("--base-url", default="http://localhost:8080")
     parser.add_argument("--out", default=None)
+    parser.add_argument("--eval-file", default=None)
     args = parser.parse_args()
 
     out_path = Path(args.out) if args.out else Path(__file__).parent / f"{args.impl}-equivalence.json"
+    eval_file = Path(args.eval_file) if args.eval_file else DEFAULT_EVAL_FILE
 
-    questions = json.loads(EVAL_FILE.read_text())["questions"]
+    questions = json.loads(eval_file.read_text())["questions"]
     results = []
 
     for q in questions:

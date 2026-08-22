@@ -162,13 +162,20 @@ class AnswerabilityGate(
 
         for (claim in requiredClaims) {
             when {
-                claim == "person_identity" && evidence.any { hasPersonInfo(it.text) } ->
+                claim == "person_identity" &&
+                    (evidence.any { hasPersonInfo(it.text) } || evidence.any { it.source == "knowledge-graph" }) ->
                     supported += claim
 
                 claim == "time_info" && combinedText.contains(Regex("\\d{4}|\\d+월|\\d+일|\\d+년")) ->
                     supported += claim
 
-                claim == "location_info" && combinedText.contains(Regex("[가-힣]+(시|도|구|동|로|길)")) ->
+                // "어디"는 지명(서울시, 강남구)뿐 아니라 그래프 엔티티(Client-X)나 고객사/부서명을
+                // 묻는 경우도 많다 — knowledge-graph/sql 근거가 있으면 위치 클레임도 지원된 것으로 본다.
+                claim == "location_info" &&
+                    (
+                        combinedText.contains(Regex("[가-힣]+(시|도|구|동|로|길)")) ||
+                            evidence.any { it.source == "knowledge-graph" || it.source == "sql" }
+                    ) ->
                     supported += claim
 
                 claim == "quantity_value" && combinedText.contains(Regex("\\d+")) ->
@@ -180,7 +187,11 @@ class AnswerabilityGate(
                 claim == "aggregated_value" && evidence.any { it.source == "sql" } ->
                     supported += claim
 
-                claim.startsWith("comparison_item_") && evidence.size >= 2 ->
+                // "A vs B"류 명시적 비교는 근거가 2건 이상이어야 하지만, "가장 낮은/높은 X"
+                // 같은 최상급 질문은 SQL이 GROUP BY+ORDER BY+LIMIT 1로 이미 비교를 마치고
+                // 단일 행만 반환한다 — 이 경우 SQL/GRAPH 근거 자체가 비교 결과이므로 충족된다.
+                claim.startsWith("comparison_item_") &&
+                    (evidence.size >= 2 || evidence.any { it.source == "sql" || it.source == "knowledge-graph" }) ->
                     supported += claim
 
                 claim == "concept_definition" && combinedText.length > 100 ->

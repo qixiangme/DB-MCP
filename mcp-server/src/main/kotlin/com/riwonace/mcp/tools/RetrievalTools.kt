@@ -90,8 +90,17 @@ class RetrievalTools(
                 token.endsWith("사업부") || token.any(Char::isUpperCase)
         }
         // predicate 키워드로 매칭되는 predicate 찾기
+        // "이끄는"은 사람 뒤에 오면 "이끈다"(프로젝트 리드)지만, 부서 뒤에 오면 실제로는
+        // "부서장"을 묻는 것이다("경영지원팀을 이끄는 사람" = 부서장). 엔티티가 부서 토큰이면
+        // LEADS_PROJECT_KEYWORDS 매칭을 부서장으로 바꿔 잘못된 predicate 검색을 막는다.
+        val isDepartmentEntity = entityTokens.any { token ->
+            listOf("팀", "부", "부서", "사업부").any(token::endsWith)
+        }
         val matchedPredicates = PREDICATE_KEYWORDS.filter { (korean, _) -> query.contains(korean) }
-            .map { it.second }
+            .map { (korean, predicate) ->
+                if (isDepartmentEntity && korean in LEADS_PROJECT_KEYWORDS) "부서장" else predicate
+            }
+            .distinct()
         val tokens = (entityTokens.ifEmpty { rawTokens.filterNot { it in GRAPH_STOP_TOKENS } }).take(4)
         log.info("[kg_search] rawTokens=$rawTokens, entityTokens=$entityTokens, tokens=$tokens, matchedPredicates=$matchedPredicates")
         // 토큰이 없어도 predicate 검색 가능
@@ -129,12 +138,44 @@ class RetrievalTools(
             *params,
         )
         log.info("[kg_search] direct results: ${direct.size}")
-        // 2홉은 질문이 명시적으로 간접/연쇄 관계를 요구할 때만 확장한다.
+        // 질문에 predicate 키워드가 2개 이상 매칭되면("부서장이 담당하는") 실제로는 체이닝이다:
+        // 1홉(엔티티 --[첫 predicate]--> 중간 엔티티) 다음 2홉(중간 엔티티 --[다음 predicate]--> 결과).
+        // 예: "클라우드사업부 --[부서장]--> 안진우" 다음 "안진우 --[담당한다]--> Client-I".
+        // direct는 predicateWhere가 OR라서 첫 predicate(부서장)만 만족해도 걸린다 — 정말 필요한
+        // 마지막 predicate(담당한다)로 끝나는 트리플이 없으면 체이닝으로 최종 hop을 찾는다.
+        val lastPredicate = matchedPredicates.lastOrNull()
+        val directSatisfiesLastPredicate = lastPredicate != null && direct.any { it["predicate"] == lastPredicate }
+        val neighbors = if (
+            !directSatisfiesLastPredicate && hasSpecificEntity && tokenWhere != null && matchedPredicates.size >= 2
+        ) {
+            val firstPredicate = matchedPredicates[0]
+            val restPredicates = matchedPredicates.drop(1)
+            val hop1 = jdbc.queryForList(
+                "SELECT subject, predicate, object FROM kg_triples WHERE ($tokenWhere) AND predicate = ? LIMIT 30",
+                *(tokenParams + firstPredicate).toTypedArray(),
+            )
+            val intermediateEntities = hop1.flatMap { listOf(it["subject"] as String, it["object"] as String) }
+                .distinct()
+            if (intermediateEntities.isEmpty()) {
+                emptyList()
+            } else {
+                val inClause = intermediateEntities.joinToString(",") { "?" }
+                val restWhere = restPredicates.joinToString(" OR ") { "predicate = ?" }
+                jdbc.queryForList(
+                    "SELECT subject, predicate, object FROM kg_triples " +
+                        "WHERE (subject IN ($inClause) OR object IN ($inClause)) AND ($restWhere) LIMIT 30",
+                    *(intermediateEntities + intermediateEntities + restPredicates).toTypedArray(),
+                )
+            }
+        } else {
+            emptyList()
+        }
+        // 그 외 2홉 확장은 질문이 명시적으로 간접/연쇄 관계를 요구할 때만 수행한다.
         // (예: "Product-D1 관련 프로젝트" → 사용 고객 → 그 고객의 프로젝트)
         val entities = direct.flatMap { listOf(it["subject"] as String, it["object"] as String) }.distinct()
-        val requiresExpansion = listOf("2홉", "간접", "연쇄", "거쳐", "연결된 프로젝트").any(query::contains)
-        val neighbors =
-            if (entities.isEmpty() || !requiresExpansion) emptyList()
+        val requiresExplicitExpansion = listOf("2홉", "간접", "연쇄", "거쳐", "연결된 프로젝트").any(query::contains)
+        val explicitNeighbors =
+            if (entities.isEmpty() || !requiresExplicitExpansion) emptyList()
             else {
                 val inClause = entities.joinToString(",") { "?" }
                 jdbc.queryForList(
@@ -144,7 +185,7 @@ class RetrievalTools(
                 )
             }
         // 직접 매칭을 앞에 배치 (관련도 순) — 총 40개로 제한해 컨텍스트 예산 보호
-        (direct + neighbors)
+        (direct + neighbors + explicitNeighbors)
             .distinctBy { "${it["subject"]}|${it["predicate"]}|${it["object"]}" }
             .take(40)
             .map { "${it["subject"]} --[${it["predicate"]}]--> ${it["object"]}" }
@@ -169,15 +210,18 @@ class RetrievalTools(
         // 검색 가치가 높은 predicate 키워드 - 엔티티가 없을 때 이것들로 검색
         // DB의 predicate는 한글: 담당한다, 사용한다, 소속, 부서장, 이끈다, 프로젝트, 이슈보고
         private val PREDICATE_KEYWORDS = setOf(
+            "부서장" to "부서장",
             "담당" to "담당한다",
             "사용" to "사용한다",
             "소속" to "소속",
             "이끈" to "이끈다",
-            "이끌" to "이끈다",  // "이끄는" → 이끈다
+            "이끌" to "이끈다",
+            "이끄" to "이끈다",  // "이끄는" → 이끈다 (어간 "이끌"이 아니라 "이끄"로 활용되는 경우)
             "보고" to "이슈보고",
             "팀장" to "부서장",
             "진행" to "프로젝트",  // "진행 중인 프로젝트" → 프로젝트 predicate
         )
+        private val LEADS_PROJECT_KEYWORDS = setOf("이끈", "이끌", "이끄")
     }
 }
 

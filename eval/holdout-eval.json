@@ -1,147 +1,3357 @@
 {
-  "description": "프롬프트 동결 후 테스트하는 독립 보류셋. 개발 중 어떤 문항도 공개하지 않으며, 최종 주장 시에만 사용한다. 기존 평가셋과 동일 분포를 유지하되 표현과 엔티티가 다르다.",
-  "version": "1.0",
-  "holdout_policy": "이 파일의 질문, 키워드, 기대 라우트는 런타임 코드나 프롬프트에 복사하지 않는다.",
+  "description": "완전히 새로운 가상 회사(Nova-Tech, holdout_test DB) 데이터로 만든 홀드아웃 검증셋. companyx-dataset-v1.0의 실제 값(Product-C1, 클라우드사업부 등)을 전혀 사용하지 않고, 같은 스키마·같은 로직을 완전히 다른 고유명사·숫자로 재검증한다. 같은 사실마다 여러 문체로 변형. 정답은 DB 쿼리로 자동 도출.",
   "questions": [
     {
-      "id": "H-SQL-01",
-      "question": "인천 지역 고객사 중 계약 금액이 가장 큰 곳은?",
+      "id": "H-1",
+      "question": "고객성공팀 소속 직원은 몇 명이야?",
       "expectedRoute": "SQL",
-      "keywords": ["Client-N", "Client-AD", "Client-V"],
-      "answerRule": {"type": "anyOf", "required": ["Client-"]}
+      "keywords": [
+        "6명",
+        "6명입니다",
+        "6"
+      ]
     },
     {
-      "id": "H-SQL-02",
-      "question": "데이터 카테고리 제품들의 평균 가격은?",
+      "id": "H-2",
+      "question": "고객성공팀에는 직원이 몇 명 있습니까?",
       "expectedRoute": "SQL",
-      "keywords": ["360", "data"],
-      "answerRule": {"type": "anyOf", "required": ["360", "data", "데이터"]}
+      "keywords": [
+        "6명",
+        "6명입니다",
+        "6"
+      ]
     },
     {
-      "id": "H-SQL-03",
-      "question": "2026년 1분기 예상 매출이 있는 계약 건수는?",
+      "id": "H-3",
+      "question": "고객성공팀 인원수 알려줘",
       "expectedRoute": "SQL",
-      "keywords": ["0", "없", "2026"],
-      "answerRule": {"type": "anyOf", "required": ["0", "없", "2026"]}
+      "keywords": [
+        "6명",
+        "6명입니다",
+        "6"
+      ]
     },
     {
-      "id": "H-SQL-04",
-      "question": "보안솔루션팀 직원 중 차장 직급은 몇 명이야?",
+      "id": "H-4",
+      "question": "고객성공팀은 총 몇 명으로 구성되어 있나요?",
       "expectedRoute": "SQL",
-      "keywords": ["3", "세", "한태호", "박성민", "권진우"],
-      "answerRule": {"type": "anyOf", "required": ["3", "세 명"]}
+      "keywords": [
+        "6명",
+        "6명입니다",
+        "6"
+      ]
     },
     {
-      "id": "H-SQL-05",
-      "question": "월 구독료가 200 이상인 제품은 몇 개야?",
+      "id": "H-5",
+      "question": "재무회계팀 소속 직원은 몇 명이야?",
       "expectedRoute": "SQL",
-      "keywords": ["6", "여섯", "Product-"],
-      "answerRule": {"type": "anyOf", "required": ["6", "여섯"]}
+      "keywords": [
+        "4명",
+        "4명입니다",
+        "4"
+      ]
     },
     {
-      "id": "H-VEC-01",
-      "question": "SSL 인증서 만료 시 대응 방법은?",
-      "expectedRoute": "VECTOR",
-      "keywords": ["갱신", "인증서", "SSL", "TLS"],
-      "answerRule": {"type": "anyOf", "required": ["인증서", "갱신", "SSL"]}
+      "id": "H-6",
+      "question": "재무회계팀에는 직원이 몇 명 있습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "4명",
+        "4명입니다",
+        "4"
+      ]
     },
     {
-      "id": "H-VEC-02",
-      "question": "성능 모니터링 도구로 뭘 쓰고 있어?",
-      "expectedRoute": "VECTOR",
-      "keywords": ["Prometheus", "Grafana", "모니터링"],
-      "answerRule": {"type": "anyOf", "required": ["모니터링", "Product-"]}
+      "id": "H-7",
+      "question": "재무회계팀 인원수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "4명",
+        "4명입니다",
+        "4"
+      ]
     },
     {
-      "id": "H-VEC-03",
-      "question": "데이터 암호화 정책이 어떻게 되어 있어?",
-      "expectedRoute": "VECTOR",
-      "keywords": ["암호화", "AES", "TLS", "보안"],
-      "answerRule": {"type": "anyOf", "required": ["암호화", "보안"]}
+      "id": "H-8",
+      "question": "재무회계팀은 총 몇 명으로 구성되어 있나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "4명",
+        "4명입니다",
+        "4"
+      ]
     },
     {
-      "id": "H-VEC-04",
-      "question": "장애 발생 시 에스컬레이션 절차는?",
-      "expectedRoute": "VECTOR",
-      "keywords": ["에스컬레이션", "장애", "대응", "팀"],
-      "answerRule": {"type": "anyOf", "required": ["장애", "대응"]}
+      "id": "H-9",
+      "question": "마케팅팀 소속 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3명",
+        "3명입니다",
+        "3"
+      ]
     },
     {
-      "id": "H-VEC-05",
-      "question": "CI/CD 파이프라인 구성 방법을 알려줘",
-      "expectedRoute": "VECTOR",
-      "keywords": ["CI/CD", "Jenkins", "GitHub Actions", "파이프라인"],
-      "answerRule": {"type": "anyOf", "required": ["CI", "CD", "파이프라인"]}
+      "id": "H-10",
+      "question": "마케팅팀에는 직원이 몇 명 있습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3명",
+        "3명입니다",
+        "3"
+      ]
     },
     {
-      "id": "H-GRP-01",
-      "question": "Client-K를 담당하는 영업 담당자는?",
+      "id": "H-11",
+      "question": "마케팅팀 인원수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3명",
+        "3명입니다",
+        "3"
+      ]
+    },
+    {
+      "id": "H-12",
+      "question": "마케팅팀은 총 몇 명으로 구성되어 있나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3명",
+        "3명입니다",
+        "3"
+      ]
+    },
+    {
+      "id": "H-13",
+      "question": "품질보증팀 소속 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5명",
+        "5명입니다",
+        "5"
+      ]
+    },
+    {
+      "id": "H-14",
+      "question": "품질보증팀에는 직원이 몇 명 있습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5명",
+        "5명입니다",
+        "5"
+      ]
+    },
+    {
+      "id": "H-15",
+      "question": "품질보증팀 인원수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5명",
+        "5명입니다",
+        "5"
+      ]
+    },
+    {
+      "id": "H-16",
+      "question": "품질보증팀은 총 몇 명으로 구성되어 있나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5명",
+        "5명입니다",
+        "5"
+      ]
+    },
+    {
+      "id": "H-17",
+      "question": "인프라운영팀 소속 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7명",
+        "7명입니다",
+        "7"
+      ]
+    },
+    {
+      "id": "H-18",
+      "question": "인프라운영팀에는 직원이 몇 명 있습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7명",
+        "7명입니다",
+        "7"
+      ]
+    },
+    {
+      "id": "H-19",
+      "question": "인프라운영팀 인원수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7명",
+        "7명입니다",
+        "7"
+      ]
+    },
+    {
+      "id": "H-20",
+      "question": "인프라운영팀은 총 몇 명으로 구성되어 있나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7명",
+        "7명입니다",
+        "7"
+      ]
+    },
+    {
+      "id": "H-21",
+      "question": "플랫폼개발팀 소속 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "9명",
+        "9명입니다",
+        "9"
+      ]
+    },
+    {
+      "id": "H-22",
+      "question": "플랫폼개발팀에는 직원이 몇 명 있습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "9명",
+        "9명입니다",
+        "9"
+      ]
+    },
+    {
+      "id": "H-23",
+      "question": "플랫폼개발팀 인원수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "9명",
+        "9명입니다",
+        "9"
+      ]
+    },
+    {
+      "id": "H-24",
+      "question": "플랫폼개발팀은 총 몇 명으로 구성되어 있나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "9명",
+        "9명입니다",
+        "9"
+      ]
+    },
+    {
+      "id": "H-25",
+      "question": "스토리지 카테고리 제품의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "648380",
+        "648,380"
+      ]
+    },
+    {
+      "id": "H-26",
+      "question": "스토리지 분야 제품들 매출 합계가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "648380",
+        "648,380"
+      ]
+    },
+    {
+      "id": "H-27",
+      "question": "스토리지 카테고리 매출 총액 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "648380",
+        "648,380"
+      ]
+    },
+    {
+      "id": "H-28",
+      "question": "전체 매출 중 스토리지 카테고리가 차지하는 금액은 얼마입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "648380",
+        "648,380"
+      ]
+    },
+    {
+      "id": "H-29",
+      "question": "분석 카테고리 제품의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "479100",
+        "479,100"
+      ]
+    },
+    {
+      "id": "H-30",
+      "question": "분석 분야 제품들 매출 합계가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "479100",
+        "479,100"
+      ]
+    },
+    {
+      "id": "H-31",
+      "question": "분석 카테고리 매출 총액 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "479100",
+        "479,100"
+      ]
+    },
+    {
+      "id": "H-32",
+      "question": "전체 매출 중 분석 카테고리가 차지하는 금액은 얼마입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "479100",
+        "479,100"
+      ]
+    },
+    {
+      "id": "H-33",
+      "question": "빌링 카테고리 제품의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "409310",
+        "409,310"
+      ]
+    },
+    {
+      "id": "H-34",
+      "question": "빌링 분야 제품들 매출 합계가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "409310",
+        "409,310"
+      ]
+    },
+    {
+      "id": "H-35",
+      "question": "빌링 카테고리 매출 총액 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "409310",
+        "409,310"
+      ]
+    },
+    {
+      "id": "H-36",
+      "question": "전체 매출 중 빌링 카테고리가 차지하는 금액은 얼마입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "409310",
+        "409,310"
+      ]
+    },
+    {
+      "id": "H-37",
+      "question": "네트워크 카테고리 제품의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "667940",
+        "667,940"
+      ]
+    },
+    {
+      "id": "H-38",
+      "question": "네트워크 분야 제품들 매출 합계가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "667940",
+        "667,940"
+      ]
+    },
+    {
+      "id": "H-39",
+      "question": "네트워크 카테고리 매출 총액 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "667940",
+        "667,940"
+      ]
+    },
+    {
+      "id": "H-40",
+      "question": "전체 매출 중 네트워크 카테고리가 차지하는 금액은 얼마입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "667940",
+        "667,940"
+      ]
+    },
+    {
+      "id": "H-41",
+      "question": "순천 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "162660",
+        "162,660"
+      ]
+    },
+    {
+      "id": "H-42",
+      "question": "순천에서 발생한 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "162660",
+        "162,660"
+      ]
+    },
+    {
+      "id": "H-43",
+      "question": "순천 지역의 총 매출 규모가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "162660",
+        "162,660"
+      ]
+    },
+    {
+      "id": "H-44",
+      "question": "춘천 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "101290",
+        "101,290"
+      ]
+    },
+    {
+      "id": "H-45",
+      "question": "춘천에서 발생한 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "101290",
+        "101,290"
+      ]
+    },
+    {
+      "id": "H-46",
+      "question": "춘천 지역의 총 매출 규모가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "101290",
+        "101,290"
+      ]
+    },
+    {
+      "id": "H-47",
+      "question": "익산 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "264370",
+        "264,370"
+      ]
+    },
+    {
+      "id": "H-48",
+      "question": "익산에서 발생한 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "264370",
+        "264,370"
+      ]
+    },
+    {
+      "id": "H-49",
+      "question": "익산 지역의 총 매출 규모가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "264370",
+        "264,370"
+      ]
+    },
+    {
+      "id": "H-50",
+      "question": "천안 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "456500",
+        "456,500"
+      ]
+    },
+    {
+      "id": "H-51",
+      "question": "천안에서 발생한 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "456500",
+        "456,500"
+      ]
+    },
+    {
+      "id": "H-52",
+      "question": "천안 지역의 총 매출 규모가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "456500",
+        "456,500"
+      ]
+    },
+    {
+      "id": "H-53",
+      "question": "안동 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "202590",
+        "202,590"
+      ]
+    },
+    {
+      "id": "H-54",
+      "question": "안동에서 발생한 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "202590",
+        "202,590"
+      ]
+    },
+    {
+      "id": "H-55",
+      "question": "안동 지역의 총 매출 규모가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "202590",
+        "202,590"
+      ]
+    },
+    {
+      "id": "H-56",
+      "question": "포항 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "220910",
+        "220,910"
+      ]
+    },
+    {
+      "id": "H-57",
+      "question": "포항에서 발생한 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "220910",
+        "220,910"
+      ]
+    },
+    {
+      "id": "H-58",
+      "question": "포항 지역의 총 매출 규모가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "220910",
+        "220,910"
+      ]
+    },
+    {
+      "id": "H-59",
+      "question": "청주 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "220230",
+        "220,230"
+      ]
+    },
+    {
+      "id": "H-60",
+      "question": "청주에서 발생한 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "220230",
+        "220,230"
+      ]
+    },
+    {
+      "id": "H-61",
+      "question": "청주 지역의 총 매출 규모가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "220230",
+        "220,230"
+      ]
+    },
+    {
+      "id": "H-62",
+      "question": "목포 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "576180",
+        "576,180"
+      ]
+    },
+    {
+      "id": "H-63",
+      "question": "목포에서 발생한 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "576180",
+        "576,180"
+      ]
+    },
+    {
+      "id": "H-64",
+      "question": "목포 지역의 총 매출 규모가 어떻게 되나요?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "576180",
+        "576,180"
+      ]
+    },
+    {
+      "id": "H-65",
+      "question": "화학 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5건",
+        "5개",
+        "5"
+      ]
+    },
+    {
+      "id": "H-66",
+      "question": "화학 분야에서 체결된 계약은 몇 개입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5건",
+        "5개",
+        "5"
+      ]
+    },
+    {
+      "id": "H-67",
+      "question": "화학 업종 계약 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5건",
+        "5개",
+        "5"
+      ]
+    },
+    {
+      "id": "H-68",
+      "question": "게임 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "14건",
+        "14개",
+        "14"
+      ]
+    },
+    {
+      "id": "H-69",
+      "question": "게임 분야에서 체결된 계약은 몇 개입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "14건",
+        "14개",
+        "14"
+      ]
+    },
+    {
+      "id": "H-70",
+      "question": "게임 업종 계약 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "14건",
+        "14개",
+        "14"
+      ]
+    },
+    {
+      "id": "H-71",
+      "question": "식품 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-72",
+      "question": "식품 분야에서 체결된 계약은 몇 개입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-73",
+      "question": "식품 업종 계약 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-74",
+      "question": "패션 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-75",
+      "question": "패션 분야에서 체결된 계약은 몇 개입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-76",
+      "question": "패션 업종 계약 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-77",
+      "question": "반도체 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-78",
+      "question": "반도체 분야에서 체결된 계약은 몇 개입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-79",
+      "question": "반도체 업종 계약 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-80",
+      "question": "농업 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "2건",
+        "2개",
+        "2"
+      ]
+    },
+    {
+      "id": "H-81",
+      "question": "농업 분야에서 체결된 계약은 몇 개입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "2건",
+        "2개",
+        "2"
+      ]
+    },
+    {
+      "id": "H-82",
+      "question": "농업 업종 계약 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "2건",
+        "2개",
+        "2"
+      ]
+    },
+    {
+      "id": "H-83",
+      "question": "항공 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "1건",
+        "1개",
+        "1"
+      ]
+    },
+    {
+      "id": "H-84",
+      "question": "항공 분야에서 체결된 계약은 몇 개입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "1건",
+        "1개",
+        "1"
+      ]
+    },
+    {
+      "id": "H-85",
+      "question": "항공 업종 계약 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "1건",
+        "1개",
+        "1"
+      ]
+    },
+    {
+      "id": "H-86",
+      "question": "조선 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "H-87",
+      "question": "조선 분야에서 체결된 계약은 몇 개입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "H-88",
+      "question": "조선 업종 계약 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "H-89",
+      "question": "물류 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-90",
+      "question": "물류 분야에서 체결된 계약은 몇 개입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-91",
+      "question": "물류 업종 계약 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "3건",
+        "3개",
+        "3"
+      ]
+    },
+    {
+      "id": "H-92",
+      "question": "출판 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "15건",
+        "15개",
+        "15"
+      ]
+    },
+    {
+      "id": "H-93",
+      "question": "출판 분야에서 체결된 계약은 몇 개입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "15건",
+        "15개",
+        "15"
+      ]
+    },
+    {
+      "id": "H-94",
+      "question": "출판 업종 계약 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "15건",
+        "15개",
+        "15"
+      ]
+    },
+    {
+      "id": "H-95",
+      "question": "medium 우선순위 티켓은 총 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "19건",
+        "19개",
+        "19"
+      ]
+    },
+    {
+      "id": "H-96",
+      "question": "우선순위가 medium인 티켓 개수를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "19건",
+        "19개",
+        "19"
+      ]
+    },
+    {
+      "id": "H-97",
+      "question": "medium 등급 티켓이 몇 건 있습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "19건",
+        "19개",
+        "19"
+      ]
+    },
+    {
+      "id": "H-98",
+      "question": "medium 티켓 건수는?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "19건",
+        "19개",
+        "19"
+      ]
+    },
+    {
+      "id": "H-99",
+      "question": "high 우선순위 티켓은 총 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "36건",
+        "36개",
+        "36"
+      ]
+    },
+    {
+      "id": "H-100",
+      "question": "우선순위가 high인 티켓 개수를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "36건",
+        "36개",
+        "36"
+      ]
+    },
+    {
+      "id": "H-101",
+      "question": "high 등급 티켓이 몇 건 있습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "36건",
+        "36개",
+        "36"
+      ]
+    },
+    {
+      "id": "H-102",
+      "question": "high 티켓 건수는?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "36건",
+        "36개",
+        "36"
+      ]
+    },
+    {
+      "id": "H-103",
+      "question": "critical 우선순위 티켓은 총 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "19건",
+        "19개",
+        "19"
+      ]
+    },
+    {
+      "id": "H-104",
+      "question": "우선순위가 critical인 티켓 개수를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "19건",
+        "19개",
+        "19"
+      ]
+    },
+    {
+      "id": "H-105",
+      "question": "critical 등급 티켓이 몇 건 있습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "19건",
+        "19개",
+        "19"
+      ]
+    },
+    {
+      "id": "H-106",
+      "question": "critical 티켓 건수는?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "19건",
+        "19개",
+        "19"
+      ]
+    },
+    {
+      "id": "H-107",
+      "question": "low 우선순위 티켓은 총 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "16건",
+        "16개",
+        "16"
+      ]
+    },
+    {
+      "id": "H-108",
+      "question": "우선순위가 low인 티켓 개수를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "16건",
+        "16개",
+        "16"
+      ]
+    },
+    {
+      "id": "H-109",
+      "question": "low 등급 티켓이 몇 건 있습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "16건",
+        "16개",
+        "16"
+      ]
+    },
+    {
+      "id": "H-110",
+      "question": "low 티켓 건수는?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "16건",
+        "16개",
+        "16"
+      ]
+    },
+    {
+      "id": "H-111",
+      "question": "micro 규모 고객사들의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "856740",
+        "856,740"
+      ]
+    },
+    {
+      "id": "H-112",
+      "question": "micro 규모 고객사 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "856740",
+        "856,740"
+      ]
+    },
+    {
+      "id": "H-113",
+      "question": "micro 규모의 고객사들에서 발생한 매출 총액이 얼마입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "856740",
+        "856,740"
+      ]
+    },
+    {
+      "id": "H-114",
+      "question": "micro 사이즈 고객사 매출 총합은?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "856740",
+        "856,740"
+      ]
+    },
+    {
+      "id": "H-115",
+      "question": "large 규모 고객사들의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "920170",
+        "920,170"
+      ]
+    },
+    {
+      "id": "H-116",
+      "question": "large 규모 고객사 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "920170",
+        "920,170"
+      ]
+    },
+    {
+      "id": "H-117",
+      "question": "large 규모의 고객사들에서 발생한 매출 총액이 얼마입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "920170",
+        "920,170"
+      ]
+    },
+    {
+      "id": "H-118",
+      "question": "large 사이즈 고객사 매출 총합은?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "920170",
+        "920,170"
+      ]
+    },
+    {
+      "id": "H-119",
+      "question": "small 규모 고객사들의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "427820",
+        "427,820"
+      ]
+    },
+    {
+      "id": "H-120",
+      "question": "small 규모 고객사 매출 합계를 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "427820",
+        "427,820"
+      ]
+    },
+    {
+      "id": "H-121",
+      "question": "small 규모의 고객사들에서 발생한 매출 총액이 얼마입니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "427820",
+        "427,820"
+      ]
+    },
+    {
+      "id": "H-122",
+      "question": "small 사이즈 고객사 매출 총합은?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "427820",
+        "427,820"
+      ]
+    },
+    {
+      "id": "H-123",
+      "question": "Nova-A3 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "H-124",
+      "question": "Nova-A3에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "H-125",
+      "question": "Nova-A3 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "H-126",
+      "question": "Nova-S2 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5건",
+        "5개",
+        "5"
+      ]
+    },
+    {
+      "id": "H-127",
+      "question": "Nova-S2에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5건",
+        "5개",
+        "5"
+      ]
+    },
+    {
+      "id": "H-128",
+      "question": "Nova-S2 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5건",
+        "5개",
+        "5"
+      ]
+    },
+    {
+      "id": "H-129",
+      "question": "Nova-B2 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "11건",
+        "11개",
+        "11"
+      ]
+    },
+    {
+      "id": "H-130",
+      "question": "Nova-B2에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "11건",
+        "11개",
+        "11"
+      ]
+    },
+    {
+      "id": "H-131",
+      "question": "Nova-B2 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "11건",
+        "11개",
+        "11"
+      ]
+    },
+    {
+      "id": "H-132",
+      "question": "Nova-S3 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "12건",
+        "12개",
+        "12"
+      ]
+    },
+    {
+      "id": "H-133",
+      "question": "Nova-S3에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "12건",
+        "12개",
+        "12"
+      ]
+    },
+    {
+      "id": "H-134",
+      "question": "Nova-S3 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "12건",
+        "12개",
+        "12"
+      ]
+    },
+    {
+      "id": "H-135",
+      "question": "Nova-B1 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-136",
+      "question": "Nova-B1에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-137",
+      "question": "Nova-B1 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-138",
+      "question": "Nova-A1 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "12건",
+        "12개",
+        "12"
+      ]
+    },
+    {
+      "id": "H-139",
+      "question": "Nova-A1에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "12건",
+        "12개",
+        "12"
+      ]
+    },
+    {
+      "id": "H-140",
+      "question": "Nova-A1 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "12건",
+        "12개",
+        "12"
+      ]
+    },
+    {
+      "id": "H-141",
+      "question": "Nova-N2 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-142",
+      "question": "Nova-N2에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-143",
+      "question": "Nova-N2 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-144",
+      "question": "Nova-S1 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-145",
+      "question": "Nova-S1에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-146",
+      "question": "Nova-S1 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-147",
+      "question": "Nova-A2 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-148",
+      "question": "Nova-A2에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-149",
+      "question": "Nova-A2 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "H-150",
+      "question": "Nova-N3 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "H-151",
+      "question": "Nova-N3에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "H-152",
+      "question": "Nova-N3 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "H-153",
+      "question": "Nova-N1 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "4건",
+        "4개",
+        "4"
+      ]
+    },
+    {
+      "id": "H-154",
+      "question": "Nova-N1에 대한 지원 요청이 몇 건 접수됐습니까?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "4건",
+        "4개",
+        "4"
+      ]
+    },
+    {
+      "id": "H-155",
+      "question": "Nova-N1 티켓 수 알려줘",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "4건",
+        "4개",
+        "4"
+      ]
+    },
+    {
+      "id": "H-156",
+      "question": "플랫폼개발팀 팀장이 누구야?",
       "expectedRoute": "GRAPH",
-      "keywords": ["담당"],
-      "answerRule": {"type": "anyOf", "required": ["담당"]}
+      "keywords": [
+        "강서윤"
+      ]
     },
     {
-      "id": "H-GRP-02",
-      "question": "Product-S2를 사용 중인 고객사 목록은?",
+      "id": "H-157",
+      "question": "플랫폼개발팀을 이끄는 사람은 누구입니까?",
       "expectedRoute": "GRAPH",
-      "keywords": ["Client-"],
-      "answerRule": {"type": "anyOf", "required": ["Client-"]}
+      "keywords": [
+        "강서윤"
+      ]
     },
     {
-      "id": "H-GRP-03",
-      "question": "데이터플랫폼팀에서 프로젝트를 이끄는 사람은?",
+      "id": "H-158",
+      "question": "플랫폼개발팀 책임자 알려줘",
       "expectedRoute": "GRAPH",
-      "keywords": ["류서연", "박성민", "안소연"],
-      "answerRule": {"type": "anyOf", "required": ["류서연", "박성민", "안소연"]}
+      "keywords": [
+        "강서윤"
+      ]
     },
     {
-      "id": "H-GRP-04",
-      "question": "Client-E와 관련된 모든 프로젝트는?",
+      "id": "H-159",
+      "question": "플랫폼개발팀의 부서장은 누구인가요?",
       "expectedRoute": "GRAPH",
-      "keywords": ["로그 분석", "DevOps", "마이그레이션", "모니터링"],
-      "answerRule": {"type": "anyOf", "required": ["프로젝트"]}
+      "keywords": [
+        "강서윤"
+      ]
     },
     {
-      "id": "H-GRP-05",
-      "question": "보안 제품군을 가장 많이 사용하는 고객사는?",
+      "id": "H-160",
+      "question": "인프라운영팀 팀장이 누구야?",
       "expectedRoute": "GRAPH",
-      "keywords": ["Client-"],
-      "answerRule": {"type": "anyOf", "required": ["Client-"]}
+      "keywords": [
+        "윤민준"
+      ]
     },
     {
-      "id": "H-MIX-01",
-      "question": "경기 지역 스타트업 고객사들의 총 계약 금액은?",
-      "expectedRoute": "SQL",
-      "keywords": ["경기", "startup"],
-      "answerRule": {"type": "numeric", "description": "숫자 결과가 있어야 함"}
-    },
-    {
-      "id": "H-MIX-02",
-      "question": "on_hold 상태 프로젝트 중 예산이 가장 큰 건?",
-      "expectedRoute": "SQL",
-      "keywords": ["MLOps", "Client-R", "10186"],
-      "answerRule": {"type": "anyOf", "required": ["MLOps", "Client-R", "10186"]}
-    },
-    {
-      "id": "H-MIX-03",
-      "question": "completed 프로젝트를 이끈 직원 목록은?",
+      "id": "H-161",
+      "question": "인프라운영팀을 이끄는 사람은 누구입니까?",
       "expectedRoute": "GRAPH",
-      "keywords": ["완료", "이끈"],
-      "answerRule": {"type": "anyOf", "required": ["완료", "이끈"]}
+      "keywords": [
+        "윤민준"
+      ]
     },
     {
-      "id": "H-MIX-04",
-      "question": "High 우선순위 티켓이 가장 많은 제품은?",
-      "expectedRoute": "SQL",
-      "keywords": ["Product-", "High"],
-      "answerRule": {"type": "anyOf", "required": ["Product-"]}
+      "id": "H-162",
+      "question": "인프라운영팀 책임자 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "윤민준"
+      ]
     },
     {
-      "id": "H-MIX-05",
-      "question": "영업팀에서 담당 고객이 3개 이상인 직원은?",
-      "expectedRoute": "SQL",
-      "keywords": ["영업", "담당"],
-      "answerRule": {"type": "anyOf", "required": ["영업"]}
+      "id": "H-163",
+      "question": "인프라운영팀의 부서장은 누구인가요?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "윤민준"
+      ]
+    },
+    {
+      "id": "H-164",
+      "question": "품질보증팀 팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정수아"
+      ]
+    },
+    {
+      "id": "H-165",
+      "question": "품질보증팀을 이끄는 사람은 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정수아"
+      ]
+    },
+    {
+      "id": "H-166",
+      "question": "품질보증팀 책임자 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정수아"
+      ]
+    },
+    {
+      "id": "H-167",
+      "question": "품질보증팀의 부서장은 누구인가요?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정수아"
+      ]
+    },
+    {
+      "id": "H-168",
+      "question": "고객성공팀 팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박하은"
+      ]
+    },
+    {
+      "id": "H-169",
+      "question": "고객성공팀을 이끄는 사람은 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박하은"
+      ]
+    },
+    {
+      "id": "H-170",
+      "question": "고객성공팀 책임자 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박하은"
+      ]
+    },
+    {
+      "id": "H-171",
+      "question": "고객성공팀의 부서장은 누구인가요?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박하은"
+      ]
+    },
+    {
+      "id": "H-172",
+      "question": "재무회계팀 팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강가은"
+      ]
+    },
+    {
+      "id": "H-173",
+      "question": "재무회계팀을 이끄는 사람은 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강가은"
+      ]
+    },
+    {
+      "id": "H-174",
+      "question": "재무회계팀 책임자 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강가은"
+      ]
+    },
+    {
+      "id": "H-175",
+      "question": "재무회계팀의 부서장은 누구인가요?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강가은"
+      ]
+    },
+    {
+      "id": "H-176",
+      "question": "마케팅팀 팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박도현"
+      ]
+    },
+    {
+      "id": "H-177",
+      "question": "마케팅팀을 이끄는 사람은 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박도현"
+      ]
+    },
+    {
+      "id": "H-178",
+      "question": "마케팅팀 책임자 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박도현"
+      ]
+    },
+    {
+      "id": "H-179",
+      "question": "마케팅팀의 부서장은 누구인가요?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박도현"
+      ]
+    },
+    {
+      "id": "H-180",
+      "question": "Nova-A1를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-G",
+        "NClient-J",
+        "NClient-P"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-181",
+      "question": "Nova-A1 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-G",
+        "NClient-J",
+        "NClient-P"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-182",
+      "question": "Nova-A1를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-G",
+        "NClient-J",
+        "NClient-P"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-183",
+      "question": "Nova-A2를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-B",
+        "NClient-D",
+        "NClient-N",
+        "NClient-O",
+        "NClient-Q",
+        "NClient-U"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-184",
+      "question": "Nova-A2 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-B",
+        "NClient-D",
+        "NClient-N",
+        "NClient-O",
+        "NClient-Q",
+        "NClient-U"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-185",
+      "question": "Nova-A2를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-B",
+        "NClient-D",
+        "NClient-N",
+        "NClient-O",
+        "NClient-Q",
+        "NClient-U"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-186",
+      "question": "Nova-A3를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-B",
+        "NClient-F",
+        "NClient-X"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-187",
+      "question": "Nova-A3 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-B",
+        "NClient-F",
+        "NClient-X"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-188",
+      "question": "Nova-A3를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-B",
+        "NClient-F",
+        "NClient-X"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-189",
+      "question": "Nova-N1를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-C",
+        "NClient-L",
+        "NClient-N",
+        "NClient-S",
+        "NClient-T"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-190",
+      "question": "Nova-N1 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-C",
+        "NClient-L",
+        "NClient-N",
+        "NClient-S",
+        "NClient-T"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-191",
+      "question": "Nova-N1를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-C",
+        "NClient-L",
+        "NClient-N",
+        "NClient-S",
+        "NClient-T"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-192",
+      "question": "Nova-N2를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-B",
+        "NClient-D",
+        "NClient-F",
+        "NClient-G",
+        "NClient-Q"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-193",
+      "question": "Nova-N2 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-B",
+        "NClient-D",
+        "NClient-F",
+        "NClient-G",
+        "NClient-Q"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-194",
+      "question": "Nova-N2를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-B",
+        "NClient-D",
+        "NClient-F",
+        "NClient-G",
+        "NClient-Q"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-195",
+      "question": "Nova-N3를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-C",
+        "NClient-E",
+        "NClient-K",
+        "NClient-M",
+        "NClient-U"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-196",
+      "question": "Nova-N3 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-C",
+        "NClient-E",
+        "NClient-K",
+        "NClient-M",
+        "NClient-U"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-197",
+      "question": "Nova-N3를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-C",
+        "NClient-E",
+        "NClient-K",
+        "NClient-M",
+        "NClient-U"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-198",
+      "question": "Nova-S1를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-F",
+        "NClient-H",
+        "NClient-M",
+        "NClient-V",
+        "NClient-W",
+        "NClient-X"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-199",
+      "question": "Nova-S1 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-F",
+        "NClient-H",
+        "NClient-M",
+        "NClient-V",
+        "NClient-W",
+        "NClient-X"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-200",
+      "question": "Nova-S1를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-F",
+        "NClient-H",
+        "NClient-M",
+        "NClient-V",
+        "NClient-W",
+        "NClient-X"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-201",
+      "question": "Nova-S2를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-E",
+        "NClient-H",
+        "NClient-J",
+        "NClient-M",
+        "NClient-R",
+        "NClient-T",
+        "NClient-X"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-202",
+      "question": "Nova-S2 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-E",
+        "NClient-H",
+        "NClient-J",
+        "NClient-M",
+        "NClient-R",
+        "NClient-T",
+        "NClient-X"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-203",
+      "question": "Nova-S2를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-E",
+        "NClient-H",
+        "NClient-J",
+        "NClient-M",
+        "NClient-R",
+        "NClient-T",
+        "NClient-X"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-204",
+      "question": "Nova-S3를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-D",
+        "NClient-H",
+        "NClient-O",
+        "NClient-W"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-205",
+      "question": "Nova-S3 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-D",
+        "NClient-H",
+        "NClient-O",
+        "NClient-W"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-206",
+      "question": "Nova-S3를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-D",
+        "NClient-H",
+        "NClient-O",
+        "NClient-W"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-207",
+      "question": "Nova-B1를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-E",
+        "NClient-L",
+        "NClient-P",
+        "NClient-V"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-208",
+      "question": "Nova-B1 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-E",
+        "NClient-L",
+        "NClient-P",
+        "NClient-V"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-209",
+      "question": "Nova-B1를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-E",
+        "NClient-L",
+        "NClient-P",
+        "NClient-V"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-210",
+      "question": "Nova-B2를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-I",
+        "NClient-L",
+        "NClient-N",
+        "NClient-O",
+        "NClient-S"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-211",
+      "question": "Nova-B2 사용 중인 거래처가 어디입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-I",
+        "NClient-L",
+        "NClient-N",
+        "NClient-O",
+        "NClient-S"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-212",
+      "question": "Nova-B2를 도입한 고객사는?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-I",
+        "NClient-L",
+        "NClient-N",
+        "NClient-O",
+        "NClient-S"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-213",
+      "question": "Nova-A1에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-G",
+        "NClient-J"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-214",
+      "question": "Nova-A1 관련 이슈를 신고한 거래처를 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-G",
+        "NClient-J"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-215",
+      "question": "Nova-A1에 대해 불만을 제기한 고객사는 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-G",
+        "NClient-J"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-216",
+      "question": "Nova-A2에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-O",
+        "NClient-U"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-217",
+      "question": "Nova-A2 관련 이슈를 신고한 거래처를 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-O",
+        "NClient-U"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-218",
+      "question": "Nova-A2에 대해 불만을 제기한 고객사는 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-O",
+        "NClient-U"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-219",
+      "question": "Nova-A3에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-B",
+        "NClient-F"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-220",
+      "question": "Nova-A3 관련 이슈를 신고한 거래처를 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-B",
+        "NClient-F"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-221",
+      "question": "Nova-A3에 대해 불만을 제기한 고객사는 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-B",
+        "NClient-F"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-222",
+      "question": "Nova-N1에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-N"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-223",
+      "question": "Nova-N1 관련 이슈를 신고한 거래처를 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-N"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-224",
+      "question": "Nova-N1에 대해 불만을 제기한 고객사는 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-N"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-225",
+      "question": "Nova-N2에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-F",
+        "NClient-B",
+        "NClient-G",
+        "NClient-Q",
+        "NClient-A"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-226",
+      "question": "Nova-N2 관련 이슈를 신고한 거래처를 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-F",
+        "NClient-B",
+        "NClient-G",
+        "NClient-Q",
+        "NClient-A"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-227",
+      "question": "Nova-N2에 대해 불만을 제기한 고객사는 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-F",
+        "NClient-B",
+        "NClient-G",
+        "NClient-Q",
+        "NClient-A"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-228",
+      "question": "Nova-S1에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-X",
+        "NClient-M",
+        "NClient-V",
+        "NClient-H"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-229",
+      "question": "Nova-S1 관련 이슈를 신고한 거래처를 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-X",
+        "NClient-M",
+        "NClient-V",
+        "NClient-H"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-230",
+      "question": "Nova-S1에 대해 불만을 제기한 고객사는 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-X",
+        "NClient-M",
+        "NClient-V",
+        "NClient-H"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-231",
+      "question": "Nova-S2에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-T",
+        "NClient-M",
+        "NClient-H"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-232",
+      "question": "Nova-S2 관련 이슈를 신고한 거래처를 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-T",
+        "NClient-M",
+        "NClient-H"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-233",
+      "question": "Nova-S2에 대해 불만을 제기한 고객사는 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-A",
+        "NClient-T",
+        "NClient-M",
+        "NClient-H"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-234",
+      "question": "Nova-S3에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-D",
+        "NClient-O",
+        "NClient-A",
+        "NClient-H"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-235",
+      "question": "Nova-S3 관련 이슈를 신고한 거래처를 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-D",
+        "NClient-O",
+        "NClient-A",
+        "NClient-H"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-236",
+      "question": "Nova-S3에 대해 불만을 제기한 고객사는 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-D",
+        "NClient-O",
+        "NClient-A",
+        "NClient-H"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-237",
+      "question": "Nova-B1에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-L",
+        "NClient-E",
+        "NClient-P",
+        "NClient-V"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-238",
+      "question": "Nova-B1 관련 이슈를 신고한 거래처를 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-L",
+        "NClient-E",
+        "NClient-P",
+        "NClient-V"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-239",
+      "question": "Nova-B1에 대해 불만을 제기한 고객사는 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-L",
+        "NClient-E",
+        "NClient-P",
+        "NClient-V"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-240",
+      "question": "Nova-B2에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-S",
+        "NClient-L"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-241",
+      "question": "Nova-B2 관련 이슈를 신고한 거래처를 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-S",
+        "NClient-L"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-242",
+      "question": "Nova-B2에 대해 불만을 제기한 고객사는 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "NClient-S",
+        "NClient-L"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-243",
+      "question": "플랫폼개발팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강서윤",
+        "이현우",
+        "조준서",
+        "김민준",
+        "임수아",
+        "정준서",
+        "장예준",
+        "강도현",
+        "임채원"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-244",
+      "question": "플랫폼개발팀 소속 인원을 나열해줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강서윤",
+        "이현우",
+        "조준서",
+        "김민준",
+        "임수아",
+        "정준서",
+        "장예준",
+        "강도현",
+        "임채원"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-245",
+      "question": "플랫폼개발팀에서 일하는 직원들은 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강서윤",
+        "이현우",
+        "조준서",
+        "김민준",
+        "임수아",
+        "정준서",
+        "장예준",
+        "강도현",
+        "임채원"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-246",
+      "question": "인프라운영팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "윤민준",
+        "최하은",
+        "정가은",
+        "윤준서",
+        "임지안",
+        "임은우",
+        "이지호"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-247",
+      "question": "인프라운영팀 소속 인원을 나열해줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "윤민준",
+        "최하은",
+        "정가은",
+        "윤준서",
+        "임지안",
+        "임은우",
+        "이지호"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-248",
+      "question": "인프라운영팀에서 일하는 직원들은 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "윤민준",
+        "최하은",
+        "정가은",
+        "윤준서",
+        "임지안",
+        "임은우",
+        "이지호"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-249",
+      "question": "품질보증팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정수아",
+        "임도현",
+        "박시우",
+        "윤수아",
+        "장다인"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-250",
+      "question": "품질보증팀 소속 인원을 나열해줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정수아",
+        "임도현",
+        "박시우",
+        "윤수아",
+        "장다인"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-251",
+      "question": "품질보증팀에서 일하는 직원들은 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정수아",
+        "임도현",
+        "박시우",
+        "윤수아",
+        "장다인"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-252",
+      "question": "고객성공팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박하은",
+        "김아린",
+        "조소율",
+        "장가은",
+        "조수아",
+        "김채원"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-253",
+      "question": "고객성공팀 소속 인원을 나열해줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박하은",
+        "김아린",
+        "조소율",
+        "장가은",
+        "조수아",
+        "김채원"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-254",
+      "question": "고객성공팀에서 일하는 직원들은 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박하은",
+        "김아린",
+        "조소율",
+        "장가은",
+        "조수아",
+        "김채원"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-255",
+      "question": "재무회계팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강가은",
+        "장도현",
+        "박다인",
+        "이아린"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-256",
+      "question": "재무회계팀 소속 인원을 나열해줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강가은",
+        "장도현",
+        "박다인",
+        "이아린"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-257",
+      "question": "재무회계팀에서 일하는 직원들은 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강가은",
+        "장도현",
+        "박다인",
+        "이아린"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-258",
+      "question": "마케팅팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박도현",
+        "장민서",
+        "김태윤"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-259",
+      "question": "마케팅팀 소속 인원을 나열해줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박도현",
+        "장민서",
+        "김태윤"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-260",
+      "question": "마케팅팀에서 일하는 직원들은 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박도현",
+        "장민서",
+        "김태윤"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "H-261",
+      "question": "NClient-A을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강도현",
+        "정수아",
+        "윤수아",
+        "장가은",
+        "이아린"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-262",
+      "question": "NClient-A 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강도현",
+        "정수아",
+        "윤수아",
+        "장가은",
+        "이아린"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-263",
+      "question": "NClient-B을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "임지안",
+        "이지호",
+        "윤수아",
+        "장다인",
+        "박하은"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-264",
+      "question": "NClient-B 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "임지안",
+        "이지호",
+        "윤수아",
+        "장다인",
+        "박하은"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-265",
+      "question": "NClient-C을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "장가은",
+        "강가은"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-266",
+      "question": "NClient-C 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "장가은",
+        "강가은"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-267",
+      "question": "NClient-D을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강도현",
+        "임은우",
+        "정수아",
+        "강가은",
+        "이아린",
+        "장민서"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-268",
+      "question": "NClient-D 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강도현",
+        "임은우",
+        "정수아",
+        "강가은",
+        "이아린",
+        "장민서"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-269",
+      "question": "NClient-E을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "조준서",
+        "정가은",
+        "임도현",
+        "장도현"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-270",
+      "question": "NClient-E 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "조준서",
+        "정가은",
+        "임도현",
+        "장도현"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-271",
+      "question": "NClient-F을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "임은우",
+        "박시우"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-272",
+      "question": "NClient-F 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "임은우",
+        "박시우"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-273",
+      "question": "NClient-G을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "이현우",
+        "장도현"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-274",
+      "question": "NClient-G 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "이현우",
+        "장도현"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-275",
+      "question": "NClient-J을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강도현",
+        "임도현",
+        "박시우"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-276",
+      "question": "NClient-J 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "강도현",
+        "임도현",
+        "박시우"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-277",
+      "question": "NClient-K을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "이현우",
+        "윤수아"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-278",
+      "question": "NClient-K 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "이현우",
+        "윤수아"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-279",
+      "question": "NClient-M을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정준서",
+        "조소율"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-280",
+      "question": "NClient-M 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정준서",
+        "조소율"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-281",
+      "question": "NClient-P을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "윤민준",
+        "김채원",
+        "김태윤"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-282",
+      "question": "NClient-P 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "윤민준",
+        "김채원",
+        "김태윤"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-283",
+      "question": "NClient-Q을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박하은"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-284",
+      "question": "NClient-Q 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박하은"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-285",
+      "question": "NClient-R을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정준서",
+        "강가은"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-286",
+      "question": "NClient-R 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정준서",
+        "강가은"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-287",
+      "question": "NClient-S을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "조준서",
+        "장다인",
+        "박하은",
+        "조소율",
+        "조수아"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-288",
+      "question": "NClient-S 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "조준서",
+        "장다인",
+        "박하은",
+        "조소율",
+        "조수아"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-289",
+      "question": "NClient-T을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정가은",
+        "조수아"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-290",
+      "question": "NClient-T 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정가은",
+        "조수아"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-291",
+      "question": "NClient-U을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정가은",
+        "임은우",
+        "정수아",
+        "장다인",
+        "장도현"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-292",
+      "question": "NClient-U 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정가은",
+        "임은우",
+        "정수아",
+        "장다인",
+        "장도현"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-293",
+      "question": "NClient-V을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "장가은",
+        "조수아",
+        "이아린"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-294",
+      "question": "NClient-V 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "장가은",
+        "조수아",
+        "이아린"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-295",
+      "question": "NClient-W을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "조소율"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-296",
+      "question": "NClient-W 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "조소율"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-297",
+      "question": "NClient-X을 담당하는 직원은 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정준서"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "H-298",
+      "question": "NClient-X 담당자가 누구입니까?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "정준서"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
     }
   ]
 }
