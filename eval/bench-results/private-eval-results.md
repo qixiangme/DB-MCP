@@ -66,6 +66,11 @@ Go만 4문항에서 차이가 났다.
 | gemma3:4b, 수정 전 | 60.0% (18/30) | 90.0% | `baseline-4b.json` |
 | gemma3:4b, 버그 수정 후 | **90.0% (27/30)** | 96.7% | `baseline-fixed-90pct.json` |
 
+참고로 `gemma3:4b`, 버그 수정 전 상태에서 Go(`go-4b.json`)와 Ktor(`ktor-4b.json`)도
+baseline과 동일하게 60.0%/90.0%였다 — 3-way 포팅이 이 버그들을 그대로 재현했다는
+뜻이며, baseline에서 고친 버그들은 Go/Ktor 포팅에도 동일하게 존재할 가능성이 높다
+(이번 라운드에서는 baseline만 수정했고 포팅으로의 반영은 별도 작업이 필요하다).
+
 ### 발견하고 고친 버그
 
 1. **`AnswerabilityGate`의 클레임 검증 오판** — "어디"(location_info), "누구"(person_identity),
