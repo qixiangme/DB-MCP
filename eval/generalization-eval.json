@@ -1,0 +1,1093 @@
+{
+  "description": "일반화 검증용 대량 질문 세트. official-eval.json/private-eval.json과 문항이 겹치지 않도록 다른 질문 각도(인원 수, 카테고리/지역 총매출, 업종별 계약 수, 우선순위별 티켓 수, 제품별 티켓 수, 부서장/사용고객/이슈보고/소속을 전수 순회)로 생성했다. 정답은 손으로 만들지 않고 DB 쿼리로 직접 도출했다.",
+  "questions": [
+    {
+      "id": "GEN1",
+      "question": "기술지원팀 소속 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "4명",
+        "4명입니다",
+        "4"
+      ]
+    },
+    {
+      "id": "GEN2",
+      "question": "경영지원팀 소속 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8명",
+        "8명입니다",
+        "8"
+      ]
+    },
+    {
+      "id": "GEN3",
+      "question": "영업팀 소속 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "10명",
+        "10명입니다",
+        "10"
+      ]
+    },
+    {
+      "id": "GEN4",
+      "question": "클라우드사업부 소속 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "10명",
+        "10명입니다",
+        "10"
+      ]
+    },
+    {
+      "id": "GEN5",
+      "question": "데이터플랫폼팀 소속 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "5명",
+        "5명입니다",
+        "5"
+      ]
+    },
+    {
+      "id": "GEN6",
+      "question": "보안솔루션팀 소속 직원은 몇 명이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8명",
+        "8명입니다",
+        "8"
+      ]
+    },
+    {
+      "id": "GEN7",
+      "question": "컨설팅 카테고리 제품의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "15721",
+        "15,721"
+      ]
+    },
+    {
+      "id": "GEN8",
+      "question": "클라우드 카테고리 제품의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "99376",
+        "99,376"
+      ]
+    },
+    {
+      "id": "GEN9",
+      "question": "보안 카테고리 제품의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "102064",
+        "102,064"
+      ]
+    },
+    {
+      "id": "GEN10",
+      "question": "데이터 카테고리 제품의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "87871",
+        "87,871"
+      ]
+    },
+    {
+      "id": "GEN11",
+      "question": "부산 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "15744",
+        "15,744"
+      ]
+    },
+    {
+      "id": "GEN12",
+      "question": "경기 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "40819",
+        "40,819"
+      ]
+    },
+    {
+      "id": "GEN13",
+      "question": "인천 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "49262",
+        "49,262"
+      ]
+    },
+    {
+      "id": "GEN14",
+      "question": "대구 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "27504",
+        "27,504"
+      ]
+    },
+    {
+      "id": "GEN15",
+      "question": "제주 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "33379",
+        "33,379"
+      ]
+    },
+    {
+      "id": "GEN16",
+      "question": "대전 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "64366",
+        "64,366"
+      ]
+    },
+    {
+      "id": "GEN17",
+      "question": "광주 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "6244",
+        "6,244"
+      ]
+    },
+    {
+      "id": "GEN18",
+      "question": "서울 지역 매출 총액은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "67714",
+        "67,714"
+      ]
+    },
+    {
+      "id": "GEN19",
+      "question": "미디어 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "6건",
+        "6개",
+        "6"
+      ]
+    },
+    {
+      "id": "GEN20",
+      "question": "공공기관 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "11건",
+        "11개",
+        "11"
+      ]
+    },
+    {
+      "id": "GEN21",
+      "question": "유통/물류 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "9건",
+        "9개",
+        "9"
+      ]
+    },
+    {
+      "id": "GEN22",
+      "question": "에너지 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "GEN23",
+      "question": "IT/SW 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "1건",
+        "1개",
+        "1"
+      ]
+    },
+    {
+      "id": "GEN24",
+      "question": "건설 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "6건",
+        "6개",
+        "6"
+      ]
+    },
+    {
+      "id": "GEN25",
+      "question": "의료/바이오 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "GEN26",
+      "question": "제조업 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "4건",
+        "4개",
+        "4"
+      ]
+    },
+    {
+      "id": "GEN27",
+      "question": "교육 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "4건",
+        "4개",
+        "4"
+      ]
+    },
+    {
+      "id": "GEN28",
+      "question": "금융 업종 고객사의 계약 건수는 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "9건",
+        "9개",
+        "9"
+      ]
+    },
+    {
+      "id": "GEN29",
+      "question": "medium 우선순위 티켓은 총 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "43건",
+        "43개",
+        "43"
+      ]
+    },
+    {
+      "id": "GEN30",
+      "question": "critical 우선순위 티켓은 총 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "26건",
+        "26개",
+        "26"
+      ]
+    },
+    {
+      "id": "GEN31",
+      "question": "high 우선순위 티켓은 총 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "30건",
+        "30개",
+        "30"
+      ]
+    },
+    {
+      "id": "GEN32",
+      "question": "low 우선순위 티켓은 총 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "21건",
+        "21개",
+        "21"
+      ]
+    },
+    {
+      "id": "GEN33",
+      "question": "mid 규모 고객사들의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "130043",
+        "130,043"
+      ]
+    },
+    {
+      "id": "GEN34",
+      "question": "enterprise 규모 고객사들의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "79354",
+        "79,354"
+      ]
+    },
+    {
+      "id": "GEN35",
+      "question": "startup 규모 고객사들의 총 매출은 얼마야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "95635",
+        "95,635"
+      ]
+    },
+    {
+      "id": "GEN36",
+      "question": "Product-C1 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "GEN37",
+      "question": "Product-C2 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "GEN38",
+      "question": "Product-D3 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "7건",
+        "7개",
+        "7"
+      ]
+    },
+    {
+      "id": "GEN39",
+      "question": "Product-D2 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "9건",
+        "9개",
+        "9"
+      ]
+    },
+    {
+      "id": "GEN40",
+      "question": "Product-D1 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "12건",
+        "12개",
+        "12"
+      ]
+    },
+    {
+      "id": "GEN41",
+      "question": "Product-T1 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "10건",
+        "10개",
+        "10"
+      ]
+    },
+    {
+      "id": "GEN42",
+      "question": "Product-S3 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "11건",
+        "11개",
+        "11"
+      ]
+    },
+    {
+      "id": "GEN43",
+      "question": "Product-C4 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "10건",
+        "10개",
+        "10"
+      ]
+    },
+    {
+      "id": "GEN44",
+      "question": "Product-T2 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "16건",
+        "16개",
+        "16"
+      ]
+    },
+    {
+      "id": "GEN45",
+      "question": "Product-S1 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "10건",
+        "10개",
+        "10"
+      ]
+    },
+    {
+      "id": "GEN46",
+      "question": "Product-S2 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "12건",
+        "12개",
+        "12"
+      ]
+    },
+    {
+      "id": "GEN47",
+      "question": "Product-C3 관련 기술지원 티켓은 몇 건이야?",
+      "expectedRoute": "SQL",
+      "keywords": [
+        "8건",
+        "8개",
+        "8"
+      ]
+    },
+    {
+      "id": "GEN48",
+      "question": "경영지원팀 팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "윤소연"
+      ]
+    },
+    {
+      "id": "GEN49",
+      "question": "클라우드사업부 팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "안진우"
+      ]
+    },
+    {
+      "id": "GEN50",
+      "question": "보안솔루션팀 팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "조재원"
+      ]
+    },
+    {
+      "id": "GEN51",
+      "question": "데이터플랫폼팀 팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박성민"
+      ]
+    },
+    {
+      "id": "GEN52",
+      "question": "기술지원팀 팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박소연"
+      ]
+    },
+    {
+      "id": "GEN53",
+      "question": "영업팀 팀장이 누구야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "김지훈"
+      ]
+    },
+    {
+      "id": "GEN54",
+      "question": "Product-C1를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-H",
+        "Client-D",
+        "Client-T",
+        "Client-Y",
+        "Client-Q",
+        "Client-V"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN55",
+      "question": "Product-C2를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-D",
+        "Client-B",
+        "Client-F",
+        "Client-X",
+        "Client-G",
+        "Client-H"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN56",
+      "question": "Product-C3를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-P",
+        "Client-AC",
+        "Client-H",
+        "Client-A",
+        "Client-V",
+        "Client-J",
+        "Client-AB"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN57",
+      "question": "Product-C4를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-Q",
+        "Client-I",
+        "Client-AB",
+        "Client-N",
+        "Client-R"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN58",
+      "question": "Product-D1를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-Y",
+        "Client-AB",
+        "Client-B",
+        "Client-T",
+        "Client-Q"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN59",
+      "question": "Product-D2를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-W",
+        "Client-X",
+        "Client-AC"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN60",
+      "question": "Product-D3를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-U",
+        "Client-Y",
+        "Client-X",
+        "Client-T",
+        "Client-AA"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN61",
+      "question": "Product-S1를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-E",
+        "Client-J",
+        "Client-AD",
+        "Client-N",
+        "Client-A",
+        "Client-K"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN62",
+      "question": "Product-S2를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-T",
+        "Client-Z",
+        "Client-E",
+        "Client-AD",
+        "Client-X",
+        "Client-B"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN63",
+      "question": "Product-S3를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-B",
+        "Client-T",
+        "Client-D",
+        "Client-AA",
+        "Client-S",
+        "Client-F"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN64",
+      "question": "Product-T1를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-Y",
+        "Client-I"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN65",
+      "question": "Product-T2를 쓰고 있는 고객사 알려줘",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-T",
+        "Client-I",
+        "Client-L",
+        "Client-AD"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN66",
+      "question": "Product-C1에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-Y",
+        "Client-K",
+        "Client-S",
+        "Client-Z",
+        "Client-AC",
+        "Client-AB",
+        "Client-J"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN67",
+      "question": "Product-C2에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-X",
+        "Client-M",
+        "Client-D",
+        "Client-K",
+        "Client-AC",
+        "Client-Z"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN68",
+      "question": "Product-C3에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-AC",
+        "Client-B",
+        "Client-Z",
+        "Client-K",
+        "Client-O"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN69",
+      "question": "Product-C4에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-Z",
+        "Client-X",
+        "Client-D",
+        "Client-S",
+        "Client-AC",
+        "Client-AD",
+        "Client-M"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN70",
+      "question": "Product-D1에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-V",
+        "Client-W",
+        "Client-AA",
+        "Client-T",
+        "Client-U",
+        "Client-N",
+        "Client-Q",
+        "Client-X",
+        "Client-H",
+        "Client-M",
+        "Client-F"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN71",
+      "question": "Product-D2에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-W",
+        "Client-B",
+        "Client-F",
+        "Client-J",
+        "Client-O",
+        "Client-E",
+        "Client-X"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN72",
+      "question": "Product-D3에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-Z",
+        "Client-P",
+        "Client-D",
+        "Client-R",
+        "Client-M",
+        "Client-I"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN73",
+      "question": "Product-S1에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-D",
+        "Client-J",
+        "Client-X",
+        "Client-V",
+        "Client-O",
+        "Client-S",
+        "Client-AA",
+        "Client-E"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN74",
+      "question": "Product-S2에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-U",
+        "Client-W",
+        "Client-X",
+        "Client-M",
+        "Client-AB",
+        "Client-F",
+        "Client-B",
+        "Client-G",
+        "Client-D",
+        "Client-Y",
+        "Client-V",
+        "Client-R"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN75",
+      "question": "Product-S3에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-B",
+        "Client-O",
+        "Client-R",
+        "Client-S",
+        "Client-E",
+        "Client-A",
+        "Client-N",
+        "Client-D",
+        "Client-AD"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN76",
+      "question": "Product-T1에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-AB",
+        "Client-C",
+        "Client-L",
+        "Client-M",
+        "Client-T",
+        "Client-Y",
+        "Client-I",
+        "Client-AD"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN77",
+      "question": "Product-T2에 문제를 제기한 고객사가 어디야?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "Client-Q",
+        "Client-C",
+        "Client-Y",
+        "Client-P",
+        "Client-Z",
+        "Client-V",
+        "Client-R",
+        "Client-W",
+        "Client-H",
+        "Client-K",
+        "Client-T",
+        "Client-S",
+        "Client-M"
+      ],
+      "answerRule": {
+        "minMatches": 1
+      }
+    },
+    {
+      "id": "GEN78",
+      "question": "경영지원팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "윤소연",
+        "홍서연",
+        "서지현",
+        "정혜원",
+        "오수진",
+        "신하은",
+        "박은지",
+        "최상우"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "GEN79",
+      "question": "클라우드사업부에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "안진우",
+        "강현우",
+        "서재원",
+        "김도윤",
+        "조동현",
+        "이지훈",
+        "황다은",
+        "한은지",
+        "황재원",
+        "김준혁"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "GEN80",
+      "question": "보안솔루션팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "조재원",
+        "권소연",
+        "한태호",
+        "신미라",
+        "박성민",
+        "권은지",
+        "권진우",
+        "장미라"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "GEN81",
+      "question": "데이터플랫폼팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박성민",
+        "박민수",
+        "류서연",
+        "안소연",
+        "조현우"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "GEN82",
+      "question": "기술지원팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "박소연",
+        "권승호",
+        "조예진",
+        "임우진"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "GEN83",
+      "question": "영업팀에는 어떤 사람들이 있어?",
+      "expectedRoute": "GRAPH",
+      "keywords": [
+        "김지훈",
+        "황민수",
+        "강동현",
+        "류혜원",
+        "안재원",
+        "신다은",
+        "강유진",
+        "신동현",
+        "황준혁",
+        "한도윤"
+      ],
+      "answerRule": {
+        "minMatches": 2
+      }
+    },
+    {
+      "id": "GEN84",
+      "question": "Client-F에게 Product-C1 도입을 제안하면서 제시한 초기 구축비는 얼마야?",
+      "expectedRoute": "VECTOR",
+      "keywords": [
+        "7917만원"
+      ]
+    },
+    {
+      "id": "GEN85",
+      "question": "Client-G에게 Product-C2 도입을 제안하면서 제시한 초기 구축비는 얼마야?",
+      "expectedRoute": "VECTOR",
+      "keywords": [
+        "4098만원"
+      ]
+    },
+    {
+      "id": "GEN86",
+      "question": "Client-H에게 Product-S1 도입을 제안하면서 제시한 초기 구축비는 얼마야?",
+      "expectedRoute": "VECTOR",
+      "keywords": [
+        "4730만원"
+      ]
+    },
+    {
+      "id": "GEN87",
+      "question": "Client-I에게 Product-S2 도입을 제안하면서 제시한 초기 구축비는 얼마야?",
+      "expectedRoute": "VECTOR",
+      "keywords": [
+        "3184만원"
+      ]
+    },
+    {
+      "id": "GEN88",
+      "question": "Client-J에게 Product-D1 도입을 제안하면서 제시한 초기 구축비는 얼마야?",
+      "expectedRoute": "VECTOR",
+      "keywords": [
+        "3449만원"
+      ]
+    },
+    {
+      "id": "GEN89",
+      "question": "Client-K에게 Product-D2 도입을 제안하면서 제시한 초기 구축비는 얼마야?",
+      "expectedRoute": "VECTOR",
+      "keywords": [
+        "3856만원"
+      ]
+    },
+    {
+      "id": "GEN90",
+      "question": "Client-L에게 Product-C3 도입을 제안하면서 제시한 초기 구축비는 얼마야?",
+      "expectedRoute": "VECTOR",
+      "keywords": [
+        "3812만원"
+      ]
+    },
+    {
+      "id": "GEN91",
+      "question": "Client-M에게 Product-C4 도입을 제안하면서 제시한 초기 구축비는 얼마야?",
+      "expectedRoute": "VECTOR",
+      "keywords": [
+        "6168만원"
+      ]
+    },
+    {
+      "id": "GEN92",
+      "question": "Client-N에게 Product-D3 도입을 제안하면서 제시한 초기 구축비는 얼마야?",
+      "expectedRoute": "VECTOR",
+      "keywords": [
+        "2215만원"
+      ]
+    },
+    {
+      "id": "GEN93",
+      "question": "Client-O에게 Product-S3 도입을 제안하면서 제시한 초기 구축비는 얼마야?",
+      "expectedRoute": "VECTOR",
+      "keywords": [
+        "4242만원"
+      ]
+    }
+  ]
+}

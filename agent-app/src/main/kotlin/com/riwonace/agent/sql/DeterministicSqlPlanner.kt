@@ -29,6 +29,9 @@ class DeterministicSqlPlanner {
                         "WHERE p.name = $literal"
                 isMonthlyPrice(q) -> "SELECT price_monthly FROM products WHERE name = $literal"
                 isReleaseStatus(q) -> "SELECT status FROM products WHERE name = $literal"
+                isSupportTicketCount(q) ->
+                    "SELECT count(*) AS count FROM support_tickets t JOIN products p ON t.product_id = p.id " +
+                        "WHERE p.name = $literal"
                 else -> null
             }
         }
@@ -99,6 +102,20 @@ class DeterministicSqlPlanner {
             return "SELECT p.name, count(*) AS cancelled_count FROM contracts c JOIN products p ON c.product_id = p.id " +
                 "WHERE c.status = 'cancelled' GROUP BY p.id, p.name ORDER BY cancelled_count DESC LIMIT 1"
         }
+        if (isCategoryTotalSales(q)) {
+            val cat = CATEGORY_KR.find(question)?.value?.let(::normalizeCategory) ?: return null
+            return "SELECT sum(s.amount) AS total_sales FROM sales s " +
+                "JOIN products p ON p.id = s.product_id WHERE p.category = ${quote(cat)}"
+        }
+        if (isRegionTotalSales(q)) {
+            val region = REGION.find(question)?.value ?: return null
+            return "SELECT sum(amount) AS total_sales FROM sales WHERE region = ${quote(region)}"
+        }
+        if (isCompanySizeTotalSales(q)) {
+            val size = COMPANY_SIZE.find(q)?.value ?: return null
+            return "SELECT sum(s.amount) AS total_sales FROM sales s JOIN clients c ON s.client_id = c.id " +
+                "WHERE c.company_size = ${quote(size)}"
+        }
 
         val category = CATEGORY.find(q)?.value
         if (category != null) {
@@ -139,6 +156,14 @@ class DeterministicSqlPlanner {
         "평균 연봉" in q && "낮은" in q && "부서" in q
     private fun isMostCancelledContractProduct(q: String) =
         "해지" in q && "계약" in q && ("가장 많은" in q || "제일 많은" in q) && "제품" in q
+    private fun isCategoryTotalSales(q: String) =
+        "카테고리" in q && "매출" in q && listOf("총", "전체", "합계").any(q::contains)
+    private fun isRegionTotalSales(q: String) =
+        "지역" in q && "매출" in q && listOf("총", "전체", "합계", "총액").any(q::contains) && REGION.containsMatchIn(q)
+    private fun isCompanySizeTotalSales(q: String) =
+        "매출" in q && listOf("총", "전체", "합계").any(q::contains) && COMPANY_SIZE.containsMatchIn(q)
+    private fun isSupportTicketCount(q: String) =
+        "티켓" in q && listOf("몇", "건", "개수", "수는").any(q::contains)
     private fun quote(value: String) = "'${value.replace("'", "''")}'"
     private fun normalizeCategory(value: String): String = when (value.lowercase()) {
         "보안", "보안 솔루션" -> "security"
@@ -155,7 +180,8 @@ class DeterministicSqlPlanner {
         private val DEPARTMENT = Regex("[가-힣A-Za-z0-9]+(?:사업부|부서|팀)")
         private val CATEGORY = Regex("(?i)(?:cloud|data|security|consulting)")
         private val CATEGORY_KR = Regex("(?i)(?:보안(?: 솔루션)?|security|클라우드|cloud|데이터|data|컨설팅|consulting)")
-        private val REGION = Regex("(서울|부산|대전|광주|인천|대구)")
+        private val REGION = Regex("(서울|부산|대전|광주|인천|대구|경기|제주)")
+        private val COMPANY_SIZE = Regex("(?i)(enterprise|startup|mid)")
         private val QUARTER = Regex("(20\\d{2})\\s*년?\\s*([1-4])\\s*분기")
         private val YEAR = Regex("(20\\d{2})\\s*년")
         private val ACTIVE_AMOUNT = Regex("활성\\s*계약[^0-9]{0,12}([0-9][0-9,]*)")
